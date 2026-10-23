@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout in grams, dwt or troy ounces."><meta name="theme-color" content="#0b0c0c"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta property="og:title" content="Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate"><meta property="og:description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout."><meta property="og:type" content="website"><meta property="og:url" content="https://cubanlinkcalc.com/"><meta property="og:image" content="https://cubanlinkcalc.com/assets/chain.webp"><meta name="twitter:card" content="summary_large_image"><title>Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate</title>
+<meta name="description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout in grams, dwt, troy ounces or tola."><meta name="theme-color" content="#0b0c0c"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta property="og:title" content="Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate"><meta property="og:description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout."><meta property="og:type" content="website"><meta property="og:url" content="https://cubanlinkcalc.com/"><meta property="og:image" content="https://cubanlinkcalc.com/assets/chain.webp"><meta name="twitter:card" content="summary_large_image"><title>Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate</title>
 <style>
   :root{
     --gold:#e3b341; --gold-deep:#b8860b; --ink:#0a0a0b; --panel:#141416; --panel2:#1b1b1e;
@@ -64,7 +64,7 @@
   /* controls */
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px}
   .panel h2{font-size:12px;letter-spacing:.22em;color:var(--muted);font-weight:800;margin-bottom:14px}
-  .karats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .karats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .karats button{background:var(--panel2);border:1.5px solid var(--line);color:var(--txt);border-radius:14px;
     padding:12px 0;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s}
   .karats button small{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}
@@ -141,7 +141,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     <nav><a class="on" href="#calculator">Calculator</a><a href="#build">Build &amp; Estimate</a><a href="#regular">Regular Calculator</a><a href="#learn">Learn</a></nav>
   </header>
 
-  <div class="intro"><span class="eyebrow">THE GOLD BEHIND THE LOOK</span><h1>Cuban Link Calculator.<br><em>Know your price.</em></h1><p>Calculate Miami Cuban chain gold value, estimate what you might pay, or model what a gold buyer might offer.</p></div>
+  <div class="intro"><span class="eyebrow">THE GOLD BEHIND THE LOOK</span><h1>Cuban Link Calculator.<br><em>Know your price.</em></h1><p>Calculate the gold value of chains, rings, bracelets, coins and scrap — with a dedicated Cuban link weight estimator.</p></div>
 
   <div class="hero" id="calculator">
     <!-- STAGE -->
@@ -166,11 +166,23 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     <div class="panel">
       <fieldset class="intent"><legend>What do you want to know?</legend><div class="intent-options"><button type="button" data-intent="buy" aria-pressed="true">I’m buying a chain<span>What might I pay?</span></button><button type="button" data-intent="sell" aria-pressed="false">I’m selling my gold<span>What might I receive?</span></button></div><p id="intentHelp">Start with the gold value. Open the store-price estimate to add your own premium.</p></fieldset><div id="marketTile" style="margin:14px 0 2px;background:var(--panel2);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap"><div><div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#e3b341"><span id="liveDot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3ecf6f;margin-right:6px;animation:mpulse 2s infinite"></span>LIVE MARKET \u00b7 GOLD SPOT</div><div id="tilePrice" style="font-size:30px;font-weight:800;line-height:1.15;margin-top:2px">$3,996.74</div><div style="font-size:12px;opacity:.75">per troy oz \u00b7 <span id="tileGram">$128.50</span>/g pure (24K)</div></div><div style="text-align:right"><div id="tileChip" style="display:none;font-weight:800;font-size:15px;padding:6px 10px;border-radius:999px"></div><div id="tileTime" style="font-size:11px;opacity:.6;margin-top:6px">Fetching market\u2026</div></div></div></div><style>@keyframes mpulse{0%,100%{opacity:1}50%{opacity:.25}}@media (prefers-reduced-motion:reduce){#liveDot{animation:none}}</style><h2>1 \u00b7 PICK YOUR KARAT</h2>
       <div class="karats" id="karats">
+        <button data-k="9">9K<small>37.5%</small></button>
         <button data-k="10">10K<small>41.7%</small></button>
+        <button data-k="12">12K<small>50.0%</small></button>
         <button data-k="14" class="on">14K<small>58.3%</small></button>
         <button data-k="18">18K<small>75.0%</small></button>
+        <button data-k="21">21K<small>87.5%</small></button>
         <button data-k="22">22K<small>91.7%</small></button>
         <button data-k="24">24K<small>99.9%</small></button>
+      </div>
+
+      <div class="row">
+        <label>OR ENTER A HALLMARK / FINENESS</label>
+        <div class="inputs">
+          <div class="field"><input type="number" id="fineIn" min="1" max="1000" step="any" placeholder="e.g. 585"></div>
+          <div class="field"><button type="button" id="fineBtn" style="width:100%;background:var(--panel2);border:1.5px solid var(--gold);color:var(--gold);border-radius:12px;padding:12px;font-size:16px;font-weight:700;cursor:pointer">Use fineness</button></div>
+        </div>
+        <p class="fineprint">Stamps are parts per thousand: 375, 585, 750, 916, 999. Nominal 14K is 583 — a 585 stamp is guaranteed at least 58.5%.</p>
       </div>
 
       <div class="row">
@@ -182,8 +194,17 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
             <option value="g">grams</option>
             <option value="dwt">pennyweight (dwt)</option>
             <option value="ozt">troy ounces</option>
+            <option value="tola">tola</option>
           </select></div>
         </div>
+      </div>
+
+      <div class="row">
+        <label>OPTIONAL · SUBTRACT NON-GOLD WEIGHT</label>
+        <div class="inputs">
+          <div class="field"><input type="number" id="dedNum" min="0" step="any" placeholder="0"></div>
+        </div>
+        <p class="fineprint">stones, steel springs, clasps — in the same unit as the weight above. Your number only; never estimated.</p>
       </div>
 
       <div class="row">
@@ -197,7 +218,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       <div class="valuebox">
         <div class="l">GOLD CONTENT VALUE · BEFORE PREMIUMS OR DEDUCTIONS</div>
         <div class="v" id="meltVal">$18,731</div>
-        <div class="s">That's <b id="pureG">145.8 g</b> of pure gold inside a <b id="totG">250 g</b> chain</div>
+        <div class="s">That's <b id="pureG">145.8 g</b> of pure gold inside a <b id="totG">250 g</b> chain<span id="dedNote"></span></div>
       </div>
       <p class="fineprint"><b>Melt value ≠ the check you get.</b> This is the value of the gold itself at today's market price. A scrap buyer may deduct fees and margin; a retailer may add labor, overhead and profit. Use the buying or selling view to model the amount relevant to you.</p>
       <details class="storebox" id="buySection"><summary>Estimate store price + premium <span>What might I pay?</span></summary><div class="l" style="margin-top:16px">BUYING · YOUR PRICE SCENARIO</div>
@@ -219,6 +240,33 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         <p class="expl" style="font-size:11.5px">Pre-tax scenario, not a seller quote. The premium can include labor, overhead, brand and profit; their individual amounts cannot be inferred from a price. Enter your own percentage or a real pre-tax quote.</p>
       </details><section class="storebox" id="sellSection" hidden><div class="l">SELLING · SCRAP PAYOUT SCENARIO</div><p class="expl">What might a gold buyer pay you? Choose an example percentage of melt, then subtract only fees not already included in that percentage. This models a scrap offer; a resale offer for an intact chain can differ.</p><label for="payoutPct">Buyer pays (% of melt)</label><div class="premium-entry"><input type="number" id="payoutPct" min="0" max="100" step="0.1" value="90"><span>% · example, not a market rate</span></div><label for="sellFee">Additional fee (USD)</label><div class="premium-entry"><input type="number" id="sellFee" min="0" step="0.01" value="0"></div><div class="sprice" id="sellTotal" aria-live="polite"></div><p class="expl" id="sellBreakdown"></p><div class="quote"><label for="buyerOffer">Already have a buyer offer? (USD)</label><div class="inputs"><input type="number" id="buyerOffer" min="0" step="0.01" placeholder="Amount they would pay you"></div><p class="qout" id="offerOut"></p></div><p class="expl">This calculator does not buy or sell gold. Obtain actual offers and confirm weight, fineness and fees with each buyer.</p></section>
     </div>
+  </div>
+
+  <style>
+    #gramTable{width:100%;border-collapse:collapse;margin-top:4px}
+    #gramTable th,#gramTable td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:14.5px}
+    #gramTable th{font-size:11px;letter-spacing:.16em;color:var(--muted);font-weight:800}
+    #gramTable th:last-child{text-align:right}
+    #gramTable td.gv{font-weight:800;color:var(--gold);text-align:right;font-variant-numeric:tabular-nums}
+    #gramTable tbody tr:last-child td{border-bottom:none}
+  </style>
+  <div class="panel" id="gramPanel" style="margin-top:26px">
+    <h2>LIVE GOLD VALUE PER GRAM</h2>
+    <p id="gramCap" class="fineprint" style="margin-top:0">At spot <b>$3,996.74</b> · melt value per gram before premiums or deductions.</p>
+    <table id="gramTable">
+      <thead><tr><th>Karat</th><th>Purity</th><th>Value / gram</th></tr></thead>
+      <tbody>
+        <tr data-pur="0.375"><td>9K</td><td>37.5%</td><td class="gv">$48.19</td></tr>
+        <tr data-pur="0.416667"><td>10K</td><td>41.7%</td><td class="gv">$53.54</td></tr>
+        <tr data-pur="0.5"><td>12K</td><td>50.0%</td><td class="gv">$64.25</td></tr>
+        <tr data-pur="0.583333"><td>14K</td><td>58.3%</td><td class="gv">$74.96</td></tr>
+        <tr data-pur="0.75"><td>18K</td><td>75.0%</td><td class="gv">$96.37</td></tr>
+        <tr data-pur="0.875"><td>21K</td><td>87.5%</td><td class="gv">$112.44</td></tr>
+        <tr data-pur="0.916667"><td>22K</td><td>91.7%</td><td class="gv">$117.79</td></tr>
+        <tr data-pur="0.999"><td>24K (fine)</td><td>99.9%</td><td class="gv">$128.37</td></tr>
+      </tbody>
+    </table>
+    <p class="fineprint">Stamps are fineness per thousand — 585 is 58.5%, 750 is 75%, 916 is 91.6%. Enter any stamp in the fineness box in the calculator.</p>
   </div>
 
   <div class="grid2">
@@ -248,7 +296,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         <div class="field"><label style="font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.12em">WEIGHT (G)</label>
           <input type="number" id="rW" value="31.1" step="0.1"></div>
         <div class="field"><label style="font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.12em">KARAT</label>
-          <select id="rK"><option value="10">10K</option><option value="14" selected>14K</option><option value="18">18K</option><option value="22">22K</option><option value="24">24K</option></select></div>
+          <select id="rK"><option value="9">9K</option><option value="10">10K</option><option value="12">12K</option><option value="14" selected>14K</option><option value="18">18K</option><option value="21">21K</option><option value="22">22K</option><option value="24">24K</option></select></div>
       </div>
       <div class="mini-out">
         <div class="v" id="rVal">$2,330</div>
@@ -258,46 +306,64 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     </div>
   </div>
 
-  <section id="learn" class="learn"><span class="eyebrow">A LITTLE GOLD KNOWLEDGE</span><h2>Three numbers. Three different meanings.</h2><div class="learn-grid"><article><span>01 / METAL</span><h3>Melt value</h3><p>The theoretical value of your gold content at the selected spot price. It excludes workmanship and seller premiums.</p></article><article><span>02 / BUYING</span><h3>Store price</h3><p>Gold value plus craftsmanship, overhead and margin. Compare the quoted price per gram and premium over melt.</p></article><article><span>03 / SELLING</span><h3>Buyer payout</h3><p>A buyer may deduct refining costs and margin. Condition, brand and resale demand can also affect an offer.</p></article></div><details><summary>How are purity and value calculated?</summary><p>We use nominal karat fractions: 14K is 14/24, or about 58.33%. A 585 hallmark means 58.5%; use tested fineness for an exact valuation. One troy ounce is 31.1034768 grams.</p></details><details><summary>Does the image show my exact chain?</summary><p>The chain detail and bust images are style references. Karat colors are illustrative. Images do not predict length, width, weight or construction.</p></details><details><summary>Can I use a store quote to judge a deal?</summary><p>The checker measures the premium above metal value. It does not authenticate jewelry or determine whether craftsmanship, condition and seller service justify a price. Use a pre-tax quote for a like-for-like comparison.</p></details></section><section class="learn" id="chain-questions"><span class="eyebrow">CUBAN LINK BUYING & SELLING GUIDE</span><h2>Gold chain questions, answered.</h2><details><summary>How much is a 14K Cuban link chain worth?</summary><p>Enter the measured weight and selected gold spot price. This calculator uses 14/24 (about 58.33%) for nominal 14K. The gold-content value is weight × purity × price per gram. A 585 hallmark represents 58.5%; exact valuation requires the actual fineness.</p></details><details><summary>How much should I pay for a Miami Cuban chain?</summary><p>Select “I’m buying a chain,” then open “Estimate store price + premium.” Adjust the percentage or enter a real seller quote. The result separates metal value from the added premium; it does not certify a fair market price.</p></details><details><summary>How much could I get for selling my gold chain?</summary><p>Select “I’m selling my gold” to model a buyer’s percentage of melt and any additional fees. The 90% starting value is an editable example, not a prediction. Private resale and collectible jewelry can follow different pricing.</p></details><details><summary>Why is the store price higher than melt value?</summary><p>A finished chain can include labor, clasp design, finishing, seller overhead, branding and profit. The premium over melt measures their combined price difference. It does not reveal the store’s rent, expenses or net profit.</p></details><details><summary>What is a gold chain premium over melt?</summary><p>Premium in dollars = seller quote − melt value. Premium percentage = (seller quote ÷ melt value − 1) × 100. This differs from gross margin, which uses selling price as its denominator. Compare pre-tax quotes on the same basis.</p></details><details><summary>How do I compare gold chain prices per gram?</summary><p>Divide the seller’s pre-tax price by total chain weight. Compare chains with the same karat, construction and relevant design features. The quote checker displays the quoted price per gram alongside the selected karat’s metal value per gram.</p></details><details><summary>How do 10K, 14K and 18K compare?</summary><p>Nominal purity is karat ÷ 24: 10K is about 41.67%, 14K about 58.33% and 18K 75%. At the same total weight and spot price, higher purity means more gold content. Alloy color and durability also depend on composition and construction.</p></details><details><summary>Does a hollow Cuban chain have the same gold value as a solid one?</summary><p>At identical measured weight and purity, the gold-content calculation is the same. Hollow and semi-hollow chains can weigh less at the same outside dimensions. The dimension-based builder currently models solid chains only; use a measured weight for hollow pieces.</p></details><details><summary>How do width and length affect Cuban link weight?</summary><p>Wider and longer chains generally contain more material, but thickness, link spacing, profile, alloy density and clasp change the result. Width and length alone cannot determine exact grams. The builder is calibrated against published handmade Miami specifications (for example, a 12mm 14K 24-inch solid chain at about 265 g); individual makers vary, which is why the estimate is shown as a range.</p></details><details><summary>How do I measure a Cuban chain?</summary><p>Measure overall length laid straight from clasp to end, and width across the widest link face. Weigh the chain on a suitable jewelry scale. Remove separate pendants and account for stones or non-gold components before using their weight as gold alloy weight.</p></details><details><summary>What is the difference between grams, dwt and troy ounces?</summary><p>A troy ounce is 31.1034768 grams; one pennyweight (dwt) is 1.55517384 grams. A regular household ounce is a different unit. Choose the unit printed on your scale; this calculator preserves weight when you switch between its supported units.</p></details><details><summary>What is the difference between 14K and a 585 gold stamp?</summary><p>14K describes nominal karat purity. A 585 fineness mark specifies 585 parts of gold per thousand, or 58.5%. The difference matters for precise valuation. A stamp by itself does not verify authenticity or replace testing.</p></details><details><summary>Does this calculator include diamonds, tax or shipping?</summary><p>Melt value covers the entered gold-alloy weight and purity only. The buying scenario is pre-tax and excludes shipping. Do not value diamond weight as gold; gemstones and separate components require their own assessment.</p></details><details><summary>Is the displayed price a real jewelry listing?</summary><p>No. This website provides calculations and editable scenarios. The chain images are style references, not inventory for sale. Only a quote entered from an actual seller represents that seller’s asking price.</p></details><details><summary>What happens if the gold price feed is unavailable?</summary><p>The website labels the feed status and retains the displayed editable price. A fallback price is not current market data. Enter a current reference price and confirm its currency and troy-ounce unit before comparing offers.</p></details></section><footer><b>CUBAN LINK CALCULATOR</b><span>Know your gold. Know your price.</span><p>Estimates for education. Values depend on the entered weight, purity and gold price. No jeweler affiliations or sponsored listings in this version.</p></footer>
+  <section id="learn" class="learn"><span class="eyebrow">A LITTLE GOLD KNOWLEDGE</span><h2>Three numbers. Three different meanings.</h2><div class="learn-grid"><article><span>01 / METAL</span><h3>Melt value</h3><p>The theoretical value of your gold content at the selected spot price. It excludes workmanship and seller premiums.</p></article><article><span>02 / BUYING</span><h3>Store price</h3><p>Gold value plus craftsmanship, overhead and margin. Compare the quoted price per gram and premium over melt.</p></article><article><span>03 / SELLING</span><h3>Buyer payout</h3><p>A buyer may deduct refining costs and margin. Condition, brand and resale demand can also affect an offer.</p></article></div><details><summary>How are purity and value calculated?</summary><p>We use nominal karat fractions: 14K is 14/24, or about 58.33%. A 585 hallmark means 58.5%; use tested fineness for an exact valuation. One troy ounce is 31.1034768 grams.</p></details><details><summary>Does the image show my exact chain?</summary><p>The chain detail and bust images are style references. Karat colors are illustrative. Images do not predict length, width, weight or construction.</p></details><details><summary>Can I use a store quote to judge a deal?</summary><p>The checker measures the premium above metal value. It does not authenticate jewelry or determine whether craftsmanship, condition and seller service justify a price. Use a pre-tax quote for a like-for-like comparison.</p></details></section><section class="learn" id="chain-questions"><span class="eyebrow">CUBAN LINK BUYING & SELLING GUIDE</span><h2>Gold chain questions, answered.</h2><details><summary>How much is a 14K Cuban link chain worth?</summary><p>Enter the measured weight and selected gold spot price. This calculator uses 14/24 (about 58.33%) for nominal 14K. The gold-content value is weight × purity × price per gram. A 585 hallmark represents 58.5%; exact valuation requires the actual fineness.</p></details><details><summary>How much should I pay for a Miami Cuban chain?</summary><p>Select “I’m buying a chain,” then open “Estimate store price + premium.” Adjust the percentage or enter a real seller quote. The result separates metal value from the added premium; it does not certify a fair market price.</p></details><details><summary>How much could I get for selling my gold chain?</summary><p>Select “I’m selling my gold” to model a buyer’s percentage of melt and any additional fees. The 90% starting value is an editable example, not a prediction. Private resale and collectible jewelry can follow different pricing.</p></details><details><summary>Why is the store price higher than melt value?</summary><p>A finished chain can include labor, clasp design, finishing, seller overhead, branding and profit. The premium over melt measures their combined price difference. It does not reveal the store’s rent, expenses or net profit.</p></details><details><summary>What is a gold chain premium over melt?</summary><p>Premium in dollars = seller quote − melt value. Premium percentage = (seller quote ÷ melt value − 1) × 100. This differs from gross margin, which uses selling price as its denominator. Compare pre-tax quotes on the same basis.</p></details><details><summary>How do I compare gold chain prices per gram?</summary><p>Divide the seller’s pre-tax price by total chain weight. Compare chains with the same karat, construction and relevant design features. The quote checker displays the quoted price per gram alongside the selected karat’s metal value per gram.</p></details><details><summary>How do 10K, 14K and 18K compare?</summary><p>Nominal purity is karat ÷ 24: 10K is about 41.67%, 14K about 58.33% and 18K 75%. At the same total weight and spot price, higher purity means more gold content. Alloy color and durability also depend on composition and construction.</p></details><details><summary>Does a hollow Cuban chain have the same gold value as a solid one?</summary><p>At identical measured weight and purity, the gold-content calculation is the same. Hollow and semi-hollow chains can weigh less at the same outside dimensions. The dimension-based builder currently models solid chains only; use a measured weight for hollow pieces.</p></details><details><summary>How do width and length affect Cuban link weight?</summary><p>Wider and longer chains generally contain more material, but thickness, link spacing, profile, alloy density and clasp change the result. Width and length alone cannot determine exact grams. The builder is calibrated against published handmade Miami specifications (for example, a 12mm 14K 24-inch solid chain at about 265 g); individual makers vary, which is why the estimate is shown as a range.</p></details><details><summary>How do I measure a Cuban chain?</summary><p>Measure overall length laid straight from clasp to end, and width across the widest link face. Weigh the chain on a suitable jewelry scale. Remove separate pendants and account for stones or non-gold components before using their weight as gold alloy weight.</p></details><details><summary>What is the difference between grams, dwt and troy ounces?</summary><p>A troy ounce is 31.1034768 grams; one pennyweight (dwt) is 1.55517384 grams. A regular household ounce is a different unit. Choose the unit printed on your scale; this calculator preserves weight when you switch between its supported units. One tola equals 11.6638 grams and is widely used in South Asian gold markets; this calculator supports it too.</p></details><details><summary>What is the difference between 14K and a 585 gold stamp?</summary><p>14K describes nominal karat purity. A 585 fineness mark specifies 585 parts of gold per thousand, or 58.5%. The difference matters for precise valuation. A stamp by itself does not verify authenticity or replace testing.</p></details><details><summary>Does this calculator include diamonds, tax or shipping?</summary><p>Melt value covers the entered gold-alloy weight and purity only. The buying scenario is pre-tax and excludes shipping. Do not value diamond weight as gold; gemstones and separate components require their own assessment.</p></details><details><summary>Is the displayed price a real jewelry listing?</summary><p>No. This website provides calculations and editable scenarios. The chain images are style references, not inventory for sale. Only a quote entered from an actual seller represents that seller’s asking price.</p></details><details><summary>What happens if the gold price feed is unavailable?</summary><p>The website labels the feed status and retains the displayed editable price. A fallback price is not current market data. Enter a current reference price and confirm its currency and troy-ounce unit before comparing offers.</p></details></section><footer><b>CUBAN LINK CALCULATOR</b><span>Know your gold. Know your price.</span><p>Estimates for education. Values depend on the entered weight, purity and gold price. No jeweler affiliations or sponsored listings in this version.</p></footer>
 </div>
 
 <script>
-  const PURITY = {10:10/24, 14:14/24, 18:0.75, 22:22/24, 24:0.999};
+  const PURITY = {9:9/24, 10:10/24, 12:0.5, 14:14/24, 18:0.75, 21:21/24, 22:22/24, 24:0.999};
   const DENS = {10:11.6, 14:13.4, 18:15.5, 22:17.8, 24:19.3};  /* approx alloy densities g/cm3 */
-  const MEANING = {10:"10K contains approximately 41.7% gold by mass. The balance is alloying metals.",14:"14K contains approximately 58.3% gold by mass. Alloy composition also affects color and durability.",18:"18K contains 75% gold by mass. Higher purity means more gold in each gram.",22:"22K contains approximately 91.7% gold by mass. Design and alloy affect suitability for wear.",24:"This calculator models 24K as 99.9% gold. Actual fineness depends on the item."};
+  const MEANING = {9:"9K contains 37.5% gold by mass. Common in the UK and Australia; the alloy-heavy mix is hard-wearing.",10:"10K contains approximately 41.7% gold by mass. The balance is alloying metals.",12:"12K contains 50% gold by mass — half gold, half alloying metals.",14:"14K contains approximately 58.3% gold by mass. Alloy composition also affects color and durability.",18:"18K contains 75% gold by mass. Higher purity means more gold in each gram.",21:"21K contains 87.5% gold by mass. Popular in Middle Eastern jewelry; rich color, softer than lower karats.",22:"22K contains approximately 91.7% gold by mass. Design and alloy affect suitability for wear.",24:"This calculator models 24K as 99.9% gold. Actual fineness depends on the item."};
   const FILTER = {
+    9:"brightness(1.2) saturate(.55)",
     10:"brightness(1.14) saturate(.68)",
+    12:"brightness(1.1) saturate(.78)",
     14:"brightness(1.05) saturate(.88)",
     18:"none",
+    21:"saturate(1.07) brightness(.99) hue-rotate(-2deg)",
     22:"saturate(1.14) brightness(.97) hue-rotate(-4deg)",
     24:"saturate(1.28) brightness(.94) hue-rotate(-8deg)"
   };
   const $ = id => document.getElementById(id);
   const money = n => "$" + Math.round(n).toLocaleString("en-US");
   let karat = 14;
+  let fine = null;
 
   function grams(){ 
     const v = Math.max(0,parseFloat($("wNum").value)||0), u = $("wUnit").value;
-    return u==="dwt" ? v*1.55517384 : u==="ozt" ? v*31.1034768 : v;
+    return u==="dwt" ? v*1.55517384 : u==="ozt" ? v*31.1034768 : u==="tola" ? v*11.6638038 : v;
+  }
+  function effP(){ return fine!==null ? fine : PURITY[karat]; }
+  function nearestK(x){ const ks=[9,10,12,14,18,21,22,24]; let best=ks[0]; ks.forEach(k=>{ if(Math.abs(k-x)<Math.abs(best-x)) best=k; }); return best; }
+  function effFilter(){ return fine!==null ? FILTER[nearestK(fine*24)] : FILTER[karat]; }
+  function fineMeaning(){
+    const head = "Custom fineness " + Math.round(fine*1000) + " = " + (fine*100).toFixed(1) + "% pure gold. ";
+    return head + (fine===0.585 ? "A stamp is parts per thousand; 14K nominal is 583, so a 585 stamp guarantees slightly more gold than nominal 14K." : "Stamps state parts of gold per thousand; use tested fineness for an exact valuation.");
+  }
+  function gramTable(perGramPure){
+    document.querySelectorAll("#gramTable [data-pur]").forEach(r=>{ r.querySelector(".gv").textContent = "$"+(perGramPure*parseFloat(r.dataset.pur)).toFixed(2); });
+    $("gramCap").innerHTML = "At spot <b>"+new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(perGramPure*31.1034768)+"</b> \u00b7 melt value per gram before premiums or deductions.";
   }
   function calc(){
     const spot = Math.max(0,parseFloat($("spot").value)||0);
     $("spotTop").textContent = new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(spot);
     $("wOut").textContent = grams().toFixed(1);
-    const perGramPure = spot/31.1034768, p = PURITY[karat], g = grams();
+    const perGramPure = spot/31.1034768, p = effP(), gross = grams();
+    const dedG = (Math.max(0,parseFloat($("dedNum").value)||0)) * (UFACT[$("wUnit").value]||1);
+    const g = Math.max(0, gross - dedG);
     setVal(g*p*perGramPure);
     lastMelt = g*p*perGramPure; lastPerGram = perGramPure*p;
     $("pureG").textContent = (g*p).toFixed(1)+" g";
     $("totG").textContent = Math.round(g)+" g";
+    $("dedNote").textContent = dedG>0 ? " (weight after subtracting "+dedG.toFixed(1)+" g of non-gold components)" : "";
     $("purityBig").textContent = (p*100).toFixed(1);
     $("purePct").textContent = (p*100).toFixed(1)+"%";
     $("alloyPct").textContent = (100-p*100).toFixed(1)+"%";
     $("perGram").textContent = "$"+(perGramPure*p).toFixed(2);
-    $("meaning").textContent = MEANING[karat];
-    if($("chainImg").dataset.view !== "bust") $("chainImg").style.filter=FILTER[karat];
+    $("meaning").textContent = fine!==null ? fineMeaning() : MEANING[karat];
+    if($("chainImg").dataset.view !== "bust") $("chainImg").style.filter=effFilter();
 
 
-    build(); regular();
+    gramTable(perGramPure); build(); regular();
   }
   function build(){
     const spot = Math.max(0,parseFloat($("spot").value)||0), perGramPure = spot/31.1034768;
@@ -316,8 +382,18 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   $("karats").addEventListener("click", e=>{
     const b = e.target.closest("button"); if(!b) return;
     document.querySelectorAll("#karats button").forEach(x=>x.classList.remove("on"));
-    b.classList.add("on"); karat = +b.dataset.k; calc();
+    b.classList.add("on"); karat = +b.dataset.k; fine = null; $("fineIn").value=""; calc();
   });
+  function applyFine(){
+    const v = parseFloat($("fineIn").value);
+    if(!(v>=1 && v<=1000)) return;
+    fine = v/1000;
+    document.querySelectorAll("#karats button").forEach(x=>x.classList.remove("on"));
+    calc();
+  }
+  $("fineBtn").addEventListener("click", applyFine);
+  $("fineIn").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); applyFine(); } });
+  $("dedNum").addEventListener("input", calc);
   $("wRange").addEventListener("input", e=>{ $("wUnit").value="g"; lastUnit="g"; $("wNum").value=e.target.value; $("wOut").textContent=e.target.value; calc(); });
   $("wNum").addEventListener("input", e=>{ if($("wUnit").value==="g"){ $("wRange").value=e.target.value; $("wOut").textContent=e.target.value||0; } calc(); });
   ["spot","bLen","bWid","bKarat","rW","rK"].forEach(id=>$(id).addEventListener("input",calc));
@@ -369,7 +445,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
 
   /* switching units preserves the actual weight */
   let lastUnit = "g";
-  const UFACT = {g:1, dwt:1.55517384, ozt:31.1034768};
+  const UFACT = {g:1, dwt:1.55517384, ozt:31.1034768, tola:11.6638038};
   $("wUnit").addEventListener("change", ()=>{
     const gNow = (Math.max(0,parseFloat($("wNum").value)||0)) * UFACT[lastUnit];
     const nu = $("wUnit").value; lastUnit = nu;
@@ -379,7 +455,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   });
 
   document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
-    const isChain=b.dataset.view==='chain',im=$('chainImg');im.dataset.view=b.dataset.view;im.src=isChain?'assets/miami-cuban.webp':'assets/chain.webp';im.alt=isChain?'Polished gold Miami Cuban chain with tightly packed broad rounded links':'Miami Cuban chain draped on a black display bust';im.style.filter=isChain?FILTER[karat]:'none';document.querySelectorAll('[data-view]').forEach(v=>v.setAttribute('aria-pressed',v===b));
+    const isChain=b.dataset.view==='chain',im=$('chainImg');im.dataset.view=b.dataset.view;im.src=isChain?'assets/miami-cuban.webp':'assets/chain.webp';im.alt=isChain?'Polished gold Miami Cuban chain with tightly packed broad rounded links':'Miami Cuban chain draped on a black display bust';im.style.filter=isChain?effFilter():'none';document.querySelectorAll('[data-view]').forEach(v=>v.setAttribute('aria-pressed',v===b));
   }));
   $("applyBuild").addEventListener("click",()=>{
     const g=0.077*parseFloat($("bWid").value)**2*parseFloat($("bLen").value)*(DENS[$("bKarat").value]/13.4);
