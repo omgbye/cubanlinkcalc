@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="About Cuban Link Calculator: what this site is, how the calculator works — live spot price feed, purity model, and the solid-chain weight estimator — who it is for, and an honest statement of its accuracy limits.">
+<meta name="theme-color" content="#0b0c0c">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:title" content="About | Cuban Link Calculator">
+<meta property="og:description" content="How the Cuban Link Calculator works, who it is for, and what its estimates can and cannot do.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cubanlinkcalc.com/about.html">
+<title>About the Cuban Link Calculator | Cuban Link Calculator</title>
+<style>
+  :root{
+    --gold:#e3b341; --gold-deep:#b8860b; --ink:#0a0a0b; --panel:#141416; --panel2:#1b1b1e;
+    --line:#2a2a2e; --txt:#f4f1ea; --muted:#9b968a; --green:#3ddc84; --red:#ff6b6b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:#0b0c0c;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px 40px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:25px 0;border-bottom:1px solid #292a27}
+  .logo{font-weight:900;font-size:19px;letter-spacing:.02em;line-height:1.05;color:var(--txt);text-decoration:none}
+  .logo span{color:var(--gold)}
+  .logo small{display:block;font-size:8px;letter-spacing:.15em;color:var(--muted);font-weight:700;margin-top:8px}
+  nav{display:flex;gap:18px;font-size:12px;color:var(--muted);font-weight:600}
+  nav a{color:inherit;text-decoration:none}
+  nav a.on{color:var(--txt)}
+  nav a:hover{color:var(--gold)}
+  a:focus-visible{outline:2px solid #e3b341;outline-offset:3px}
+  .pagehead{padding:44px 0 6px}
+  .eyebrow{font-size:10px;letter-spacing:.2em;color:#c5b58c;font-weight:700}
+  .pagehead h1{font-size:clamp(34px,4.6vw,54px);font-weight:600;letter-spacing:-.045em;line-height:1.05;margin:16px 0 14px}
+  .pagehead h1 em{font-family:Georgia,serif;font-weight:400;color:#e3b341}
+  .pagehead .lede{color:#aaa99f;font-size:16px;max-width:640px;line-height:1.6}
+  .article{max-width:780px}
+  .article h2{font-size:27px;font-weight:500;letter-spacing:-.03em;margin:38px 0 14px}
+  .article h3{font-size:19px;font-weight:600;margin:26px 0 8px}
+  .article p{font-size:15.5px;color:#c9c6bb;line-height:1.75;margin-bottom:14px}
+  .article ul,.article ol{margin:0 0 14px 22px;color:#c9c6bb;font-size:15.5px;line-height:1.75}
+  .article li{margin-bottom:7px}
+  .article a{color:var(--gold)}
+  .article b,.article strong{color:var(--txt)}
+  .callout{background:#131513;border:1px solid var(--line);border-radius:6px;padding:20px 22px;margin:22px 0}
+  .callout p{margin-bottom:0}
+  .learn{padding:52px 0 10px}
+  .learn h2{font-size:26px;font-weight:500;letter-spacing:-.035em;margin:14px 0 22px}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  .learn article{border-top:1px solid #494534;padding-top:18px}
+  .learn article span{font-size:10px;letter-spacing:.14em;color:#cfb775}
+  .learn h3{margin:14px 0 8px;font-size:19px;font-weight:500}
+  .learn h3 a{color:var(--txt);text-decoration:none}
+  .learn h3 a:hover{color:var(--gold)}
+  .learn p{font-size:14px;color:#aaa99f;line-height:1.7}
+  footer{margin-top:36px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:12.5px;line-height:1.65}
+  footer b{color:var(--txt)}
+  footer span{float:right}
+  footer p{margin-top:14px;font-size:11px;max-width:650px}
+  .footnav{font-size:12.5px;max-width:none}
+  .footnav a{color:var(--muted);text-decoration:none}
+  .footnav a:hover{color:var(--gold)}
+  @media(max-width:860px){nav{display:none}.wrap{padding:0 18px 30px}.learn-grid{grid-template-columns:1fr;gap:24px}footer span{float:none;display:block;margin-top:10px}.pagehead{padding-top:30px}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MGXCDLBHK6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MGXCDLBHK6');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9902709215635813" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <a class="logo" href="/">CUBAN LINK <span>CALCULATOR</span><small>KNOW YOUR GOLD. KNOW YOUR PRICE.</small></a>
+    <nav><a href="/#calculator">Calculator</a><a href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a><a href="/gold-karats-explained.html">Karats</a><a href="/what-is-melt-value.html">Melt Value</a><a href="/faq.html">FAQ</a></nav>
+  </header>
+
+  <div class="pagehead"><span class="eyebrow">ABOUT THIS SITE</span><h1>Know your gold. <em>Know your price.</em></h1><p class="lede">Cuban Link Calculator is a free educational tool that shows you what the gold in a chain is worth — before a store adds its premium or a buyer subtracts its margin — so you can walk into any gold transaction already knowing the number that matters.</p></div>
+
+  <div class="article">
+    <h2>Why this site exists</h2>
+    <p>Most gold jewelry is bought and sold in the dark. A buyer is handed a price with no breakdown of how much is metal and how much is markup. A seller is handed an offer with no explanation of how it was calculated. In both cases, one side of the transaction knows exactly what the gold is worth and the other side is guessing. This site exists to close that gap. Gold is a commodity with a public market price, and the value of the gold in a chain is simple arithmetic. Once that arithmetic is in the buyer's and seller's hands, negotiations become what they should be: a discussion about workmanship, service, and margin, conducted in the open.</p>
+
+    <h2>How the calculator works</h2>
+    <h3>The live spot price</h3>
+    <p>When the calculator loads, it fetches the current spot price of gold — US dollars per troy ounce — from the gold-api.com market feed. Every value on the page is computed from that live price in your browser. The price field is editable, so you can substitute any reference price you trust, and if the feed is unavailable the site says so and labels the displayed price rather than presenting stale data as live.</p>
+    <h3>The purity model</h3>
+    <p>Values are computed from purity: nominal karat fractions (14K is 14/24, about 58.33%) or an exact fineness you enter from a hallmark stamp, such as 585 for 58.5%. Weight can be entered in grams, pennyweight, troy ounces, or tola, and non-gold weight — stones, steel springs, clasps — can be subtracted so it is never valued as gold.</p>
+    <h3>The Cuban link weight estimator</h3>
+    <p>For buyers shopping by size, the build estimator models a solid Miami Cuban link from length and width, adjusting for the density of each karat's alloy. It is calibrated against published handmade maker specifications; a solid 14K chain at 12mm wide and 24 inches long, for example, comes out at roughly 265 grams. Because real makers vary, the estimate is always presented as a range (about −12% to +20%), never as a false-precision exact weight. A measured weight from a scale beats the model every time, and the site says so wherever the estimate appears.</p>
+    <h3>The premium and payout layers</h3>
+    <p>On top of melt value, the calculator offers two clearly labeled scenarios. The buying view adds a premium percentage that you choose, or analyzes a real quote you paste in, and reports the premium in dollars, as a percentage, and as a price per gram. The selling view models a buyer's percentage of melt minus fees. Neither view is a listing, an offer, or a prediction — they are transparent arithmetic on numbers you supply.</p>
+
+    <h2>Who it is for</h2>
+    <p>The site is written for first-time Cuban link buyers comparing quotes, for owners checking what their chain is worth before selling or pawning it, and for anyone who owns gold — chains, bracelets, rings, coins, or scrap — and wants its metal value at today's price. The accompanying guides explain <a href="/how-to-buy-a-cuban-link-chain.html">how Cuban link pricing works</a>, <a href="/gold-karats-explained.html">how karats and hallmarks work</a>, and <a href="/what-is-melt-value.html">what melt value means when you sell</a>.</p>
+
+    <h2>Accuracy limits, stated honestly</h2>
+    <ul>
+      <li><b>Estimates are estimates.</b> Dimension-based weights are modeled ranges. Real chains vary by maker, profile, and clasp; weigh the actual piece for a real valuation.</li>
+      <li><b>A stamp is not a test.</b> The calculator values gold at the purity you enter. It cannot authenticate a piece or verify that a hallmark is truthful — only physical testing can do that.</li>
+      <li><b>Prices move.</b> Gold trades around the clock, and a value computed this morning is not this afternoon's value. Re-run the calculation on the day you transact.</li>
+      <li><b>Scenarios are not quotes.</b> Premium and payout examples are illustrative. This site has no jeweler affiliations and no sponsored listings, sells nothing, and buys nothing.</li>
+      <li><b>Education, not financial advice.</b> Nothing here is a recommendation to buy or sell anything. For significant transactions, confirm weight, fineness, and terms with the business you are dealing with.</li>
+    </ul>
+
+    <div class="callout"><p>Questions, corrections, or a specification that does not match your chain? See the <a href="/contact.html">contact page</a>. Site policies are on the <a href="/privacy.html">privacy policy</a> page.</p></div>
+  </div>
+
+  <section class="learn"><span class="eyebrow">KEEP READING</span><h2>More gold knowledge.</h2><div class="learn-grid"><article><span>GUIDE</span><h3><a href="/how-to-buy-a-cuban-link-chain.html">How to buy a Cuban link chain</a></h3><p>How pricing works, what drives the premium, and the questions to ask before you pay.</p></article><article><span>GUIDE</span><h3><a href="/gold-karats-explained.html">Gold karats explained</a></h3><p>Purity, fineness, hallmarks, and why a 585 stamp is not quite the same thing as 14K.</p></article><article><span>GUIDE</span><h3><a href="/what-is-melt-value.html">What is melt value?</a></h3><p>What the gold in your chain is worth, why melt is not the check you get, and how buyers price scrap.</p></article></div></section>
+
+  <footer><b>CUBAN LINK CALCULATOR</b><span>Know your gold. Know your price.</span><p>Estimates for education. Values depend on the entered weight, purity and gold price. No jeweler affiliations or sponsored listings in this version.</p><p class="footnav"><a href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a> · <a href="/gold-karats-explained.html">Karats Explained</a> · <a href="/what-is-melt-value.html">Melt Value</a> · <a href="/faq.html">FAQ</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/contact.html">Contact</a></p></footer>
+</div>
+
+</body>
+</html>
