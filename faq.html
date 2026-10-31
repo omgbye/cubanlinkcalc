@@ -10,6 +10,7 @@
 <meta property="og:description" content="Cuban link prices, melt value, premiums, karats, selling scrap, and the live gold price — answered in plain English.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cubanlinkcalc.com/faq.html">
+<link rel="canonical" href="https://cubanlinkcalc.com/faq.html">
 <title>FAQ: Cuban Link Prices, Melt Value &amp; Selling Gold | Cuban Link Calculator</title>
 <style>
   :root{
@@ -59,6 +60,18 @@
   @media(max-width:860px){nav{display:none}.wrap{padding:0 18px 30px}.learn-grid{grid-template-columns:1fr;gap:24px}footer span{float:none;display:block;margin-top:10px}.pagehead{padding-top:30px}}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<style>
+  .menubtn{display:none}
+  .mnav{display:none}
+  @media(max-width:860px){
+    .menubtn{display:inline-block;background:var(--panel2);border:1.5px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+    .mnav{flex-direction:column;padding:10px 0 6px;border-bottom:1px solid var(--line)}
+    .mnav.open{display:flex}
+    .mnav a{color:var(--txt);text-decoration:none;font-size:15px;font-weight:600;padding:11px 2px;border-top:1px solid #22231f}
+    .mnav a:first-child{border-top:0}
+  }
+  .calcjump{display:inline-block;margin-top:20px;background:#e3b341;color:#15130e;font-weight:700;font-size:15px;padding:13px 22px;border-radius:5px;text-decoration:none}
+</style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MGXCDLBHK6"></script>
 <script>
@@ -75,19 +88,27 @@
 <div class="wrap">
   <header>
     <a class="logo" href="/">CUBAN LINK <span>CALCULATOR</span><small>KNOW YOUR GOLD. KNOW YOUR PRICE.</small></a>
-    <nav><a href="/#calculator">Calculator</a><a href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a><a href="/gold-karats-explained.html">Karats</a><a href="/what-is-melt-value.html">Melt Value</a><a class="on" href="/faq.html">FAQ</a></nav>
+    <nav><a href="/#calculator">Calculator</a><a href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a><a href="/gold-karats-explained.html">Karats</a><a href="/what-is-melt-value.html">Melt Value</a><a class="on" href="/faq.html">FAQ</a></nav><button class="menubtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu">&#9776; Menu</button>
   </header>
+  <div class="mnav" id="mobileMenu">
+    <a href="/#calculator">Calculator</a>
+    <a href="/how-to-buy-a-cuban-link-chain.html">Buying Guide</a>
+    <a href="/methodology.html">Methodology</a>
+    <a href="/faq.html">FAQ</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+  </div>
 
   <div class="pagehead"><span class="eyebrow">QUESTIONS, ANSWERED</span><h1>Frequently asked <em>questions.</em></h1><p class="lede">Straight answers about Cuban link prices, melt value, premiums, karats, and selling gold — the same questions the calculator was built to settle.</p></div>
 
   <div class="article">
-    <details><summary>How accurate is the Cuban link weight estimator?</summary><p>The estimator models a solid Miami Cuban link from its length and width, using alloy densities for each karat, and it is calibrated against published handmade maker specifications — for example, a solid 14K chain at 12mm wide and 24 inches long comes out at roughly 265 grams. Because individual makers vary in link profile, spacing, and clasp weight, every estimate is shown as a range of about −12% to +20% rather than a single exact figure. A measured weight on a jewelry scale is always more accurate, and you should use one whenever you have it.</p></details>
+    <details><summary>How accurate is the Cuban link weight estimator?</summary><p>The estimator models a solid Miami Cuban link from its length and width, using alloy densities for each karat, and it is calibrated against published handmade maker specifications — for example, a solid 14K chain at 12mm wide and 24 inches long comes out at roughly 265 grams. Because individual makers vary in link profile, spacing, and clasp weight, every estimate is shown as a range of about −12% to +20% rather than a single exact figure. A measured weight on a jewelry scale is always more accurate, and you should use one whenever you have it. The <a href="/methodology.html">methodology page</a> publishes the model, its calibration, and its limits in full.</p></details>
 
     <details><summary>What is melt value, in plain terms?</summary><p>Melt value is the worth of the gold inside an item at the current market price: weight in grams, multiplied by purity, multiplied by the price of pure gold per gram. It counts only the metal. It ignores craftsmanship, brand, and gemstones, which is exactly why it is useful — it is the constant underneath a retailer's price (melt plus a premium) and a scrap buyer's offer (melt minus a deduction). Our guide on <a href="/what-is-melt-value.html">what melt value means</a> works through a full example.</p></details>
 
     <details><summary>What premium over melt is fair for a Cuban link chain?</summary><p>There is no single fair percentage, because the premium pays for everything from hand-filing each link to the seller's rent and warranty. Handmade Miami links legitimately carry higher premiums than machine-made or cast chains, and branded retailers charge more than independent jewelers. What you can do is measure: run the same specification through the quote checker on the <a href="/#calculator">calculator page</a> for several sellers and compare the premium percentage and price per gram side by side. A premium you have compared is a decision; a premium you have not measured is a guess.</p></details>
 
-    <details><summary>Should I buy 10K or 14K?</summary><p>Buy 10K if budget or hard daily wear comes first: it is the hardest common karat and the cheapest per gram, because only 41.7% of it is gold. Buy 14K if you want the balance most buyers choose — 58.3% gold, richer color, proven durability, and the deepest resale market, which is why it is the Miami standard. Either way, compare total price against total weight and karat, never against dimensions alone.</p></details>
+    <details><summary>Should I buy 10K or 14K?</summary><p>Buy 10K if budget or hard daily wear comes first: it is among the hardest, most scratch-resistant common karats and the cheapest per gram, because only 41.7% of it is gold. Buy 14K if you want the balance most buyers choose — 58.3% gold, richer color, proven durability, and one of the deepest resale markets, which is why it is the Miami standard. Either way, compare total price against total weight and karat, never against dimensions alone.</p></details>
 
     <details><summary>Where does the live gold price come from?</summary><p>The calculator loads the current spot price of gold — US dollars per troy ounce — from the gold-api.com market feed when the page opens, and you can refresh it at any time. The price is editable, so you can also type in a reference price of your own. If the feed is ever unavailable, the site labels the price status and keeps the last displayed price rather than pretending it is live, and the day-change indicator on the market tile comes from a public gold price feed as a cross-check.</p></details>
 
@@ -95,7 +116,7 @@
 
     <details><summary>What will I actually get if I sell my chain for scrap?</summary><p>Typically a percentage of melt value, minus any fees the buyer charges for testing or processing. The selling view on the <a href="/#calculator">calculator page</a> models this: set the buyer's percentage and fees and it shows the payout, or enter a real offer and it tells you what percentage of melt that offer works out to. Percentages vary widely between buyers, so collect several offers. And remember that a clean, intact chain in a popular size can sometimes beat its scrap value in a private or resale sale, because that buyer is purchasing a chain rather than raw material.</p></details>
 
-    <details><summary>What is the difference between 14K and a 585 stamp?</summary><p>14K is a name for a purity: 14 parts gold out of 24, which is 58.33% — a fineness of 583. A 585 stamp states the fineness directly and guarantees at least 58.5% gold, slightly more than nominal 14K requires. Makers use the 585 mark so a piece can never test below the 14K threshold. The difference is small but real, and the calculator's fineness box lets you value a piece at its exact stamp instead of the rounded karat.</p></details>
+    <details><summary>What is the difference between 14K and a 585 stamp?</summary><p>14K is a name for a purity: 14 parts gold out of 24, which is 58.33% — a fineness of 583. A 585 stamp states the fineness directly: at least 58.5% gold, slightly more than nominal 14K requires. Makers use the 585 mark so a piece can never test below the 14K threshold. The difference is small but real, and the calculator's fineness box lets you value a piece at its exact stamp instead of the rounded karat.</p></details>
 
     <details><summary>Does a hollow chain have less gold value than a solid one?</summary><p>At the same measured weight and purity, no — gold value follows the metal that is actually there. The catch is that a hollow chain weighs far less than a solid chain of the same outside dimensions, so two chains that look identical can have very different melt values. The weight estimator on this site models solid chains only. For a hollow or semi-hollow piece, weigh it and enter the measured weight.</p></details>
 
@@ -111,5 +132,8 @@
   <footer><b>CUBAN LINK CALCULATOR</b><span>Know your gold. Know your price.</span><p>Estimates for education. Values depend on the entered weight, purity and gold price. No jeweler affiliations or sponsored listings in this version.</p><p class="footnav"><a href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a> · <a href="/gold-karats-explained.html">Karats Explained</a> · <a href="/what-is-melt-value.html">Melt Value</a> · <a href="/faq.html">FAQ</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/contact.html">Contact</a></p></footer>
 </div>
 
+<script>
+  (function(){var b=document.getElementById('menuBtn'),m=document.getElementById('mobileMenu');if(!b||!m)return;b.addEventListener('click',function(){var open=m.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});})();
+</script>
 </body>
 </html>

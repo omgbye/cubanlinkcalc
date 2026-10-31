@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The published method behind the Cuban Link Calculator: the solid-chain weight model and its 0.077 coefficient, alloy densities, the 265 g GOLDZENN calibration anchor, how melt value is computed from the live spot price, and why Premium over Melt stays a separate layer.">
+<meta name="theme-color" content="#0b0c0c">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:title" content="Methodology | Cuban Link Calculator">
+<meta property="og:description" content="How the calculator estimates Cuban link weight and melt value: the model, the densities, the calibration, and the limits — published in full.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cubanlinkcalc.com/methodology.html">
+<link rel="canonical" href="https://cubanlinkcalc.com/methodology.html">
+<title>How the Cuban Link Calculator Estimates Weight &amp; Value | Cuban Link Calculator</title>
+<style>
+  :root{
+    --gold:#e3b341; --gold-deep:#b8860b; --ink:#0a0a0b; --panel:#141416; --panel2:#1b1b1e;
+    --line:#2a2a2e; --txt:#f4f1ea; --muted:#9b968a; --green:#3ddc84; --red:#ff6b6b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:#0b0c0c;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px 40px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:25px 0;border-bottom:1px solid #292a27}
+  .logo{font-weight:900;font-size:19px;letter-spacing:.02em;line-height:1.05;color:var(--txt);text-decoration:none}
+  .logo span{color:var(--gold)}
+  .logo small{display:block;font-size:8px;letter-spacing:.15em;color:var(--muted);font-weight:700;margin-top:8px}
+  nav{display:flex;gap:18px;font-size:12px;color:var(--muted);font-weight:600}
+  nav a{color:inherit;text-decoration:none}
+  nav a.on{color:var(--txt)}
+  nav a:hover{color:var(--gold)}
+  a:focus-visible{outline:2px solid #e3b341;outline-offset:3px}
+  .pagehead{padding:44px 0 6px}
+  .eyebrow{font-size:10px;letter-spacing:.2em;color:#c5b58c;font-weight:700}
+  .pagehead h1{font-size:clamp(34px,4.6vw,54px);font-weight:600;letter-spacing:-.045em;line-height:1.05;margin:16px 0 14px}
+  .pagehead h1 em{font-family:Georgia,serif;font-weight:400;color:#e3b341}
+  .pagehead .lede{color:#aaa99f;font-size:16px;max-width:640px;line-height:1.6}
+  .article{max-width:780px}
+  .article h2{font-size:27px;font-weight:500;letter-spacing:-.03em;margin:38px 0 14px}
+  .article h3{font-size:19px;font-weight:600;margin:26px 0 8px}
+  .article p{font-size:15.5px;color:#c9c6bb;line-height:1.75;margin-bottom:14px}
+  .article ul,.article ol{margin:0 0 14px 22px;color:#c9c6bb;font-size:15.5px;line-height:1.75}
+  .article li{margin-bottom:7px}
+  .article a{color:var(--gold)}
+  .article b,.article strong{color:var(--txt)}
+  .callout{background:#131513;border:1px solid var(--line);border-radius:6px;padding:20px 22px;margin:22px 0}
+  .callout p{margin-bottom:0}
+  .mtable{width:100%;border-collapse:collapse;margin:6px 0 18px}
+  .mtable th,.mtable td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:14.5px;color:#c9c6bb}
+  .mtable th{font-size:11px;letter-spacing:.16em;color:var(--muted);font-weight:800}
+  .mtable td.gv{font-weight:800;color:var(--gold)}
+  .learn{padding:52px 0 10px}
+  .learn h2{font-size:26px;font-weight:500;letter-spacing:-.035em;margin:14px 0 22px}
+  .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  .learn article{border-top:1px solid #494534;padding-top:18px}
+  .learn article span{font-size:10px;letter-spacing:.14em;color:#cfb775}
+  .learn h3{margin:14px 0 8px;font-size:19px;font-weight:500}
+  .learn h3 a{color:var(--txt);text-decoration:none}
+  .learn h3 a:hover{color:var(--gold)}
+  .learn p{font-size:14px;color:#aaa99f;line-height:1.7}
+  footer{margin-top:36px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:12.5px;line-height:1.65}
+  footer b{color:var(--txt)}
+  footer span{float:right}
+  footer p{margin-top:14px;font-size:11px;max-width:650px}
+  .footnav{font-size:12.5px;max-width:none}
+  .footnav a{color:var(--muted);text-decoration:none}
+  .footnav a:hover{color:var(--gold)}
+  @media(max-width:860px){nav{display:none}.wrap{padding:0 18px 30px}.learn-grid{grid-template-columns:1fr;gap:24px}footer span{float:none;display:block;margin-top:10px}.pagehead{padding-top:30px}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>
+  .menubtn{display:none}
+  .mnav{display:none}
+  @media(max-width:860px){
+    .menubtn{display:inline-block;background:var(--panel2);border:1.5px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+    .mnav{flex-direction:column;padding:10px 0 6px;border-bottom:1px solid var(--line)}
+    .mnav.open{display:flex}
+    .mnav a{color:var(--txt);text-decoration:none;font-size:15px;font-weight:600;padding:11px 2px;border-top:1px solid #22231f}
+    .mnav a:first-child{border-top:0}
+  }
+  .calcjump{display:inline-block;margin-top:20px;background:#e3b341;color:#15130e;font-weight:700;font-size:15px;padding:13px 22px;border-radius:5px;text-decoration:none}
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MGXCDLBHK6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MGXCDLBHK6');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9902709215635813" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <a class="logo" href="/">CUBAN LINK <span>CALCULATOR</span><small>KNOW YOUR GOLD. KNOW YOUR PRICE.</small></a>
+    <nav><a href="/#calculator">Calculator</a><a href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a><a href="/gold-karats-explained.html">Karats</a><a href="/what-is-melt-value.html">Melt Value</a><a href="/faq.html">FAQ</a></nav><button class="menubtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu">&#9776; Menu</button>
+  </header>
+  <div class="mnav" id="mobileMenu">
+    <a href="/#calculator">Calculator</a>
+    <a href="/how-to-buy-a-cuban-link-chain.html">Buying Guide</a>
+    <a href="/methodology.html">Methodology</a>
+    <a href="/faq.html">FAQ</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+  </div>
+
+  <div class="pagehead"><span class="eyebrow">METHODOLOGY</span><h1>How the calculator <em>estimates.</em></h1><p class="lede">Every number on this site comes from a published method, not a black box. This page sets out the weight model, the alloy densities and calibration behind it, and exactly how melt value and the premium layer are computed — including what the estimates cannot do.</p></div>
+
+  <div class="article">
+    <h2>Two kinds of numbers</h2>
+    <p>The calculator produces two kinds of figures, and it is worth keeping them separate. When you enter a <b>measured weight</b> — from a scale — the only math involved is purity times price, and the result is as exact as your inputs. The model described on this page enters only when a weight is <b>estimated from dimensions</b>: the width, length, and karat of a solid Miami Cuban link. Modeled weights are estimates, and they are always shown with their uncertainty range.</p>
+
+    <h2>The weight model</h2>
+    <p>The build estimator models a <b>solid</b> Miami Cuban link. Its estimated weight, in grams, is:</p>
+    <div class="callout"><p><b>weight ≈ 0.077 × width² × length × (alloy density ÷ 13.4)</b> — width in millimeters, length in inches, and 13.4 g/cm³ is the density of 14K gold, the model's reference alloy.</p></div>
+    <p>Width appears squared because a wider Cuban link is not just wider — its links are proportionally thicker and taller too, so the cross-section of metal grows roughly with the square of the width. The coefficient <b>0.077</b> folds together the link geometry of the classic Miami Cuban profile: link length relative to width, wire thickness, and spacing. The density term then rescales the result for the chosen karat, because gold alloys get denser as purity rises.</p>
+    <p>Every modeled weight is presented as a range of <b>−12% to +20%</b> around the estimate — the builder displays, for example, "≈ 242 g (range 213–290 g)." That spread is the honest part of the model: individual makers vary in link profile, tightness, and clasp weight, so a dimension-based figure is a model estimate, never a measured weight and never an exact gram count.</p>
+
+    <h2>Alloy densities used</h2>
+    <table class="mtable">
+      <thead><tr><th>Karat</th><th>Density (g/cm³)</th></tr></thead>
+      <tbody>
+        <tr><td>10K</td><td class="gv">11.6</td></tr>
+        <tr><td>14K</td><td class="gv">13.4</td></tr>
+        <tr><td>18K</td><td class="gv">15.5</td></tr>
+        <tr><td>22K</td><td class="gv">17.8</td></tr>
+        <tr><td>24K</td><td class="gv">19.3</td></tr>
+      </tbody>
+    </table>
+    <p>These are standard approximate densities for common yellow-gold alloys. Exact alloy recipes differ slightly between makers — the silver, copper, and zinc mixed with the gold are not identical from one refinery to the next — which is one more reason modeled weights carry a range rather than a single figure.</p>
+
+    <h2>Calibration: the 265-gram anchor</h2>
+    <p>The model was checked against published maker catalog specifications for handmade solid Miami Cuban links. The anchor point is GOLDZENN's catalog specification for a solid 14K Cuban link at <b>12mm wide and 24 inches long: 265 grams</b>. Run through the model, those same dimensions return ≈ 266 grams — within about half a percent of the catalog figure. That agreement at the anchor is what the coefficient was tuned to hold.</p>
+    <table class="mtable">
+      <thead><tr><th>Dimensions</th><th>Karat</th><th>Model estimate</th><th>Catalog specification</th></tr></thead>
+      <tbody>
+        <tr><td>12mm × 24 in</td><td>14K</td><td class="gv">≈ 266 g</td><td>265 g — GOLDZENN catalog</td></tr>
+        <tr><td>12mm × 24 in</td><td>10K</td><td class="gv">≈ 230 g</td><td>—</td></tr>
+        <tr><td>12mm × 24 in</td><td>18K</td><td class="gv">≈ 308 g</td><td>—</td></tr>
+        <tr><td>10mm × 24 in</td><td>14K</td><td class="gv">≈ 185 g</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p>Only the anchor row has a published catalog counterpart; the other rows are the model working as designed, shown so you can see what it predicts across sizes and karats. And one caution the table cannot show: manufacturers vary. A semi-hollow or hollow chain weighs far less than the solid chain this model describes, link tightness and profile differ between shops, and clasps add weight of their own. Treat the model as a well-calibrated starting point for a solid chain — not as a substitute for weighing the piece in front of you.</p>
+
+    <h2>How melt value is computed</h2>
+    <p>Melt value is the value of the gold content itself: <b>weight in grams × purity fraction × the spot price of pure gold per gram</b>. The calculator fetches the live spot price — US dollars per troy ounce — from the gold-api.com market feed when the page loads, and divides by 31.1034768 (grams per troy ounce) to get the per-gram price. The price field stays editable, so every figure can be re-run against any reference price.</p>
+    <p>Purity uses the nominal karat fraction: 14K is 14/24, or about 58.33% — a fineness of 583. Hallmark stamps state fineness directly, in parts per thousand: a <b>585 stamp states 58.5%</b>, slightly more than nominal 14K, and makers use it so a piece cannot test below the 14K threshold; older pieces may be stamped 583 instead. If you enter a fineness, the calculator values the piece at exactly that figure. A hallmark states the <i>claimed</i> purity — testing is how the claim is confirmed.</p>
+    <h3>A worked example (illustration only)</h3>
+    <p>At a round spot price of <b>$4,000 per troy ounce — an illustration chosen for clean arithmetic, not a current price</b> — pure gold works out to $4,000 ÷ 31.1035 ≈ $128.60 per gram. A 100-gram 14K chain holds 58.33 grams of pure gold, so its melt value is 100 × 0.5833 × $128.60 ≈ <b>$7,502</b>. The 265-gram calibration chain at the same illustrative price would melt at ≈ $19,880. The method never changes; only the live price moves.</p>
+
+    <h2>Premium over Melt: a separate layer, on purpose</h2>
+    <p>Melt value is never adjusted, blended, or marked up inside the calculator. The retail markup is handled as its own labeled layer — <b>Premium over Melt</b> — which sits on top of melt and is always shown separately. The buying view adds a premium percentage you choose to the melt figure; the quote checker works the other way, subtracting melt from a real store quote to expose the premium inside it, in dollars, as a percentage, and per gram. The selling view models a buyer's payout as a percentage of melt minus fees. Keeping the layers separate is the point of the site: you always know which dollars are gold and which dollars are markup.</p>
+
+    <h2>Ground truth, and the limits of this page</h2>
+    <p>Everything here is educational. A dimension-based estimate can be off by the width of its stated range; alloys vary; prices move by the minute. The ground truth for any real transaction is physical: a jeweler's scale for weight, and an acid test or XRF analysis for fineness. Weigh and test the actual piece, then use this calculator to check the arithmetic — that order, not the reverse.</p>
+  </div>
+
+  <section class="learn"><span class="eyebrow">KEEP READING</span><h2>More gold knowledge.</h2><div class="learn-grid"><article><span>GUIDE</span><h3><a href="/how-to-buy-a-cuban-link-chain.html">How to buy a Cuban link chain</a></h3><p>How pricing works, what drives the premium, and the questions to ask before you pay.</p></article><article><span>GUIDE</span><h3><a href="/gold-karats-explained.html">Gold karats explained</a></h3><p>Purity, fineness, hallmarks, and why a 585 stamp is not quite the same thing as 14K.</p></article><article><span>GUIDE</span><h3><a href="/what-is-melt-value.html">What is melt value?</a></h3><p>What the gold in your chain is worth, why melt is not the check you get, and how buyers price scrap.</p></article></div></section>
+
+  <footer><b>CUBAN LINK CALCULATOR</b><span>Know your gold. Know your price.</span><p>Estimates for education. Values depend on the entered weight, purity and gold price. No jeweler affiliations or sponsored listings in this version.</p><p class="footnav"><a href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a> · <a href="/gold-karats-explained.html">Karats Explained</a> · <a href="/what-is-melt-value.html">Melt Value</a> · <a href="/methodology.html">Methodology</a> · <a href="/faq.html">FAQ</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/contact.html">Contact</a></p></footer>
+</div>
+
+<script>
+  (function(){var b=document.getElementById('menuBtn'),m=document.getElementById('mobileMenu');if(!b||!m)return;b.addEventListener('click',function(){var open=m.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});})();
+</script>
+</body>
+</html>
