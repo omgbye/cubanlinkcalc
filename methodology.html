@@ -48,6 +48,9 @@
   .mtable th,.mtable td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:14.5px;color:#c9c6bb}
   .mtable th{font-size:11px;letter-spacing:.16em;color:var(--muted);font-weight:800}
   .mtable td.gv{font-weight:800;color:var(--gold)}
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;margin:6px 0 18px}
+  .tscroll .mtable{margin:0}
+  @media(max-width:480px){.mtable th,.mtable td{padding:8px 9px;font-size:13.5px}}
   .learn{padding:52px 0 10px}
   .learn h2{font-size:26px;font-weight:500;letter-spacing:-.035em;margin:14px 0 22px}
   .learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
@@ -119,7 +122,7 @@
     <p>Every modeled weight is presented as a range of <b>−12% to +20%</b> around the estimate — the builder displays, for example, "≈ 242 g (range 213–290 g)." That spread is the honest part of the model: individual makers vary in link profile, tightness, and clasp weight, so a dimension-based figure is a model estimate, never a measured weight and never an exact gram count.</p>
 
     <h2>Alloy densities used</h2>
-    <table class="mtable">
+    <div class="tscroll"><table class="mtable">
       <thead><tr><th>Karat</th><th>Density (g/cm³)</th></tr></thead>
       <tbody>
         <tr><td>10K</td><td class="gv">11.6</td></tr>
@@ -128,12 +131,12 @@
         <tr><td>22K</td><td class="gv">17.8</td></tr>
         <tr><td>24K</td><td class="gv">19.3</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>These are standard approximate densities for common yellow-gold alloys. Exact alloy recipes differ slightly between makers — the silver, copper, and zinc mixed with the gold are not identical from one refinery to the next — which is one more reason modeled weights carry a range rather than a single figure.</p>
 
     <h2>Calibration: the 265-gram anchor</h2>
-    <p>The model was checked against published maker catalog specifications for handmade solid Miami Cuban links. The anchor point is GOLDZENN's catalog specification for a solid 14K Cuban link at <b>12mm wide and 24 inches long: 265 grams</b>. Run through the model, those same dimensions return ≈ 266 grams — within about half a percent of the catalog figure. That agreement at the anchor is what the coefficient was tuned to hold.</p>
-    <table class="mtable">
+    <p>The model was checked against published maker catalog specifications for handmade solid Miami Cuban links. The anchor point is <a href="https://www.goldzenn.com/collections/cuban-link-chains" target="_blank" rel="noopener">GOLDZENN's catalog specification</a> for a solid 14K Cuban link at <b>12mm wide and 24 inches long: 265 grams</b>. Run through the model, those same dimensions return ≈ 266 grams — within about half a percent of the catalog figure. That agreement at the anchor is what the coefficient was tuned to hold.</p>
+    <div class="tscroll"><table class="mtable">
       <thead><tr><th>Dimensions</th><th>Karat</th><th>Model estimate</th><th>Catalog specification</th></tr></thead>
       <tbody>
         <tr><td>12mm × 24 in</td><td>14K</td><td class="gv">≈ 266 g</td><td>265 g — GOLDZENN catalog</td></tr>
@@ -141,12 +144,12 @@
         <tr><td>12mm × 24 in</td><td>18K</td><td class="gv">≈ 308 g</td><td>—</td></tr>
         <tr><td>10mm × 24 in</td><td>14K</td><td class="gv">≈ 185 g</td><td>—</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>Only the anchor row has a published catalog counterpart; the other rows are the model working as designed, shown so you can see what it predicts across sizes and karats. And one caution the table cannot show: manufacturers vary. A semi-hollow or hollow chain weighs far less than the solid chain this model describes, link tightness and profile differ between shops, and clasps add weight of their own. Treat the model as a well-calibrated starting point for a solid chain — not as a substitute for weighing the piece in front of you.</p>
 
     <h2>How melt value is computed</h2>
-    <p>Melt value is the value of the gold content itself: <b>weight in grams × purity fraction × the spot price of pure gold per gram</b>. The calculator fetches the live spot price — US dollars per troy ounce — from the gold-api.com market feed when the page loads, and divides by 31.1034768 (grams per troy ounce) to get the per-gram price. The price field stays editable, so every figure can be re-run against any reference price.</p>
-    <p>Purity uses the nominal karat fraction: 14K is 14/24, or about 58.33% — a fineness of 583. Hallmark stamps state fineness directly, in parts per thousand: a <b>585 stamp states 58.5%</b>, slightly more than nominal 14K, and makers use it so a piece cannot test below the 14K threshold; older pieces may be stamped 583 instead. If you enter a fineness, the calculator values the piece at exactly that figure. A hallmark states the <i>claimed</i> purity — testing is how the claim is confirmed.</p>
+    <p>Melt value is the value of the gold content itself: <b>weight in grams × purity fraction × the spot price of pure gold per gram</b>. The calculator fetches the live spot price — US dollars per troy ounce — from the <a href="https://www.gold-api.com" target="_blank" rel="noopener">gold-api.com</a> market feed when the page loads, and divides by 31.1034768 (grams per troy ounce) to get the per-gram price. The price field stays editable, so every figure can be re-run against any reference price.</p>
+    <p>Purity uses the nominal karat fraction: 14K is 14/24, or about 58.33% — a fineness of 583. Hallmark stamps state fineness directly, in parts per thousand: a <b>585 stamp states 58.5%</b>, slightly more than nominal 14K, and makers stamp 585 so the stated fineness sits slightly above the 14K minimum; what any individual piece actually contains is established by testing, not by the stamp; older pieces may be stamped 583 instead. If you enter a fineness, the calculator values the piece at exactly that figure. A hallmark states the <i>claimed</i> purity — testing is how the claim is confirmed.</p>
     <h3>A worked example (illustration only)</h3>
     <p>At a round spot price of <b>$4,000 per troy ounce — an illustration chosen for clean arithmetic, not a current price</b> — pure gold works out to $4,000 ÷ 31.1035 ≈ $128.60 per gram. A 100-gram 14K chain holds 58.33 grams of pure gold, so its melt value is 100 × 0.5833 × $128.60 ≈ <b>$7,502</b>. The 265-gram calibration chain at the same illustrative price would melt at ≈ $19,880. The method never changes; only the live price moves.</p>
 
@@ -155,6 +158,12 @@
 
     <h2>Ground truth, and the limits of this page</h2>
     <p>Everything here is educational. A dimension-based estimate can be off by the width of its stated range; alloys vary; prices move by the minute. The ground truth for any real transaction is physical: a jeweler's scale for weight, and an acid test or XRF analysis for fineness. Weigh and test the actual piece, then use this calculator to check the arithmetic — that order, not the reverse.</p>
+
+    <h2>Sources</h2>
+    <ul>
+      <li><a href="https://www.goldzenn.com/collections/cuban-link-chains" target="_blank" rel="noopener">GOLDZENN — Handmade Miami Cuban Link Chains</a> — the published maker catalog specifications the weight model was calibrated against, including the anchor chain: solid 14K, 12mm × 24 in, 265 g.</li>
+      <li><a href="https://www.gold-api.com" target="_blank" rel="noopener">Gold API</a> — the live spot-price feed the calculator fetches when the page loads, used for all melt-value figures.</li>
+    </ul>
   </div>
 
   <section class="learn"><span class="eyebrow">KEEP READING</span><h2>More gold knowledge.</h2><div class="learn-grid"><article><span>GUIDE</span><h3><a href="/how-to-buy-a-cuban-link-chain.html">How to buy a Cuban link chain</a></h3><p>How pricing works, what drives the premium, and the questions to ask before you pay.</p></article><article><span>GUIDE</span><h3><a href="/gold-karats-explained.html">Gold karats explained</a></h3><p>Purity, fineness, hallmarks, and why a 585 stamp is not quite the same thing as 14K.</p></article><article><span>GUIDE</span><h3><a href="/what-is-melt-value.html">What is melt value?</a></h3><p>What the gold in your chain is worth, why melt is not the check you get, and how buyers price scrap.</p></article></div></section>
