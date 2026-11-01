@@ -1,6 +1,7 @@
 /* Dependency-free WebGL2 visual. No weight, pricing, or feed calculations.
-   Renderer v2, built on Codex's original: filed-flat Cuban link geometry,
-   karat tint (uTint), and procedural studio-environment reflections.
+   Renderer v3, built on Codex's original: one centred oval band per link
+   (v3 geometry), karat tint (uTint), and procedural studio-environment
+   reflections (v2).
    Integration: renderChain(container, {widthMm, lengthIn, light, angleDeg, karat}).
    Canvas, buffers, and geometry are retained. Input calls coalesce into one RAF. */
 (function(global){
@@ -114,32 +115,38 @@
   return new Float32Array(data);
  }
  function linkMesh(){
-  // Filed-flat Miami Cuban faces (v2): two broad, near-planar leaves per link.
-  // The leaves are widened until they nearly fill the ring outline (the face
-  // reads as one solid flat oval band, not a thin frame), their cross-curvature
-  // is cut so the top faces are broad mirror planes, they lie almost in the
-  // ring plane (tilt .14 rad, was .70 — the old tilt made each link read as a
-  // diagonal blade), and they are lengthened along the path so each link
-  // overlaps the next at the 0.72x-width pitch (no gaps along the strand).
-  // The second leaf sits a hair higher (+.014) where the two overlap, like a
-  // real curb link's shoulder passing over its mate.
-  const out=[],steps=40,angle=.14,c=Math.cos(angle),sn=Math.sin(angle);
-  function leaf(cx,cy,cz){
-   const vertex=(r,t,z,flat)=>{
-    const x=.30*r*Math.cos(t),y=.46*r*Math.sin(t);
-    const pos=[cx+x*c-y*sn,cy+x*sn+y*c,z];
-    const radial=norm([Math.cos(t)/.30,Math.sin(t)/.46,flat?10000:3]);
-    const n=flat?[0,0,1]:norm([radial[0]*c-radial[1]*sn,radial[0]*sn+radial[1]*c,radial[2]]);
-    return [...pos,...n,flat?1:.55];
-   };
-   const center=[cx,cy,.12+cz,0,0,1,1];
-   for(let j=0;j<steps;j++){
-    const t=j/steps*Math.PI*2,t2=(j+1)/steps*Math.PI*2;
-    const a=vertex(.86,t,.12+cz,true),b=vertex(.86,t2,.12+cz,true),e=vertex(1,t,cz,false),f=vertex(1,t2,cz,false);
-    triangle(out,center,a,b);triangle(out,a,e,f);triangle(out,a,f,b);
-   }
+  // One centred oval band per link (v3). v2 built each link from TWO ellipse
+  // leaves offset diagonally (centres (-.13,-.24) / (.13,.24), the second
+  // raised +.014): the pair's outline ran ~28 deg off the chain axis in local
+  // space (10.5 deg screen-projected on the front arc), each leaf's dark rim
+  // crossed the other's face (48 of 240 rim vertices fell inside the mate's
+  // face ellipse -- the visible centre seam), and the outline spanned only
+  // 86.7% of the nominal width. A real Miami Cuban link is a single oval ring
+  // lying in the chain's plane, long axis along the chain, with a subtle
+  // lengthwise crown (the filed ridge) instead of a seam.
+  // v3: one ellipse, semi-axes .475 across / .69 along (outline .95 x 1.38,
+  // still overlapping the next link at the 0.72x-width pitch). The face is a
+  // gentle cylindrical crown across the width -- z = FZ + RIDGE*(1-(x/.9A)^2)
+  // with matching tilted normals -- so a soft highlight ridge runs along the
+  // link the way light runs along a real link's filed crown. Single fan
+  // centre, no z step, no interior rim: the seam is gone by construction.
+  // Rings: centre fan + r=.5 + r=.9 (crowned face, AO 1) and the r=1 rim
+  // (radial normals, AO .55) as in v2; 48 steps x 5 triangles keeps the
+  // v2 vertex count (720 verts / 5040 floats).
+  const out=[],steps=48,A=.475,B=.69,FZ=.12,RIDGE=.035;
+  function ring(r,t){
+   const x=A*r*Math.cos(t),y=B*r*Math.sin(t);
+   if(r>=1)return [x,y,0,...norm([Math.cos(t)/A,Math.sin(t)/B,3]),.55];
+   const xw=r*Math.cos(t); // across coordinate in units of A
+   const crown=RIDGE*(1-(xw/.9)**2),slope=-2*RIDGE*xw/(.81*A);
+   return [x,y,FZ+crown,...norm([-slope,0,1]),1];
   }
-  leaf(-.13,-.24,0);leaf(.13,.24,.014);
+  const center=[0,0,FZ+RIDGE,0,0,1,1];
+  for(let j=0;j<steps;j++){
+   const t=j/steps*Math.PI*2,t2=(j+1)/steps*Math.PI*2;
+   const a=ring(.5,t),b=ring(.5,t2),c=ring(.9,t),d=ring(.9,t2),e=ring(1,t),f=ring(1,t2);
+   triangle(out,center,a,b);triangle(out,a,c,d);triangle(out,a,d,b);triangle(out,c,e,f);triangle(out,c,f,d);
+  }
   return new Float32Array(out);
  }
  function standMesh(){
