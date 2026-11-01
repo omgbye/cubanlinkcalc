@@ -1,5 +1,7 @@
 /* Dependency-free WebGL2 visual. No weight, pricing, or feed calculations.
-   Integration: renderChain(container, {widthMm, lengthIn, light, angleDeg}).
+   Renderer v2, built on Codex's original: filed-flat Cuban link geometry,
+   karat tint (uTint), and procedural studio-environment reflections.
+   Integration: renderChain(container, {widthMm, lengthIn, light, angleDeg, karat}).
    Canvas, buffers, and geometry are retained. Input calls coalesce into one RAF. */
 (function(global){
  'use strict';
@@ -8,6 +10,22 @@
  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
  const norm=a=>{const n=Math.hypot(...a)||1;return a.map(x=>x/n);};
  const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ /* Karat tint multipliers on the shader's gold, applied to the base color,
+    the specular highlight, and the environment reflection alike. Brightness
+    and yellow saturation RISE with karat: 10K palest/dullest, 14K the neutral
+    baseline (1,1,1), 18K a touch brighter and more yellow, 22K richer, 24K
+    the brightest, most saturated yellow-gold. Still subtle throughout.
+    Anchors are linearly interpolated; a custom fineness maps onto the same
+    scale by purity fraction (fineness x 24). */
+ const tintAnchors=[[9,[.885,.855,.905]],[10,[.905,.872,.923]],[14,[1,1,1]],[18,[1.030,1.005,.905]],[22,[1.055,1.002,.825]],[24,[1.075,.995,.760]]];
+ function tintForKarat(k){
+  k=clamp(Number(k)||14,9,24);
+  for(let i=1;i<tintAnchors.length;i++){
+   const a=tintAnchors[i-1],b=tintAnchors[i];
+   if(k<=b[0]){const t=(k-a[0])/(b[0]-a[0]);return a[1].map((v,j)=>v+(b[1][j]-v)*t);}
+  }
+  return tintAnchors[tintAnchors.length-1][1].slice();
+ }
  function radius(y){
   for(let i=1;i<profile.length;i++)if(y<=profile[i][0]){
    const a=profile[i-1],b=profile[i],prev=profile[Math.max(0,i-2)],next=profile[Math.min(profile.length-1,i+1)];
@@ -32,8 +50,10 @@
    const a=cursor-1,f=(target-path.dist[a])/(path.dist[cursor]-path.dist[a]||1),t=-Math.PI+(a+f)/(path.pts.length-1)*Math.PI*2;
    const pos=center(t,drop,width),n=normal(pos[1],t),tangent=norm(center(t+.001,drop,width).map((v,j)=>v-center(t-.001,drop,width)[j]));
    let right=norm(cross(tangent,n)),up=norm(cross(right,tangent));
-   // The curb twist is subtle. Adjacent broad faces overlap, rather than alternate upright rings.
-   const twist=(i%2?1:-1)*.065,skew=(i%2?1:-1)*.035;
+   // Filed Cuban links lie in one plane as a continuous band: the alternating
+   // twist/skew is kept near zero so faces catch light together instead of
+   // tilting into diagonal slashes.
+   const twist=(i%2?1:-1)*.02,skew=(i%2?1:-1)*.012;
    const r=right.map((v,j)=>v*Math.cos(skew)+tangent[j]*Math.sin(skew));
    const v=tangent.map((x,j)=>x*Math.cos(skew)-right[j]*Math.sin(skew));
    right=r.map((x,j)=>x*Math.cos(twist)+up[j]*Math.sin(twist));
@@ -57,15 +77,28 @@
  vec3 camera=vec3(vPos.x,.866*(vPos.y+30.)-.5*vPos.z,.5*(vPos.y+30.)+.866*vPos.z-720.);
  float near=10.,far=1800.;gl_Position=vec4(camera.x*2.65/uAspect,camera.y*2.65,((far+near)/(near-far))*camera.z+(2.*far*near)/(near-far),-camera.z);}`;
  const fs=`#version 300 es
- precision highp float;in vec3 vPos,vNormal,vLocal,vLink;in float vAO;uniform float uMaterial,uLight,uDrop,uWidth;out vec4 color;
+ precision highp float;in vec3 vPos,vNormal,vLocal,vLink;in float vAO;uniform float uMaterial,uLight,uDrop,uWidth;uniform vec3 uTint;out vec4 color;
  vec3 tonemap(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}
+ /* Procedural studio environment for the chain only: a dark room with two
+    softbox strips and a low warm strip, sampled by reflection direction.
+    The key softbox azimuth follows uLight, so moving the studio light sweeps
+    the reflections across the links. A handful of smoothsteps — no textures,
+    cheap enough for phone GPUs. */
+ vec3 studioEnv(vec3 d){vec3 base=mix(vec3(.030,.027,.022),vec3(.10,.095,.080),clamp(d.y*.5+.5,0.,1.));
+ float az=atan(d.x,d.z);float keyAz=uLight*1.1+.55;
+ float keyBox=smoothstep(.62,.18,abs(mod(az-keyAz+3.14159,6.28318)-3.14159))*smoothstep(-.05,.35,d.y)*smoothstep(1.05,.55,d.y);
+ float fillBox=smoothstep(.85,.30,abs(mod(az-keyAz+2.60+3.14159,6.28318)-3.14159))*smoothstep(.0,.3,d.y)*.45;
+ float lowStrip=smoothstep(.28,.06,abs(d.y+.18))*.35;
+ return base+vec3(1.25,1.16,.98)*keyBox+vec3(.55,.58,.62)*fillBox+vec3(.9,.8,.6)*lowStrip;}
  void main(){vec3 n=normalize(vNormal);if(!gl_FrontFacing)n=-n;vec3 eye=normalize(vec3(0.,270.,720.)-vPos);vec3 l=normalize(vec3(uLight*1.7,.9,1.7));float diffuse=max(dot(n,l),0.);vec3 c;
  if(uMaterial>1.5){c=vec3(.055,.024,.007)+vec3(.17,.075,.018)*diffuse;}else if(uMaterial>0.5){vec3 r=reflect(-eye,n);float sky=.18+.35*max(r.y,0.);float key=pow(max(dot(r,l),0.),45.)*2.6;
  float box=smoothstep(.77,.96,dot(r,normalize(vec3(uLight*.85,.38,1.))))*.7;
  float strip=pow(max(dot(r,normalize(vec3(-1.2,.6,.4))),0.),30.)*1.1;
  float endSeam=smoothstep(.58,.745,abs(vLink.y));float darkSeam=(.30+.70*vAO)*(1.-endSeam*.48);
- vec3 gold=vec3(1.,.68,.18);c=gold*(.075+sky*.50+diffuse*.16)+vec3(1.,.84,.43)*(key+box+strip);c*=darkSeam;
- c+=vec3(.18,.12,.04)*pow(1.-max(dot(n,eye),0.),4.);
+ vec3 gold=vec3(1.,.68,.18)*uTint;c=gold*(.075+sky*.50+diffuse*.16)+vec3(1.,.84,.43)*uTint*(key+box+strip);c*=darkSeam;
+ c+=vec3(.18,.12,.04)*uTint*pow(1.-max(dot(n,eye),0.),4.);
+ float ndv=max(dot(n,eye),0.);float fres=.22+.78*pow(1.-ndv,3.);
+ c+=studioEnv(r)*uTint*fres*.85*darkSeam;
  }else{float front=max(dot(n,normalize(vec3(-.6,.8,1.))),0.);c=vec3(.19,.185,.17)+vec3(.38,.38,.35)*front+vec3(.27,.27,.25)*diffuse;
  float phi=atan(vLocal.x/110.,vLocal.z/65.);float cy=162.-uDrop*pow((1.+cos(phi))*.5,3.4);
  float contact=exp(-pow((vLocal.y-cy+uLight*2.)/(uWidth*.68+2.),2.));c*=1.-contact*.70;
@@ -81,25 +114,32 @@
   return new Float32Array(data);
  }
  function linkMesh(){
-  // Filed curb faces: two broad, rounded, oblique shoulders per interlocked link.
-  // The aperture is concealed by the overlapping neighbor, not drawn as an open oval.
-  const out=[],steps=40,angle=.70,c=Math.cos(angle),sn=Math.sin(angle);
-  function leaf(cx,cy){
+  // Filed-flat Miami Cuban faces (v2): two broad, near-planar leaves per link.
+  // The leaves are widened until they nearly fill the ring outline (the face
+  // reads as one solid flat oval band, not a thin frame), their cross-curvature
+  // is cut so the top faces are broad mirror planes, they lie almost in the
+  // ring plane (tilt .14 rad, was .70 — the old tilt made each link read as a
+  // diagonal blade), and they are lengthened along the path so each link
+  // overlaps the next at the 0.72x-width pitch (no gaps along the strand).
+  // The second leaf sits a hair higher (+.014) where the two overlap, like a
+  // real curb link's shoulder passing over its mate.
+  const out=[],steps=40,angle=.14,c=Math.cos(angle),sn=Math.sin(angle);
+  function leaf(cx,cy,cz){
    const vertex=(r,t,z,flat)=>{
-    const x=.13*r*Math.cos(t),y=.41*r*Math.sin(t);
+    const x=.30*r*Math.cos(t),y=.46*r*Math.sin(t);
     const pos=[cx+x*c-y*sn,cy+x*sn+y*c,z];
-    const radial=norm([Math.cos(t)/.13,Math.sin(t)/.41,flat?10000:5]);
+    const radial=norm([Math.cos(t)/.30,Math.sin(t)/.46,flat?10000:3]);
     const n=flat?[0,0,1]:norm([radial[0]*c-radial[1]*sn,radial[0]*sn+radial[1]*c,radial[2]]);
     return [...pos,...n,flat?1:.55];
    };
-   const center=[cx,cy,.15,0,0,1,1];
+   const center=[cx,cy,.12+cz,0,0,1,1];
    for(let j=0;j<steps;j++){
     const t=j/steps*Math.PI*2,t2=(j+1)/steps*Math.PI*2;
-    const a=vertex(.79,t,.15,true),b=vertex(.79,t2,.15,true),e=vertex(1,t,-.055,false),f=vertex(1,t2,-.055,false);
+    const a=vertex(.86,t,.12+cz,true),b=vertex(.86,t2,.12+cz,true),e=vertex(1,t,cz,false),f=vertex(1,t2,cz,false);
     triangle(out,center,a,b);triangle(out,a,e,f);triangle(out,a,f,b);
    }
   }
-  leaf(-.14,-.22);leaf(.14,.22);
+  leaf(-.13,-.24,0);leaf(.13,.24,.014);
   return new Float32Array(out);
  }
  function standMesh(){
@@ -130,7 +170,7 @@
   const clasp=mesh(gl,claspMesh()),claspInstances=gl.createBuffer();gl.bindVertexArray(clasp.vao);gl.bindBuffer(gl.ARRAY_BUFFER,claspInstances);
   for(let i=3;i<=6;i++){gl.enableVertexAttribArray(i);gl.vertexAttribPointer(i,3,gl.FLOAT,false,48,(i-3)*12);gl.vertexAttribDivisor(i,1);}
   gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.clearColor(0,0,0,0);
-  const uniforms={};for(const name of ['uChain','uWidth','uAngle','uAspect','uMaterial','uLight','uDrop'])uniforms[name]=gl.getUniformLocation(program,name);
+  const uniforms={};for(const name of ['uChain','uWidth','uAngle','uAspect','uMaterial','uLight','uDrop','uTint'])uniforms[name]=gl.getUniformLocation(program,name);
   const state={canvas,gl,program,bust,stand,link,clasp,claspInstances,instances,uniforms,lastKey:'',scheduled:false,options:{},width:0,height:0};
   new ResizeObserver(entries=>{const r=entries[0].contentRect;state.width=r.width;state.height=r.height;schedule(state);}).observe(el);
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();el.setAttribute('aria-label','Studio paused because the graphics context was lost. Reload to restore it.');});
@@ -140,12 +180,13 @@
  function draw(s){const {gl,canvas,uniforms:u,options:o}=s;if(!s.width||!s.height)return;const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(s.width*dpr),h=Math.round(s.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(s.program);
   const key=o.widthMm+':'+o.lengthIn;if(s.lastKey!==key){s.chain=chainGeometry(o.widthMm,o.lengthIn);gl.bindBuffer(gl.ARRAY_BUFFER,s.instances);gl.bufferData(gl.ARRAY_BUFFER,s.chain.data,gl.DYNAMIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,s.claspInstances);gl.bufferData(gl.ARRAY_BUFFER,s.chain.clasp,gl.DYNAMIC_DRAW);s.lastKey=key;}
   gl.uniform1f(u.uWidth,o.widthMm);gl.uniform1f(u.uAngle,o.angleDeg*Math.PI/180);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uLight,o.light);gl.uniform1f(u.uDrop,s.chain.drop);
+  const tint=tintForKarat(o.karat);gl.uniform3f(u.uTint,tint[0],tint[1],tint[2]);
   gl.uniform1i(u.uChain,0);gl.uniform1f(u.uMaterial,2);gl.bindVertexArray(s.stand.vao);gl.drawArrays(gl.TRIANGLES,0,s.stand.count);gl.uniform1f(u.uMaterial,0);gl.bindVertexArray(s.bust.vao);gl.drawArrays(gl.TRIANGLES,0,s.bust.count);
   gl.uniform1i(u.uChain,1);gl.uniform1f(u.uMaterial,1);gl.bindVertexArray(s.link.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,s.link.count,s.chain.count);
   gl.bindVertexArray(s.clasp.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,s.clasp.count,1);
   canvas.dataset.renderError=String(gl.getError());canvas.dataset.links=String(s.chain.count);canvas.dataset.valid=String(s.chain.data.every(Number.isFinite));
  }
  global.renderChain=function(el,options){if(!(el instanceof Element))throw TypeError('renderChain needs a container element.');let s=cache.get(el);if(!s){s=initialize(el);cache.set(el,s);}if(s.failed)return;
-  s.options={widthMm:clamp(Number(options.widthMm)||12,4,20),lengthIn:clamp(Number(options.lengthIn)||24,16,32),light:clamp(Number(options.light)||0,-1,1),angleDeg:Number(options.angleDeg)||0};schedule(s);
+  s.options={widthMm:clamp(Number(options.widthMm)||12,3,20),lengthIn:clamp(Number(options.lengthIn)||24,16,32),light:clamp(Number(options.light)||0,-1,1),angleDeg:Number(options.angleDeg)||0,karat:clamp(Number(options.karat)||14,9,24)};schedule(s);
  };
 })(window);
