@@ -210,7 +210,7 @@
       <div class="field"><label for="spotIn">USE YOUR OWN PRICE (OPTIONAL)</label><input type="number" id="spotIn" min="0" step="0.01" placeholder="Leave blank to use the live price"></div>
       <button class="ghostbtn" id="spotReset" type="button" hidden>Use live price</button>
     </div>
-    <p class="fineprint" id="spotNote">Calculations use the Gold API price shown at the top of the page, with its source timestamp. Type your own price here instead and every result is labeled <b>Manual price</b>.</p>
+    <p class="fineprint" id="spotNote">Calculations use the live market price shown at the top of the page, with its source timestamp. Type your own price here instead and every result is labeled <b>Manual price</b>.</p>
     <div style="margin-top:16px"><button class="ghostbtn" id="exampleBtn" type="button">See an example</button> <span style="color:var(--muted);font-size:12.5px;line-height:1.5">Fills in two sample quotes at a manual $4,000 spot price so you can watch the comparison work.</span></div>
   </section>
 
@@ -399,7 +399,7 @@
     else if(spotState === "live"){
       st.textContent = refreshFailed
         ? "Stale · last updated " + stampText() + " · refresh failed, showing last quote"
-        : "Gold API · price timestamp " + stampText();
+        : "Live Market Feed · price timestamp " + stampText();
     } else {
       st.textContent = refreshFailed
         ? "Feed unavailable · showing example price"
@@ -484,7 +484,7 @@
   function basisText(){
     const p = effSpot();
     if(spotState === "manual") return "All figures use your <b>manual spot price of " + fmt2(p) + " per troy oz</b> — labeled Manual price throughout, including the print view.";
-    if(spotState === "live") return "All figures use one spot price: <b>" + fmt2(p) + " per troy oz</b> · Source: Gold API (gold-api.com) · Price timestamp: <b>" + stampText() + "</b>" + (refreshFailed ? " · <b>Stale — the last refresh failed, so the last successful quote is still in use.</b>" : "");
+    if(spotState === "live") return "All figures use one spot price: <b>" + fmt2(p) + " per troy oz</b> · Source: Live Market Feed · Price timestamp: <b>" + stampText() + "</b>" + (refreshFailed ? " · <b>Stale — the last refresh failed, so the last successful quote is still in use.</b>" : "");
     return "All figures currently use an <b>example spot price of " + fmt2(p) + " per troy oz</b> — the live feed has not answered yet" + (refreshFailed ? " (the feed could not be reached)" : "") + ". Re-check the numbers once a live price shows at the top of the page.";
   }
 </script>
@@ -595,7 +595,7 @@
 
   function spotAssumption(){
     if(spotState === "manual") return "Spot price: " + fmt2(effSpot()) + " per troy oz — a manual price entered by the visitor, not a live quote. Every result on this page is labeled Manual price.";
-    if(spotState === "live") return "Spot source: Gold API (gold-api.com), price timestamp " + stampText() + ", spot " + fmt2(effSpot()) + " per troy oz." + (refreshFailed ? " The last refresh failed, so the last successful quote is the one in use and is marked stale." : "");
+    if(spotState === "live") return "Spot source: Live Market Feed, price timestamp " + stampText() + ", spot " + fmt2(effSpot()) + " per troy oz." + (refreshFailed ? " The last refresh failed, so the last successful quote is the one in use and is marked stale." : "");
     return "Spot price: " + fmt2(effSpot()) + " per troy oz — an example price; the live feed had not answered when these figures were produced.";
   }
 
@@ -630,7 +630,7 @@
     const spot = effSpot();
     let spotLine;
     if(spotState === "manual") spotLine = "Spot price used: " + fmt2(spot) + " per troy oz — <b>Manual price</b> entered by the visitor (not a live quote).";
-    else if(spotState === "live") spotLine = "Spot price used: " + fmt2(spot) + " per troy oz — Source: Gold API (gold-api.com) · Price timestamp: " + stampText() + (refreshFailed ? " · Stale: the last refresh failed; the last successful quote is shown." : "");
+    else if(spotState === "live") spotLine = "Spot price used: " + fmt2(spot) + " per troy oz — Source: Live Market Feed · Price timestamp: " + stampText() + (refreshFailed ? " · Stale: the last refresh failed; the last successful quote is shown." : "");
     else spotLine = "Spot price used: " + fmt2(spot) + " per troy oz — Example price (the live feed had not answered when this was printed).";
     const head = "<tr><th></th>" + valid.map(q=>"<th>Quote " + q.letter + (q.name ? " — " + esc(q.name) : "") + "</th>").join("") + "</tr>";
     const prow = (label, fn) => "<tr><td>" + label + "</td>" + valid.map((q,i)=>"<td>" + fn(q, validC[i]) + "</td>").join("") + "</tr>";

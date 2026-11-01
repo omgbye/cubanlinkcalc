@@ -667,7 +667,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   $("spot").addEventListener("input",()=>{$("priceStatus").textContent="Manual price · USD";spotManual=true;priceState="manual";updateTile();});
   async function refreshPrice(){
     const b=$("refreshPrice");b.disabled=true;b.textContent="Updating…";
-    try{const res=await fetch("https://api.gold-api.com/price/XAU",{signal:AbortSignal.timeout(10000)});if(!res.ok)throw Error();const data=await res.json();if(!(data.price>0))throw Error();$("spot").value=Number(data.price).toFixed(2);calc();const stamp=data.updatedAt?new Date(data.updatedAt):null;$("priceStatus").textContent="Gold API · "+(stamp&&!isNaN(stamp)?"price timestamp "+stamp.toLocaleString():"fetched "+new Date().toLocaleTimeString());priceState="live";providerStamp=(stamp&&!isNaN(stamp))?stamp:new Date();refreshFailed=false;updateTile();}
+    try{const res=await fetch("https://api.gold-api.com/price/XAU",{signal:AbortSignal.timeout(10000)});if(!res.ok)throw Error();const data=await res.json();if(!(data.price>0))throw Error();$("spot").value=Number(data.price).toFixed(2);calc();const stamp=data.updatedAt?new Date(data.updatedAt):null;$("priceStatus").textContent="Live Market Feed · "+(stamp&&!isNaN(stamp)?"price timestamp "+stamp.toLocaleString():"fetched "+new Date().toLocaleTimeString());priceState="live";providerStamp=(stamp&&!isNaN(stamp))?stamp:new Date();refreshFailed=false;updateTile();}
     catch(e){$("priceStatus").textContent="Feed unavailable · using displayed price (editable)";refreshFailed=true;updateTile();}
     finally{b.disabled=false;b.textContent="Refresh price ↻";}
   }
@@ -1030,15 +1030,15 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     /* ---------- floating live ticker ----------
        A scrolling strip under the header. Data rules (nothing fabricated):
        - GOLD · USD mirrors the calculator script's own feed state — the same
-         gold-api spot and goldprice.org day-change the market tile uses,
+         live market feed spot and public day-change feed the market tile uses,
          with the tile's honesty states (live + provider stamp / manual =
          feed paused / failed refresh = stale last quote). This layer fetches
          nothing for the USD item.
-       - GOLD · EUR / GBP = that same spot x daily FX from open.er-api.com
+       - GOLD · EUR / GBP = that same spot x daily FX from a public FX feed
          (keyless), refetched at most once per hour; the FX provider and its
          own update stamp ride in the strip's attribution item. If FX never
          loads, those items are omitted — never estimated.
-       - SILVER · USD comes from gold-api's XAG endpoint on the feed cadence;
+       - SILVER · USD comes from the feed's XAG endpoint on the feed cadence;
          a failed refresh keeps the last value, labeled "last known"; if it
          never loads, the item is omitted.
        - EUR/GBP/silver movement blocks compare against the previous
@@ -1145,7 +1145,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
           status = "Stale \u00b7 last updated " + t + " \u00b7 refresh failed, showing last quote";
         } else {
           dotBg = "#3ecf6f";
-          status = "Live \u00b7 Gold API \u00b7 price timestamp " + t;
+          status = "Live \u00b7 Live Market Feed \u00b7 price timestamp " + t;
         }
       } else {
         dotBg = "#9b9784"; dotAnim = "animation:none;";
@@ -1194,8 +1194,8 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       }
       /* SILVER \u00b7 USD */
       if(tkXag){
-        var xs = tkXagStale ? "last known \u00b7 Gold API"
-          : "Gold API" + (tkXag.stamp && !isNaN(tkXag.stamp) ? " \u00b7 price timestamp " + tkXag.stamp.toLocaleString() : "");
+        var xs = tkXagStale ? "last known \u00b7 Live Market Feed"
+          : "Live Market Feed" + (tkXag.stamp && !isNaN(tkXag.stamp) ? " \u00b7 price timestamp " + tkXag.stamp.toLocaleString() : "");
         var xParts = tkMoveParts("XAG", tkXag.price, "USD");
         var xFlash = tkFlashFor("XAG", tkXag.price, xParts.dir);
         items.push('<span class="tk-item' + xFlash + '"><span class="tk-lbl">SILVER \u00b7 USD</span>' +
@@ -1204,8 +1204,8 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
           '<span class="tk-status">' + xs + '</span></span>');
       }
       /* attribution: sources + the FX provider's own update stamp */
-      var attr = "Spot: Gold API";
-      if(tkFx) attr += " \u00b7 FX: exchangerate-api.com" + (tkFx.stamp ? " \u00b7 rates updated " + tkFx.stamp : "");
+      var attr = "Spot: Live Market Feed";
+      if(tkFx) attr += " \u00b7 FX reference rates" + (tkFx.stamp ? " \u00b7 rates updated " + tkFx.stamp : "");
       else attr += " \u00b7 currency conversion unavailable";
       attr += " \u00b7 moves: USD today \u00b7 EUR/GBP/silver vs previous observed quote";
       items.push('<span class="tk-item"><span class="tk-status">' + attr + '</span></span>');
