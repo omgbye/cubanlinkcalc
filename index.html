@@ -327,6 +327,24 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       </div>
       <div class="stage-divide">PHOTO · PURITY METER</div>
       <div class="view-switch" aria-label="Chain view"><button type="button" data-view="chain" aria-pressed="true">Chain detail</button><button type="button" data-view="bust" aria-pressed="false">On neck</button></div><div class="float-wrap" id="floatWrap"><span class="stage-label">MIAMI CUBAN / YELLOW GOLD</span><img id="chainImg" src="assets/miami-cuban.webp" alt="Polished gold Miami Cuban chain with tightly packed broad rounded links" width="1920" height="1920"></div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<filter id="kt9"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.2323 0 0 0 0 0 1.1621 0 0 0 0 0 0.7089 0 0 0 0 0 1 0"/></filter>
+<filter id="kt10"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.2602 0 0 0 0 0 1.1852 0 0 0 0 0 0.723 0 0 0 0 0 1 0"/></filter>
+<filter id="kt12"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.3263 0 0 0 0 0 1.2722 0 0 0 0 0 0.7531 0 0 0 0 0 1 0"/></filter>
+<filter id="kt14"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.3925 0 0 0 0 0 1.3592 0 0 0 0 0 0.7833 0 0 0 0 0 1 0"/></filter>
+<filter id="kt18"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.4343 0 0 0 0 0 1.366 0 0 0 0 0 0.7089 0 0 0 0 0 1 0"/></filter>
+<filter id="kt21"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.4604 0 0 0 0 0 1.3629 0 0 0 0 0 0.6619 0 0 0 0 0 1 0"/></filter>
+<filter id="kt22"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.4691 0 0 0 0 0 1.3619 0 0 0 0 0 0.6462 0 0 0 0 0 1 0"/></filter>
+<filter id="kt24"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.4969 0 0 0 0 0 1.3524 0 0 0 0 0 0.5953 0 0 0 0 0 1 0"/></filter>
+<filter id="kb9"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.2696 0 0 0 0 0 1.0012 0 0 0 0 0 0.4388 0 0 0 0 0 1 0"/></filter>
+<filter id="kb10"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.2983 0 0 0 0 0 1.0211 0 0 0 0 0 0.4475 0 0 0 0 0 1 0"/></filter>
+<filter id="kb12"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.3665 0 0 0 0 0 1.0961 0 0 0 0 0 0.4662 0 0 0 0 0 1 0"/></filter>
+<filter id="kb14"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.4346 0 0 0 0 0 1.171 0 0 0 0 0 0.4849 0 0 0 0 0 1 0"/></filter>
+<filter id="kb18"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.4776 0 0 0 0 0 1.1769 0 0 0 0 0 0.4388 0 0 0 0 0 1 0"/></filter>
+<filter id="kb21"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.5045 0 0 0 0 0 1.1742 0 0 0 0 0 0.4097 0 0 0 0 0 1 0"/></filter>
+<filter id="kb22"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.5135 0 0 0 0 0 1.1733 0 0 0 0 0 0.4 0 0 0 0 0 1 0"/></filter>
+<filter id="kb24"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.5422 0 0 0 0 0 1.1651 0 0 0 0 0 0.3685 0 0 0 0 0 1 0"/></filter>
+</defs></svg>
       <div class="meterbox">
         <div class="meterhead">
           <span class="t">THEORETICAL PURITY</span>
@@ -499,15 +517,12 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   const PURITY = {9:9/24, 10:10/24, 12:0.5, 14:14/24, 18:0.75, 21:21/24, 22:22/24, 24:0.999};
   const DENS = {10:11.6, 14:13.4, 18:15.5, 22:17.8, 24:19.3};  /* approx alloy densities g/cm3 */
   const MEANING = {9:"9K contains 37.5% gold by mass. Common in the UK and Australia; the balance is alloying metals.",10:"10K contains approximately 41.7% gold by mass. The balance is alloying metals.",12:"12K contains 50% gold by mass — half gold, half alloying metals.",14:"14K contains approximately 58.3% gold by mass. Alloy composition also affects color and durability.",18:"18K contains 75% gold by mass. Higher purity means more gold in each gram.",21:"21K contains 87.5% gold by mass. Popular in Middle Eastern jewelry; deep, rich color.",22:"22K contains approximately 91.7% gold by mass. Design and alloy affect suitability for wear.",24:"This calculator models 24K as 99.9% gold. Actual fineness depends on the item."};
+  /* Photo tints share the renderer's karat anchors (render-chain.js tintAnchors) as the
+     single source of truth: each entry points at an SVG feColorMatrix whose diagonal is
+     baseCorrection(photo) x anchor(karat) — see the hidden SVG defs next to #chainImg. */
   const FILTER = {
-    9:"brightness(1.2) saturate(.55)",
-    10:"brightness(1.14) saturate(.68)",
-    12:"brightness(1.1) saturate(.78)",
-    14:"brightness(1.05) saturate(.88)",
-    18:"none",
-    21:"saturate(1.07) brightness(.99) hue-rotate(-2deg)",
-    22:"saturate(1.14) brightness(.97) hue-rotate(-4deg)",
-    24:"saturate(1.28) brightness(.94) hue-rotate(-8deg)"
+    chain:{9:"url(#kt9)",10:"url(#kt10)",12:"url(#kt12)",14:"url(#kt14)",18:"url(#kt18)",21:"url(#kt21)",22:"url(#kt22)",24:"url(#kt24)"},
+    bust:{9:"url(#kb9)",10:"url(#kb10)",12:"url(#kb12)",14:"url(#kb14)",18:"url(#kb18)",21:"url(#kb21)",22:"url(#kb22)",24:"url(#kb24)"}
   };
   const $ = id => document.getElementById(id);
   const money = n => "$" + Math.round(n).toLocaleString("en-US");
@@ -520,7 +535,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   }
   function effP(){ return fine!==null ? fine : PURITY[karat]; }
   function nearestK(x){ const ks=[9,10,12,14,18,21,22,24]; let best=ks[0]; ks.forEach(k=>{ if(Math.abs(k-x)<Math.abs(best-x)) best=k; }); return best; }
-  function effFilter(){ return fine!==null ? FILTER[nearestK(fine*24)] : FILTER[karat]; }
+  function effFilter(){ const k = fine!==null ? nearestK(fine*24) : karat; return ($("chainImg").dataset.view==="bust" ? FILTER.bust : FILTER.chain)[k]; }
   function fineMeaning(){
     const head = "Custom fineness " + Math.round(fine*1000) + " = " + (fine*100).toFixed(1) + "% pure gold. ";
     return head + (fine===0.585 ? "A stamp is parts per thousand; 14K nominal is 583, so a 585 stamp states slightly more gold than nominal 14K." : "Stamps state parts of gold per thousand; use tested fineness for an exact valuation.");
@@ -546,7 +561,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     $("alloyPct").textContent = (100-p*100).toFixed(1)+"%";
     $("perGram").textContent = "$"+(perGramPure*p).toFixed(2);
     $("meaning").textContent = fine!==null ? fineMeaning() : MEANING[karat];
-    if($("chainImg").dataset.view !== "bust") $("chainImg").style.filter=effFilter();
+    $("chainImg").style.filter=effFilter();
 
 
     gramTable(perGramPure); build(); regular();
@@ -641,7 +656,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   });
 
   document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
-    const isChain=b.dataset.view==='chain',im=$('chainImg');im.dataset.view=b.dataset.view;im.src=isChain?'assets/miami-cuban.webp':'assets/chain.webp';im.alt=isChain?'Polished gold Miami Cuban chain with tightly packed broad rounded links':'Miami Cuban chain draped on a black display bust';im.style.filter=isChain?effFilter():'none';document.querySelectorAll('[data-view]').forEach(v=>v.setAttribute('aria-pressed',v===b));
+    const isChain=b.dataset.view==='chain',im=$('chainImg');im.dataset.view=b.dataset.view;im.src=isChain?'assets/miami-cuban.webp':'assets/chain.webp';im.alt=isChain?'Polished gold Miami Cuban chain with tightly packed broad rounded links':'Miami Cuban chain draped on a black display bust';im.style.filter=effFilter();document.querySelectorAll('[data-view]').forEach(v=>v.setAttribute('aria-pressed',v===b));
   }));
   $("applyBuild").addEventListener("click",()=>{
     const g=0.077*parseFloat($("bWid").value)**2*parseFloat($("bLen").value)*(DENS[$("bKarat").value]/13.4);
