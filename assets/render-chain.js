@@ -166,7 +166,10 @@
  const MASTER_OUTER=1.2752; // measured vertex extent along (end taper trims the tips)
  /* framing:'macro' magnification: at 6.5x a 12mm link projects ~94px wide
     in a 550x430 frame (measured with this file's own projection math);
-    uZoom/uCenterY default to 1/0, where the projection is the identity. */
+    uZoom/uCenterY default to 1/0, where the projection is the identity.
+    options.zoom multiplies MACRO_ZOOM in the macro framing only (the
+    studio passes >1 for its compact strip, 1 when expanded); the bust
+    framing ignores it — its uZoom stays exactly 1. */
  const MACRO_ZOOM=6.5;
  function tierLevels(maxW){return maxW<=5?['lod2']:maxW<=9?['lod','lod2']:['master','lod','lod2'];}
  /* Link tiers, chosen per draw (and by chainGeometry for the pitch) by
@@ -236,7 +239,7 @@
  function draw(s){const {gl,canvas,uniforms:u,options:o}=s;if(!s.width||!s.height)return;const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(s.width*dpr),h=Math.round(s.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(s.program);
   const key=o.widthMm+':'+o.lengthIn;if(s.lastKey!==key){s.chain=chainGeometry(o.widthMm,o.lengthIn);gl.bindBuffer(gl.ARRAY_BUFFER,s.instances);gl.bufferData(gl.ARRAY_BUFFER,s.chain.data,gl.DYNAMIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,s.claspInstances);gl.bufferData(gl.ARRAY_BUFFER,s.chain.clasp,gl.DYNAMIC_DRAW);s.lastKey=key;}
   gl.uniform1f(u.uWidth,o.widthMm);gl.uniform1f(u.uAngle,o.angleDeg*Math.PI/180);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uLight,o.light);gl.uniform1f(u.uDrop,s.chain.drop);
-  const macro=o.framing==='macro';gl.uniform1f(u.uZoom,macro?MACRO_ZOOM:1);let macroCY=0;if(macro){const bp=center(0,s.chain.drop,o.widthMm);macroCY=.866*(bp[1]+30)-.5*Math.cos(o.angleDeg*Math.PI/180)*bp[2];}gl.uniform1f(u.uCenterY,macroCY);
+  const macro=o.framing==='macro';gl.uniform1f(u.uZoom,macro?MACRO_ZOOM*(o.zoom||1):1);let macroCY=0;if(macro){const bp=center(0,s.chain.drop,o.widthMm);macroCY=.866*(bp[1]+30)-.5*Math.cos(o.angleDeg*Math.PI/180)*bp[2];}gl.uniform1f(u.uCenterY,macroCY);
   const tint=tintForKarat(o.karat);gl.uniform3f(u.uTint,tint[0],tint[1],tint[2]);
   gl.uniform1i(u.uChain,0);gl.uniform1f(u.uMaterial,2);gl.bindVertexArray(s.stand.vao);gl.drawArrays(gl.TRIANGLES,0,s.stand.count);gl.uniform1f(u.uMaterial,0);gl.bindVertexArray(s.bust.vao);gl.drawArrays(gl.TRIANGLES,0,s.bust.count);
   if(s.linkReady){gl.uniform1i(u.uChain,1);gl.uniform1f(u.uMaterial,1);const tier=s.linkTiers.find(t=>o.widthMm<=t.maxW)||s.linkTiers[s.linkTiers.length-1];const drop=s.chain.count>300?2:s.chain.count>220?1:0;const m=tier.levels[Math.min(tier.levels.length-1,drop)];gl.bindVertexArray(m.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,m.count,s.chain.count);
@@ -244,6 +247,6 @@
   canvas.dataset.renderError=String(gl.getError());canvas.dataset.links=String(s.chain.count);canvas.dataset.valid=String(s.chain.data.every(Number.isFinite));
  }
  global.renderChain=function(el,options){if(!(el instanceof Element))throw TypeError('renderChain needs a container element.');let s=cache.get(el);if(!s){s=initialize(el);cache.set(el,s);}if(s.failed)return;
-  s.options={widthMm:clamp(Number(options.widthMm)||12,3,20),lengthIn:clamp(Number(options.lengthIn)||24,16,32),light:clamp(Number(options.light)||0,-1,1),angleDeg:Number(options.angleDeg)||0,karat:clamp(Number(options.karat)||14,9,24),framing:options.framing==='macro'?'macro':'full'};schedule(s);
+  s.options={widthMm:clamp(Number(options.widthMm)||12,3,20),lengthIn:clamp(Number(options.lengthIn)||24,16,32),light:clamp(Number(options.light)||0,-1,1),angleDeg:Number(options.angleDeg)||0,karat:clamp(Number(options.karat)||14,9,24),framing:options.framing==='macro'?'macro':'full',zoom:clamp(Number(options.zoom)||1,.25,4)};schedule(s);
  };
 })(window);
