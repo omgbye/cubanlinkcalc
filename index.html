@@ -200,6 +200,15 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   .stage-gl canvas{display:block;width:100%;height:100%}
   .stage-gl:focus-visible{outline:2px solid #e3b341;outline-offset:3px}
   .stage-gl .renderer-error{position:absolute;left:14px;right:14px;bottom:14px;margin:0;padding:10px 12px;border:1px solid #2b2d20;border-radius:10px;background:rgba(12,14,10,.93);color:#c9c4ae;font-size:13px;line-height:1.5}
+  /* detail panel: compact by default (40% of the panel's long-standing
+     heights at each breakpoint); .expanded restores the full height */
+  #floatWrap{height:172px}
+  #floatWrap.expanded{height:430px}
+  @media(max-width:860px){#floatWrap{height:140px}#floatWrap.expanded{height:350px}}
+  @media(max-width:440px){#floatWrap{height:128px}#floatWrap.expanded{height:320px}}
+  #chainMacro{position:absolute;inset:0;pointer-events:none}
+  #chainMacro canvas{display:block;width:100%;height:100%}
+  #chainMacro .renderer-error{position:absolute;left:14px;right:14px;bottom:14px;margin:0;padding:10px 12px;border:1px solid #2b2d20;border-radius:10px;background:rgba(12,14,10,.93);color:#c9c4ae;font-size:13px;line-height:1.5}
   @media(max-width:860px){.stage-gl{height:400px}}
   @media(max-width:440px){.stage-gl{height:350px}}
   .vcontrols{border-top:1px solid #2b2d20;margin-top:14px;padding-top:16px;text-align:left}
@@ -325,8 +334,8 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
           <div class="small">Illustrative alloy color &amp; lighting · polish varies</div>
         </div>
       </div>
-      <div class="stage-divide">PHOTO · PURITY METER</div>
-      <div class="view-switch" aria-label="Chain view"><button type="button" data-view="chain" aria-pressed="true">Chain detail</button><button type="button" data-view="bust" aria-pressed="false">On neck</button></div><div class="float-wrap" id="floatWrap"><span class="stage-label">MIAMI CUBAN / YELLOW GOLD</span><img id="chainImg" src="assets/miami-cuban.webp" alt="Polished gold Miami Cuban chain with tightly packed broad rounded links" width="1920" height="1920"></div>
+      <div class="stage-divide">DETAIL · PURITY METER</div>
+      <div class="view-switch" aria-label="Chain view"><button type="button" data-view="chain" aria-pressed="true">Chain detail</button><button type="button" data-view="bust" aria-pressed="false">In use</button><button type="button" id="btnExpandPhoto" aria-expanded="false" aria-controls="floatWrap">Expand</button></div><div class="float-wrap" id="floatWrap"><span class="stage-label">MIAMI CUBAN / YELLOW GOLD</span><div id="chainMacro" role="img" aria-label="Close-up render of the same chain's links, low on the drape. It follows the same width, length and karat settings as the chain on the bust."></div><img id="chainImg" src="assets/chain.webp" data-view="bust" alt="Miami Cuban chain draped on a black display bust" width="1120" height="2240" style="display:none"></div>
       <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
 <filter id="kt9"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.2323 0 0 0 0 0 1.1621 0 0 0 0 0 0.7089 0 0 0 0 0 1 0"/></filter>
 <filter id="kt10"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="1.2602 0 0 0 0 0 1.1852 0 0 0 0 0 0.723 0 0 0 0 0 1 0"/></filter>
@@ -658,7 +667,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   });
 
   document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
-    const isChain=b.dataset.view==='chain',im=$('chainImg');im.dataset.view=b.dataset.view;im.src=isChain?'assets/miami-cuban.webp':'assets/chain.webp';im.alt=isChain?'Polished gold Miami Cuban chain with tightly packed broad rounded links':'Miami Cuban chain draped on a black display bust';im.style.filter=effFilter();document.querySelectorAll('[data-view]').forEach(v=>v.setAttribute('aria-pressed',v===b));
+    const isChain=b.dataset.view==='chain',im=$('chainImg');im.dataset.view=b.dataset.view;im.src='assets/chain.webp';im.alt='Miami Cuban chain draped on a black display bust';im.style.filter=effFilter();document.querySelectorAll('[data-view]').forEach(v=>v.setAttribute('aria-pressed',v===b));
   }));
   $("applyBuild").addEventListener("click",()=>{
     const g=0.077*parseFloat($("bWid").value)**2*parseFloat($("bLen").value)*(DENS[$("bKarat").value]/13.4);
@@ -769,6 +778,30 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         "Drag horizontally or use the left and right arrow keys to rotate.");
     }
 
+    /* ---------- synced macro close-up (the Chain detail view) ----------
+       The close-up under the bust is a SECOND instance of the same
+       renderer on the same settings — not a photograph. drawChain() owns
+       the bust; this owns the macro: the same width/length/light and the
+       same unified karat, a fixed front angle, and framing:'macro' (the
+       renderer centres the bottom arc of the drape and magnifies it).
+       No drag, no drift — syncStudio() is its only driver, so the one
+       settings set above drives both renders. */
+    var chainMacro = $s("chainMacro");
+    function drawMacro(){
+      if(!chainMacro || typeof window.renderChain !== "function") return;
+      var effKarat = (typeof fine !== "undefined" && fine !== null)
+        ? fine * 24
+        : ((typeof karat !== "undefined") ? karat : 14);
+      window.renderChain(chainMacro, {
+        widthMm: studio.width,
+        lengthIn: studio.length,
+        light: FIXED_LIGHT,
+        angleDeg: 0,
+        karat: effKarat,
+        framing: "macro"
+      });
+    }
+
     /* ---------- coupling to the live inputs ---------- */
     function syncStudio(){
       var w = parseFloat($s("bWid").value), l = parseFloat($s("bLen").value);
@@ -794,6 +827,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       syncPanelSliders();
       syncKaratUI();
       drawChain();
+      drawMacro();
     }
     ["bWid","bLen"].forEach(function(id){
       $s(id).addEventListener("input", syncStudio);
@@ -1028,6 +1062,30 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       angleDeg += 0.4;
       drawChain();
     }, 100);
+
+    /* ---------- detail panel: view swap + expand ----------
+       Chain detail shows the macro render; In use shows the photo. The
+       calculator script's own toggle handler still owns the photo's
+       src/filter/pressed state — this only swaps which element shows.
+       Expand toggles the panel between its compact height (the default)
+       and the full height: the renderer's ResizeObserver picks up the
+       macro's new size and drawMacro() re-renders into it; the two calls
+       coalesce into a single frame inside the renderer. */
+    var floatWrap = $s("floatWrap"), chainImgEl = $s("chainImg"), btnExpandPhoto = $s("btnExpandPhoto");
+    document.querySelectorAll('[data-view]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var isChain = b.dataset.view === 'chain';
+        if(chainMacro) chainMacro.style.display = isChain ? '' : 'none';
+        if(chainImgEl) chainImgEl.style.display = isChain ? 'none' : '';
+        if(isChain) drawMacro();
+      });
+    });
+    if(btnExpandPhoto && floatWrap) btnExpandPhoto.addEventListener('click', function(){
+      var ex = floatWrap.classList.toggle('expanded');
+      btnExpandPhoto.setAttribute('aria-expanded', ex ? 'true' : 'false');
+      btnExpandPhoto.textContent = ex ? 'Collapse' : 'Expand';
+      drawMacro();
+    });
 
     /* ---------- floating live ticker ----------
        A scrolling strip under the header. Data rules (nothing fabricated):
