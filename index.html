@@ -161,7 +161,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   body{background:#0c0e0a}
   .spotbar{background:#151713}
 
-  /* masthead: real lockup, screen-blended onto the dark header */
+  /* masthead: real lockup with a true alpha channel, composited on the dark header */
   header{flex-wrap:wrap;gap:10px 22px;padding:26px 0 20px;border-bottom:1px solid #2b2d20}
   .logolock{line-height:0;flex:0 1 auto;min-width:0}
   .logolock img{display:block;width:clamp(300px,44vw,470px);max-width:100%;height:auto}
@@ -207,6 +207,8 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   .vcontrols .seg button{font:inherit;font-size:14px;padding:9px 20px;border-radius:9px;cursor:pointer;background:transparent;color:#d8d2ba;border:1.5px solid #3a3c2a}
   .vcontrols .seg button.on{border-color:#e3b341;color:#e3b341}
   .lightrow{display:flex;align-items:center;gap:14px;margin-top:16px;color:#c9c4ae;font-size:14px}
+  .lightrow>span:first-child{min-width:118px}
+  .lightrow .pval{min-width:52px;text-align:right;color:#e3b341;font-weight:700;font-variant-numeric:tabular-nums}
   .caption{margin-top:16px;text-align:left}
   .caption .big{font-size:16.5px;color:#eee9d6}
   .caption .small{font-size:13px;color:#6d6a58;margin-top:6px}
@@ -228,16 +230,29 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   .tk-item .tk-px{font-weight:800;font-size:14.5px;color:#e3b341;font-variant-numeric:tabular-nums}
   .tk-item .tk-per{color:#9b9784;font-size:11.5px}
   .tk-item .tk-mv{font-weight:700;font-size:11.5px}
-  .tk-item .tk-mv.up{color:#3ecf6f}
-  .tk-item .tk-mv.down{color:#ef5350}
+  .tk-item .tk-mv.up{color:#22c55e}
+  .tk-item .tk-mv.down{color:#ef4444}
   .tk-item .tk-mv.flat{color:#9b9784;font-weight:400}
   .tk-item .tk-status{color:#9b9784;font-size:11.5px}
   .tk-item .tk-chg{font-weight:800;font-size:12px;padding:2px 8px;border-radius:999px}
+  /* theatrical movement: big direction arrow + direction-colored price numbers */
+  .tk-item .tk-arrow{font-size:1.35em;font-weight:900;line-height:1;flex:none}
+  .tk-item .tk-arrow.up{color:#22c55e}
+  .tk-item .tk-arrow.down{color:#ef4444}
+  .tk-item .tk-px.up{color:#22c55e}
+  .tk-item .tk-px.down{color:#ef4444}
+  /* update flash: one-shot background sweep when a refresh changes the price */
+  @keyframes tkFlashUp{0%{background:rgba(34,197,94,.30)}100%{background:transparent}}
+  @keyframes tkFlashDown{0%{background:rgba(239,68,68,.30)}100%{background:transparent}}
+  .tk-item.tk-flash-up{animation:tkFlashUp .6s ease-out}
+  .tk-item.tk-flash-down{animation:tkFlashDown .6s ease-out}
   @keyframes tkScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @media(prefers-reduced-motion:reduce){
     .tk-track{animation:none;flex-wrap:wrap;width:auto}
     .tk-half{flex-wrap:wrap}
     .tk-half[aria-hidden="true"]{display:none}
+    .tk-item.tk-flash-up,.tk-item.tk-flash-down{animation:none}
+    .tk-item .tk-dot{animation:none}
   }
 
   /* mobile: controls first, visual after */
@@ -295,6 +310,16 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         <div class="seg">
           <button class="on" id="btnBust" type="button">On bust</button>
           <button id="btnAngle" type="button">Studio angle</button>
+        </div>
+        <div class="lightrow">
+          <span>Chain width</span>
+          <input type="range" id="panelWid" min="3" max="20" step="1" value="12" style="flex:1" aria-label="Chain width in millimeters">
+          <span class="pval" id="panelWidVal">12 mm</span>
+        </div>
+        <div class="lightrow">
+          <span>Chain length</span>
+          <input type="range" id="panelLen" min="18" max="30" step="1" value="22" style="flex:1" aria-label="Chain length in inches">
+          <span class="pval" id="panelLenVal">22 in</span>
         </div>
         <div class="lightrow">
           <span>Move the studio light</span>
@@ -704,11 +729,18 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     function drawChain(){
       if(!chainStage || typeof window.renderChain !== "function") return;
       var lv = parseFloat(lightSlider.value);
+      /* karat tint follows the MAIN calculator's karat state (buttons + custom
+         fineness) — the same state the bust caption reads; the Build & Estimate
+         dropdown is a separate estimate-only input and does not drive it. */
+      var effKarat = (typeof fine !== "undefined" && fine !== null)
+        ? fine * 24
+        : ((typeof karat !== "undefined") ? karat : 14);
       window.renderChain(chainStage, {
         widthMm: studio.width,
         lengthIn: studio.length,
         light: isNaN(lv) ? 0 : lv/50 - 1,
-        angleDeg: angleDeg
+        angleDeg: angleDeg,
+        karat: effKarat
       });
       chainStage.setAttribute("aria-label",
         studio.width + " mm, " + studio.length + " inch Miami Cuban chain on a display bust. " +
@@ -726,6 +758,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         : "Miami Cuban · " + ((typeof karat !== "undefined") ? karat : 14) + "K";
       $s("panelKarat").textContent = label;
       $s("capSize").textContent = studio.width + " mm · " + studio.length + " inches";
+      syncPanelSliders();
       drawChain();
     }
     ["bWid","bLen","bKarat"].forEach(function(id){
@@ -735,6 +768,64 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     $s("karats").addEventListener("click", syncStudio);
     $s("fineBtn").addEventListener("click", syncStudio);
     $s("applyBuild").addEventListener("click", syncStudio);
+
+    /* ---------- panel measurement sliders ----------
+       The studio panel carries its own Width/Length sliders so the controls
+       beside the visual drive it. They hold NO state of their own: a slider
+       move snaps to the nearest real #bWid/#bLen option and fires the same
+       input+change events a select choice fires, so the estimate, caption
+       and render all update through the one existing path; syncStudio()
+       reflects select changes back onto the sliders. Snapping: the select
+       grids are 3,4,5,6,8,10,... mm and 18,20,... in, so raw slider values
+       between stops land on the nearest option (ties go to the lower stop). */
+    var panelWid = $s("panelWid"), panelLen = $s("panelLen");
+    function fireEl(el, type){
+      if(!el) return;
+      if(typeof el.dispatchEvent === "function" && typeof Event === "function"){
+        el.dispatchEvent(new Event(type, { bubbles: true }));
+      } else if(typeof el.fire === "function"){
+        el.fire(type);
+      }
+    }
+    function selectPairs(sel){
+      var out = [], raw = null, i, n;
+      if(!sel) return out;
+      if(sel.options && sel.options.length){ raw = []; for(i = 0; i < sel.options.length; i++) raw.push(sel.options[i].value); }
+      else if(sel._options){ raw = sel._options; }
+      if(!raw) return out;
+      for(i = 0; i < raw.length; i++){ n = parseFloat(raw[i]); if(n > 0) out.push({ num: n, str: raw[i] }); }
+      return out;
+    }
+    var widPairs = selectPairs($s("bWid")), lenPairs = selectPairs($s("bLen"));
+    if(panelWid && widPairs.length){ panelWid.min = widPairs[0].num; panelWid.max = widPairs[widPairs.length-1].num; }
+    if(panelLen && lenPairs.length){ panelLen.min = lenPairs[0].num; panelLen.max = lenPairs[lenPairs.length-1].num; }
+    function nearestPair(pairs, v){
+      var best = null;
+      for(var i = 0; i < pairs.length; i++){
+        if(!best || Math.abs(pairs[i].num - v) < Math.abs(best.num - v)) best = pairs[i];
+      }
+      return best;
+    }
+    function onPanelSlider(which){
+      var sel = which === "w" ? $s("bWid") : $s("bLen");
+      var pairs = which === "w" ? widPairs : lenPairs;
+      var slider = which === "w" ? panelWid : panelLen;
+      if(!sel || !slider) return;
+      var p = nearestPair(pairs, parseFloat(slider.value));
+      if(!p) return;
+      if(sel.value !== p.str) sel.value = p.str;
+      fireEl(sel, "input"); fireEl(sel, "change");
+      if(parseFloat(slider.value) !== p.num){ slider.value = p.num; paintRange(slider); }
+    }
+    if(panelWid) panelWid.addEventListener("input", function(){ onPanelSlider("w"); });
+    if(panelLen) panelLen.addEventListener("input", function(){ onPanelSlider("l"); });
+    function syncPanelSliders(){
+      var w = parseFloat($s("bWid").value), l = parseFloat($s("bLen").value);
+      if(panelWid && w > 0){ panelWid.value = w; paintRange(panelWid); }
+      if(panelLen && l > 0){ panelLen.value = l; paintRange(panelLen); }
+      if($s("panelWidVal") && w > 0) $s("panelWidVal").textContent = w + " mm";
+      if($s("panelLenVal") && l > 0) $s("panelLenVal").textContent = l + " in";
+    }
 
     /* ---------- studio light + rotation ---------- */
     lightSlider.addEventListener("input", function(){ drawChain(); });
@@ -789,25 +880,59 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
        - EUR/GBP/silver arrows compare against the previous DISTINCT observed
          value this session; the first observation shows "first quote".
          EUR/GBP observations are recorded only in the live state, so the
-         pre-feed example price can never pose as a market move. */
+         pre-feed example price can never pose as a market move.
+       - Movement display (finance-channel style, presentation only): every
+         item gets a large direction arrow before its price and the price
+         number itself takes the direction color (green up / red down). The
+         USD arrow follows the goldprice.org day-change when present, else
+         the session delta; manual state suppresses arrows entirely; flat or
+         first-quote items show no arrow and keep the default number color.
+         When a refresh changes an item's displayed value, that item flashes
+         once (soft green up / red down, 600ms); the LIVE dot pulses only in
+         the live state. Reduced-motion disables flash and pulse. */
     function tkFmt(n, cur){ return new Intl.NumberFormat("en-US",{style:"currency",currency:cur}).format(n); }
     var tkFx = null, tkFxTried = 0;
     var tkXag = null, tkXagStale = false;
     var tkObs = {};
-    function tkMove(code, value){
+    /* Movement parts for one item: direction ("up"/"down"/"flat"/"none") plus
+       the delta span. Direction is honest or nothing: it comes only from a
+       real observed change vs the previous distinct quote (or, for the USD
+       item, the goldprice.org day-change handled in renderTicker). The first
+       observation has no direction; an unchanged value keeps the last one. */
+    function tkMoveParts(code, value){
       var o = tkObs[code];
-      if(o && o.value === value) return o.moveHtml;
-      var html;
+      if(o && o.value === value) return { dir: o.dir, html: o.moveHtml };
+      var dir = "none", html;
       if(!o || !(o.value > 0)){
         html = '<span class="tk-mv flat">first quote</span>';
       } else {
         var pc = (value - o.value) / o.value * 100;
-        if(Math.abs(pc) < 0.00005) html = '<span class="tk-mv flat">\u2014 unchanged</span>';
-        else if(pc > 0) html = '<span class="tk-mv up">\u25b2 +' + pc.toFixed(3) + '%</span>';
-        else html = '<span class="tk-mv down">\u25bc ' + pc.toFixed(3) + '%</span>';
+        if(Math.abs(pc) < 0.00005){ dir = "flat"; html = '<span class="tk-mv flat">\u2014 unchanged</span>'; }
+        else if(pc > 0){ dir = "up"; html = '<span class="tk-mv up">\u25b2 +' + pc.toFixed(3) + '%</span>'; }
+        else { dir = "down"; html = '<span class="tk-mv down">\u25bc ' + pc.toFixed(3) + '%</span>'; }
       }
-      tkObs[code] = { value: value, moveHtml: html };
-      return html;
+      tkObs[code] = { value: value, moveHtml: html, dir: dir };
+      return { dir: dir, html: html };
+    }
+    function tkMove(code, value){ return tkMoveParts(code, value).html; }
+    function tkArrow(dir){
+      return dir === "up" ? '<span class="tk-arrow up">\u25b2</span>'
+           : dir === "down" ? '<span class="tk-arrow down">\u25bc</span>' : "";
+    }
+    function tkPxCls(dir){ return dir === "up" ? " up" : dir === "down" ? " down" : ""; }
+    /* Update flash: when an item's displayed value actually changes between
+       renders, its next rendered HTML carries a one-shot flash class (green
+       up / red down, 600ms CSS fade). Unchanged refreshes never flash. */
+    var tkPrevDisp = {}, tkFlashPending = {};
+    function tkFlashFor(key, value, dir){
+      var prev = tkPrevDisp[key];
+      tkPrevDisp[key] = value;
+      if(prev !== undefined && prev !== value && (dir === "up" || dir === "down")){
+        tkFlashPending[key] = dir === "up" ? " tk-flash-up" : " tk-flash-down";
+      }
+      var f = tkFlashPending[key] || "";
+      tkFlashPending[key] = "";
+      return f;
     }
     function tkFetchFx(){
       tkFxTried = Date.now();
@@ -865,21 +990,41 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       if(state !== "manual" && pc !== null && !isNaN(pc) && p > 0){
         var d = p - p/(1 + pc/100), up = pc > 0, flat = Math.abs(pc) < 0.005;
         if(flat) chip = '<span class="tk-chg" style="background:rgba(255,255,255,.08);color:#ece7d8">\u2014 0.00% today</span>';
-        else if(up) chip = '<span class="tk-chg" style="background:rgba(62,207,111,.13);color:#3ecf6f">\u25b2 +' + tkFmt(Math.abs(d), "USD") + " (+" + Math.abs(pc).toFixed(2) + "%) today</span>";
-        else chip = '<span class="tk-chg" style="background:rgba(239,83,80,.13);color:#ef5350">\u25bc -' + tkFmt(Math.abs(d), "USD") + " (-" + Math.abs(pc).toFixed(2) + "%) today</span>";
+        else if(up) chip = '<span class="tk-chg" style="background:rgba(34,197,94,.13);color:#22c55e">\u25b2 +' + tkFmt(Math.abs(d), "USD") + " (+" + Math.abs(pc).toFixed(2) + "%) today</span>";
+        else chip = '<span class="tk-chg" style="background:rgba(239,68,68,.13);color:#ef4444">\u25bc -' + tkFmt(Math.abs(d), "USD") + " (-" + Math.abs(pc).toFixed(2) + "%) today</span>";
       }
-      items.push('<span class="tk-item"><span class="tk-dot" style="background:' + dotBg + ";" + dotAnim + '"></span>' +
-        '<span class="tk-lbl">GOLD \u00b7 USD</span>' +
-        '<span class="tk-px">' + (p > 0 ? tkFmt(p, "USD") : "\u2014") + '</span>' +
-        '<span class="tk-per">per troy oz</span>' + chip +
+      /* USD direction: the goldprice.org day-change when that data is present
+         (same math as the tile chip); otherwise the session delta vs the
+         previous distinct live quote. Manual suppresses arrows entirely;
+         a stale quote keeps its last arrow (cached parts / chip). */
+      var usdDir = "none", usdMoveHtml = "";
+      if(state === "live" && p > 0){
+        var usdParts = tkMoveParts("USD", p);
+        if(chip){
+          usdDir = Math.abs(pc) < 0.005 ? "flat" : (pc > 0 ? "up" : "down");
+        } else {
+          usdDir = usdParts.dir;
+          if(usdDir === "up" || usdDir === "down") usdMoveHtml = usdParts.html;
+        }
+      } else if(state !== "manual" && chip && p > 0){
+        usdDir = Math.abs(pc) < 0.005 ? "flat" : (pc > 0 ? "up" : "down");
+      }
+      var usdFlash = p > 0 ? tkFlashFor("USD", p, usdDir) : "";
+      items.push('<span class="tk-item' + usdFlash + '"><span class="tk-dot" style="background:' + dotBg + ";" + dotAnim + '"></span>' +
+        '<span class="tk-lbl">GOLD \u00b7 USD</span>' + tkArrow(usdDir) +
+        '<span class="tk-px' + tkPxCls(usdDir) + '">' + (p > 0 ? tkFmt(p, "USD") : "\u2014") + '</span>' +
+        '<span class="tk-per">per troy oz</span>' + chip + usdMoveHtml +
         '<span class="tk-status">' + status + '</span></span>');
       /* GOLD \u00b7 EUR / GBP — the same spot x daily FX */
       if(tkFx && p > 0){
         ["EUR","GBP"].forEach(function(code){
           var v = p * tkFx[code];
-          items.push('<span class="tk-item"><span class="tk-lbl">GOLD \u00b7 ' + code + '</span>' +
-            '<span class="tk-px">' + tkFmt(v, code) + '</span>' +
-            '<span class="tk-per">per troy oz</span>' + (state === "live" ? tkMove(code, v) : "") +
+          var parts = state === "live" ? tkMoveParts(code, v) : { dir: "none", html: "" };
+          var fxFlash = tkFlashFor(code, v, parts.dir);
+          items.push('<span class="tk-item' + fxFlash + '"><span class="tk-lbl">GOLD \u00b7 ' + code + '</span>' +
+            tkArrow(parts.dir) +
+            '<span class="tk-px' + tkPxCls(parts.dir) + '">' + tkFmt(v, code) + '</span>' +
+            '<span class="tk-per">per troy oz</span>' + parts.html +
             (state === "manual" ? '<span class="tk-status">converted from your manual USD price</span>' : "") +
             '</span>');
         });
@@ -888,9 +1033,12 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       if(tkXag){
         var xs = tkXagStale ? "last known \u00b7 Gold API"
           : "Gold API" + (tkXag.stamp && !isNaN(tkXag.stamp) ? " \u00b7 price timestamp " + tkXag.stamp.toLocaleString() : "");
-        items.push('<span class="tk-item"><span class="tk-lbl">SILVER \u00b7 USD</span>' +
-          '<span class="tk-px">' + tkFmt(tkXag.price, "USD") + '</span>' +
-          '<span class="tk-per">per troy oz</span>' + tkMove("XAG", tkXag.price) +
+        var xParts = tkMoveParts("XAG", tkXag.price);
+        var xFlash = tkFlashFor("XAG", tkXag.price, xParts.dir);
+        items.push('<span class="tk-item' + xFlash + '"><span class="tk-lbl">SILVER \u00b7 USD</span>' +
+          tkArrow(xParts.dir) +
+          '<span class="tk-px' + tkPxCls(xParts.dir) + '">' + tkFmt(tkXag.price, "USD") + '</span>' +
+          '<span class="tk-per">per troy oz</span>' + xParts.html +
           '<span class="tk-status">' + xs + '</span></span>');
       }
       /* attribution: sources + the FX provider's own update stamp */
