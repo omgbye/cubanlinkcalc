@@ -152,6 +152,101 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   gtag('config', 'G-MGXCDLBHK6');
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9902709215635813" crossorigin="anonymous"></script>
+<style>
+  /* ===== STUDIO RESKIN (appended layer — original styles above are untouched) ===== */
+  :root{
+    --gold:#e3b341; --gold-deep:#b8860b; --ink:#0c0e0a; --panel:#14160f; --panel2:#191b12;
+    --line:#2b2d20; --txt:#ece7d8; --muted:#9b9784; --green:#3ddc84; --red:#ff6b6b;
+  }
+  body{background:#0c0e0a}
+  .spotbar{background:#151713}
+
+  /* masthead: real lockup, screen-blended onto the dark header */
+  header{flex-wrap:wrap;gap:10px 22px;padding:26px 0 20px;border-bottom:1px solid #2b2d20}
+  .logolock{line-height:0;flex:0 1 auto;min-width:0}
+  .logolock img{display:block;width:clamp(320px,56vw,690px);max-width:100%;height:auto;mix-blend-mode:screen}
+  header nav{margin-left:auto;align-items:center}
+  @media(max-width:560px){.logolock img{width:100%}}
+
+  /* mode tabs (from the studio mockup) */
+  .tabs{display:flex;justify-content:center;margin:26px 0 4px}
+  .tabs .rail{display:flex;background:#14160f;border:1px solid #2b2d20;border-radius:16px;padding:6px;gap:4px;max-width:100%}
+  .tabs button{font:inherit;font-size:15.5px;padding:13px 30px;border-radius:11px;border:0;cursor:pointer;background:transparent;color:#cfc9b2;white-space:nowrap}
+  .tabs button.on{background:linear-gradient(180deg,#e8c877,#cfa64a);color:#191703;font-weight:700;box-shadow:0 2px 10px rgba(217,180,92,.35)}
+  @media(max-width:560px){.tabs button{padding:12px 16px;font-size:13.5px}}
+
+  /* studio display headline (the page H1 above it is unchanged) */
+  .studio-hero{margin:20px 0 22px}
+  .studio-head{font-size:clamp(38px,5.2vw,56px);line-height:1.04;font-weight:800;letter-spacing:-.01em;color:#f6f2e4}
+  .studio-head em{display:block;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:500;color:#e3b341}
+  .studio-sub{margin-top:12px;font-size:16.5px;color:#c9c4ae}
+
+  /* panels & stage in the studio palette */
+  .panel{background:linear-gradient(180deg,#191b12,#14160f);border:1px solid #2b2d20;border-radius:20px}
+  .stage{background:radial-gradient(120% 90% at 50% 0%,#1d1f14 0%,#0c0e0a 65%);border:1px solid #2b2d20;border-radius:20px;padding:22px 20px 24px}
+  .valuebox{border-radius:16px}
+  .storebox{border-radius:16px}
+  .split .cell,.meaning,.mini-out{border-radius:12px}
+  .karats button{border-radius:12px}
+  #marketTile{border-radius:16px!important}
+  .grid2.solo{grid-template-columns:1fr}
+
+  /* studio bust panel (from the mockup) */
+  .prow{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.26em;text-transform:uppercase}
+  .prow .l{color:#e3b341}
+  .prow .r{color:#6d6a58}
+  .stage-gl{margin-top:6px;height:470px;border-radius:12px;overflow:hidden;position:relative;cursor:grab;touch-action:pan-y;background:radial-gradient(ellipse at 50% 32%,#232415,transparent 72%)}
+  .stage-gl:active{cursor:grabbing}
+  .stage-gl canvas{display:block;width:100%;height:100%}
+  .stage-gl:focus-visible{outline:2px solid #e3b341;outline-offset:3px}
+  .stage-gl .renderer-error{position:absolute;left:14px;right:14px;bottom:14px;margin:0;padding:10px 12px;border:1px solid #2b2d20;border-radius:10px;background:rgba(12,14,10,.93);color:#c9c4ae;font-size:13px;line-height:1.5}
+  @media(max-width:860px){.stage-gl{height:400px}}
+  @media(max-width:440px){.stage-gl{height:350px}}
+  .vcontrols{border-top:1px solid #2b2d20;margin-top:14px;padding-top:16px;text-align:left}
+  .vcontrols .seg{display:flex;gap:9px}
+  .vcontrols .seg button{font:inherit;font-size:14px;padding:9px 20px;border-radius:9px;cursor:pointer;background:transparent;color:#d8d2ba;border:1.5px solid #3a3c2a}
+  .vcontrols .seg button.on{border-color:#e3b341;color:#e3b341}
+  .lightrow{display:flex;align-items:center;gap:14px;margin-top:16px;color:#c9c4ae;font-size:14px}
+  .caption{margin-top:16px;text-align:left}
+  .caption .big{font-size:16.5px;color:#eee9d6}
+  .caption .small{font-size:13px;color:#6d6a58;margin-top:6px}
+  .stage-divide{margin:20px 0 4px;font-size:9px;letter-spacing:.22em;color:#6d6a58;text-align:left}
+
+  /* gold range sliders (mockup treatment; --fill painted by the studio script) */
+  input[type=range]{-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:linear-gradient(90deg,#d9b45c var(--fill,50%),#33341f var(--fill,50%));outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:21px;height:21px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f4dc96,#cfa64a 70%);border:1px solid #7c6220;box-shadow:0 1px 6px rgba(0,0,0,.6)}
+  input[type=range]::-moz-range-thumb{width:21px;height:21px;border-radius:50%;background:#dcbb62;border:1px solid #7c6220}
+
+  /* floating live ticker — scrolling strip; real data only (see studio script) */
+  .tickerstrip{border-bottom:1px solid #2b2d20;background:#101208;overflow:hidden;position:relative}
+  .tk-track{display:flex;width:max-content;animation:tkScroll 48s linear infinite}
+  .tickerstrip:hover .tk-track,.tickerstrip:focus-within .tk-track{animation-play-state:paused}
+  .tk-half{display:flex;align-items:center}
+  .tk-item{display:inline-flex;align-items:center;gap:9px;padding:8px 26px;border-right:1px solid #22241a;font-size:12.5px;white-space:nowrap}
+  .tk-item .tk-dot{width:7px;height:7px;border-radius:50%;background:#3ecf6f;animation:mpulse 2s infinite;flex:none}
+  .tk-item .tk-lbl{color:#9b9784;letter-spacing:.14em;font-size:10.5px;font-weight:700}
+  .tk-item .tk-px{font-weight:800;font-size:14.5px;color:#e3b341;font-variant-numeric:tabular-nums}
+  .tk-item .tk-per{color:#9b9784;font-size:11.5px}
+  .tk-item .tk-mv{font-weight:700;font-size:11.5px}
+  .tk-item .tk-mv.up{color:#3ecf6f}
+  .tk-item .tk-mv.down{color:#ef5350}
+  .tk-item .tk-mv.flat{color:#9b9784;font-weight:400}
+  .tk-item .tk-status{color:#9b9784;font-size:11.5px}
+  .tk-item .tk-chg{font-weight:800;font-size:12px;padding:2px 8px;border-radius:999px}
+  @keyframes tkScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){
+    .tk-track{animation:none;flex-wrap:wrap;width:auto}
+    .tk-half{flex-wrap:wrap}
+    .tk-half[aria-hidden="true"]{display:none}
+  }
+
+  /* mobile: controls first, visual after */
+  @media(max-width:860px){
+    .hero{display:flex;flex-direction:column}
+    #calc-inputs{order:-1}
+    .stage{order:0}
+  }
+</style>
 </head>
 <body>
 
@@ -159,9 +254,12 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
 
 <div class="wrap">
   <header>
-    <div class="logo">CUBAN LINK <span>CALCULATOR</span><small>KNOW YOUR GOLD. KNOW YOUR PRICE.</small></div>
+    <div class="logo logolock"><img src="assets/logo-lockup-gold.png" alt="Cuban Link Calculator"></div>
     <nav><a class="on" href="#calculator">Calculator</a><a href="#build">Build &amp; Estimate</a><a href="#regular">Regular Calculator</a><a href="#learn">Learn</a><a href="/compare.html">Compare Quotes</a><a href="/weight-chart.html">Weight Chart</a><a href="/melt-percentage.html">Payout %</a></nav><button class="menubtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu">&#9776; Menu</button>
   </header>
+  <div class="tickerstrip" id="liveTicker" aria-label="Live precious metal prices">
+    <div class="tk-track" id="tkTrack"><div class="tk-half" id="tkHalfA"><span class="tk-item"><span class="tk-status">Connecting to live prices…</span></span></div><div class="tk-half" id="tkHalfB" aria-hidden="true"></div></div>
+  </div>
   <div class="mnav" id="mobileMenu">
     <a href="/#calculator">Calculator</a>
     <a href="/how-to-buy-a-cuban-link-chain.html">Buying Guide</a>
@@ -176,9 +274,38 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
 
   <div class="intro"><span class="eyebrow">THE GOLD BEHIND THE LOOK</span><h1>Cuban Link Calculator.<br><em>Know your price.</em></h1><p>Calculate the gold value of chains, rings, bracelets, coins and scrap — with a dedicated Cuban link weight estimator.</p><a class="calcjump" href="#calc-inputs">Calculate my chain &#8595;</a></div>
 
+  <div class="tabs" role="group" aria-label="Calculator mode">
+    <div class="rail">
+      <button type="button" id="tabStudio" class="on" aria-pressed="true">Cuban chain studio</button>
+      <button type="button" id="tabSimple" aria-pressed="false">Gold Calculator</button>
+    </div>
+  </div>
+
+  <div class="studio-hero">
+    <p class="studio-head">Build the chain.<em>Understand the price.</em></p>
+    <p class="studio-sub">Explore the size. Check the metal value. Keep the premium separate.</p>
+  </div>
+
   <div class="hero" id="calculator">
     <!-- STAGE -->
     <div class="stage">
+      <div class="prow"><span class="l" id="panelKarat">Miami Cuban · 14K</span><span class="r">Illustration</span></div>
+      <div class="stage-gl" id="chainStage" tabindex="0" role="img" aria-label="Interactive 3D Miami Cuban link chain on a display bust. Drag sideways, or use the left and right arrow keys, to rotate the chain."></div>
+      <div class="vcontrols">
+        <div class="seg">
+          <button class="on" id="btnBust" type="button">On bust</button>
+          <button id="btnAngle" type="button">Studio angle</button>
+        </div>
+        <div class="lightrow">
+          <span>Move the studio light</span>
+          <input type="range" id="lightSlider" min="0" max="100" value="28" style="flex:1">
+        </div>
+        <div class="caption">
+          <div class="big" id="capSize">12 mm · 22 inches</div>
+          <div class="small">Illustrative alloy color &amp; lighting · polish varies</div>
+        </div>
+      </div>
+      <div class="stage-divide">PHOTO · PURITY METER</div>
       <div class="view-switch" aria-label="Chain view"><button type="button" data-view="chain" aria-pressed="true">Chain detail</button><button type="button" data-view="bust" aria-pressed="false">On neck</button></div><div class="float-wrap" id="floatWrap"><span class="stage-label">MIAMI CUBAN / YELLOW GOLD</span><img id="chainImg" src="assets/miami-cuban.webp" alt="Polished gold Miami Cuban chain with tightly packed broad rounded links"></div>
       <div class="meterbox">
         <div class="meterhead">
@@ -323,7 +450,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     </div>
 
     <!-- REGULAR CALCULATOR -->
-    <div class="panel" id="regular">
+    <div class="panel" id="regular" hidden>
       <h2>JUST GOLD? REGULAR CALCULATOR</h2>
       <div class="inputs">
         <div class="field"><label style="font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.12em">WEIGHT (G)</label>
@@ -528,6 +655,265 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
 </script>
 <script>
   (function(){var b=document.getElementById('menuBtn'),m=document.getElementById('mobileMenu');if(!b||!m)return;b.addEventListener('click',function(){var open=m.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});})();
+</script>
+<script src="assets/render-chain.js"></script>
+<script>
+  /* ===== STUDIO LAYER (additive only — the calculator script above is untouched) =====
+     - mode tabs: Cuban chain studio <-> Simple gold calculator (show/hide, live sections)
+     - interactive WebGL2 chain (assets/render-chain.js), driven by the LIVE
+       Build & Estimate inputs (bWid / bLen) + the calculator's karat/fineness state */
+  (function(){
+    "use strict";
+    var $s = function(id){ return document.getElementById(id); };
+
+    /* ---------- mode tabs ---------- */
+    var tabStudio = $s("tabStudio"), tabSimple = $s("tabSimple");
+    function setMode(simple){
+      $s("calculator").hidden = simple;
+      $s("build").hidden = simple;
+      $s("regular").hidden = !simple;
+      document.querySelector(".grid2").classList.toggle("solo", simple);
+      tabStudio.classList.toggle("on", !simple);
+      tabSimple.classList.toggle("on", simple);
+      tabStudio.setAttribute("aria-pressed", simple ? "false" : "true");
+      tabSimple.setAttribute("aria-pressed", simple ? "true" : "false");
+    }
+    tabStudio.addEventListener("click", function(){ setMode(false); });
+    tabSimple.addEventListener("click", function(){ setMode(true); });
+
+    /* ---------- range fill paint (mockup slider treatment) ---------- */
+    function paintRange(el){
+      if(!el || el.min === "" || el.max === "") return;
+      var pct = (el.value - el.min) / (el.max - el.min) * 100;
+      el.style.setProperty("--fill", pct + "%");
+    }
+    document.querySelectorAll("input[type=range]").forEach(function(el){
+      paintRange(el);
+      el.addEventListener("input", function(){ paintRange(el); });
+    });
+
+    /* ---------- interactive chain (WebGL2 component, assets/render-chain.js) ----------
+       Codex's renderer draws its own bust + stand + chain into #chainStage and
+       keeps its canvas between calls. This script only supplies live values:
+       width/length from the Build & Estimate inputs, light mapped from the
+       slider's 0..100 to the renderer's -1..1, and the rotation state below. */
+    var studio = { width: 12, length: 22 };
+    var chainStage = $s("chainStage");
+    var lightSlider = $s("lightSlider");
+    var angleDeg = 0;
+    function drawChain(){
+      if(!chainStage || typeof window.renderChain !== "function") return;
+      var lv = parseFloat(lightSlider.value);
+      window.renderChain(chainStage, {
+        widthMm: studio.width,
+        lengthIn: studio.length,
+        light: isNaN(lv) ? 0 : lv/50 - 1,
+        angleDeg: angleDeg
+      });
+      chainStage.setAttribute("aria-label",
+        studio.width + " mm, " + studio.length + " inch Miami Cuban chain on a display bust. " +
+        "Drag horizontally or use the left and right arrow keys to rotate.");
+    }
+
+    /* ---------- coupling to the live inputs ---------- */
+    function syncStudio(){
+      var w = parseFloat($s("bWid").value), l = parseFloat($s("bLen").value);
+      if(w > 0) studio.width = w;
+      if(l > 0) studio.length = l;
+      /* karat / fine are the calculator script's own state (read-only here) */
+      var label = (typeof fine !== "undefined" && fine !== null)
+        ? "Miami Cuban · " + Math.round(fine*1000) + " fine"
+        : "Miami Cuban · " + ((typeof karat !== "undefined") ? karat : 14) + "K";
+      $s("panelKarat").textContent = label;
+      $s("capSize").textContent = studio.width + " mm · " + studio.length + " inches";
+      drawChain();
+    }
+    ["bWid","bLen","bKarat"].forEach(function(id){
+      $s(id).addEventListener("input", syncStudio);
+      $s(id).addEventListener("change", syncStudio);
+    });
+    $s("karats").addEventListener("click", syncStudio);
+    $s("fineBtn").addEventListener("click", syncStudio);
+    $s("applyBuild").addEventListener("click", syncStudio);
+
+    /* ---------- studio light + rotation ---------- */
+    lightSlider.addEventListener("input", function(){ drawChain(); });
+    function syncAngleBtns(){
+      $s("btnBust").classList.toggle("on", angleDeg === 0);
+      $s("btnAngle").classList.toggle("on", angleDeg !== 0);
+    }
+    function setAngle(deg){ angleDeg = deg; syncAngleBtns(); drawChain(); }
+    $s("btnBust").addEventListener("click", function(){ setAngle(0); });
+    $s("btnAngle").addEventListener("click", function(){ setAngle(35); });
+
+    /* drag to rotate: ~0.5 deg per px, state retained between calls */
+    var dragState = null;
+    chainStage.addEventListener("pointerdown", function(e){
+      if(e.button !== 0) return;
+      dragState = { x: e.clientX, angle: angleDeg };
+      if(chainStage.setPointerCapture){
+        try{ chainStage.setPointerCapture(e.pointerId); }catch(err){}
+      }
+    });
+    chainStage.addEventListener("pointermove", function(e){
+      if(!dragState) return;
+      angleDeg = dragState.angle + (e.clientX - dragState.x) * 0.5;
+      syncAngleBtns(); drawChain();
+    });
+    chainStage.addEventListener("pointerup", function(){ dragState = null; });
+    chainStage.addEventListener("pointercancel", function(){ dragState = null; });
+    chainStage.addEventListener("keydown", function(e){
+      if(e.key === "ArrowLeft" || e.key === "ArrowRight"){
+        e.preventDefault();
+        angleDeg += (e.key === "ArrowLeft" ? -5 : 5);
+        syncAngleBtns(); drawChain();
+      } else if(e.key === "Home"){
+        e.preventDefault(); setAngle(0);
+      }
+    });
+
+    /* ---------- floating live ticker ----------
+       A scrolling strip under the header. Data rules (nothing fabricated):
+       - GOLD · USD mirrors the calculator script's own feed state — the same
+         gold-api spot and goldprice.org day-change the market tile uses,
+         with the tile's honesty states (live + provider stamp / manual =
+         feed paused / failed refresh = stale last quote). This layer fetches
+         nothing for the USD item.
+       - GOLD · EUR / GBP = that same spot x daily FX from open.er-api.com
+         (keyless), refetched at most once per hour; the FX provider and its
+         own update stamp ride in the strip's attribution item. If FX never
+         loads, those items are omitted — never estimated.
+       - SILVER · USD comes from gold-api's XAG endpoint on the feed cadence;
+         a failed refresh keeps the last value, labeled "last known"; if it
+         never loads, the item is omitted.
+       - EUR/GBP/silver arrows compare against the previous DISTINCT observed
+         value this session; the first observation shows "first quote".
+         EUR/GBP observations are recorded only in the live state, so the
+         pre-feed example price can never pose as a market move. */
+    function tkFmt(n, cur){ return new Intl.NumberFormat("en-US",{style:"currency",currency:cur}).format(n); }
+    var tkFx = null, tkFxTried = 0;
+    var tkXag = null, tkXagStale = false;
+    var tkObs = {};
+    function tkMove(code, value){
+      var o = tkObs[code];
+      if(o && o.value === value) return o.moveHtml;
+      var html;
+      if(!o || !(o.value > 0)){
+        html = '<span class="tk-mv flat">first quote</span>';
+      } else {
+        var pc = (value - o.value) / o.value * 100;
+        if(Math.abs(pc) < 0.00005) html = '<span class="tk-mv flat">\u2014 unchanged</span>';
+        else if(pc > 0) html = '<span class="tk-mv up">\u25b2 +' + pc.toFixed(3) + '%</span>';
+        else html = '<span class="tk-mv down">\u25bc ' + pc.toFixed(3) + '%</span>';
+      }
+      tkObs[code] = { value: value, moveHtml: html };
+      return html;
+    }
+    function tkFetchFx(){
+      tkFxTried = Date.now();
+      fetch("https://open.er-api.com/v6/latest/USD").then(function(r){
+        if(!r.ok) throw new Error("fx");
+        return r.json();
+      }).then(function(d){
+        if(d && d.result === "success" && d.rates && d.rates.EUR > 0 && d.rates.GBP > 0){
+          tkFx = { EUR: d.rates.EUR, GBP: d.rates.GBP, stamp: d.time_last_update_utc || null };
+        }
+        renderTicker();
+      }).catch(function(){ /* keep last-known rates; their date rides in the attribution */ });
+    }
+    function tkFetchXag(){
+      fetch("https://api.gold-api.com/price/XAG").then(function(r){
+        if(!r.ok) throw new Error("xag");
+        return r.json();
+      }).then(function(d){
+        if(d && d.price > 0){
+          tkXag = { price: d.price, stamp: d.updatedAt ? new Date(d.updatedAt) : null };
+          tkXagStale = false;
+        } else { tkXagStale = !!tkXag; }
+        renderTicker();
+      }).catch(function(){ tkXagStale = !!tkXag; renderTicker(); });
+    }
+    var tkLastHtml = null;
+    function renderTicker(){
+      if(Date.now() - tkFxTried >= 3600000) tkFetchFx();
+      var state = (typeof priceState !== "undefined") ? priceState : "fallback";
+      var failed = (typeof refreshFailed !== "undefined") ? refreshFailed : false;
+      var stamp = (typeof providerStamp !== "undefined") ? providerStamp : null;
+      var p = parseFloat($s("spot").value);
+      var items = [];
+      /* GOLD \u00b7 USD — a view onto the tile's state machine */
+      var dotBg, dotAnim = "", status;
+      if(state === "manual"){
+        dotBg = "#9b9784"; dotAnim = "animation:none;";
+        status = "Manual price \u00b7 live feed paused";
+      } else if(state === "live"){
+        var t = (stamp || new Date()).toLocaleString();
+        if(failed){
+          dotBg = "#e3b341"; dotAnim = "animation:none;";
+          status = "Stale \u00b7 last updated " + t + " \u00b7 refresh failed, showing last quote";
+        } else {
+          dotBg = "#3ecf6f";
+          status = "Live \u00b7 Gold API \u00b7 price timestamp " + t;
+        }
+      } else {
+        dotBg = "#9b9784"; dotAnim = "animation:none;";
+        status = failed ? "Feed unavailable \u00b7 showing example price"
+                        : "Example price \u00b7 connecting to market feed\u2026";
+      }
+      var chip = "";
+      var pc = (typeof dayPc !== "undefined") ? dayPc : null;
+      if(state !== "manual" && pc !== null && !isNaN(pc) && p > 0){
+        var d = p - p/(1 + pc/100), up = pc > 0, flat = Math.abs(pc) < 0.005;
+        if(flat) chip = '<span class="tk-chg" style="background:rgba(255,255,255,.08);color:#ece7d8">\u2014 0.00% today</span>';
+        else if(up) chip = '<span class="tk-chg" style="background:rgba(62,207,111,.13);color:#3ecf6f">\u25b2 +' + tkFmt(Math.abs(d), "USD") + " (+" + Math.abs(pc).toFixed(2) + "%) today</span>";
+        else chip = '<span class="tk-chg" style="background:rgba(239,83,80,.13);color:#ef5350">\u25bc -' + tkFmt(Math.abs(d), "USD") + " (-" + Math.abs(pc).toFixed(2) + "%) today</span>";
+      }
+      items.push('<span class="tk-item"><span class="tk-dot" style="background:' + dotBg + ";" + dotAnim + '"></span>' +
+        '<span class="tk-lbl">GOLD \u00b7 USD</span>' +
+        '<span class="tk-px">' + (p > 0 ? tkFmt(p, "USD") : "\u2014") + '</span>' +
+        '<span class="tk-per">per troy oz</span>' + chip +
+        '<span class="tk-status">' + status + '</span></span>');
+      /* GOLD \u00b7 EUR / GBP — the same spot x daily FX */
+      if(tkFx && p > 0){
+        ["EUR","GBP"].forEach(function(code){
+          var v = p * tkFx[code];
+          items.push('<span class="tk-item"><span class="tk-lbl">GOLD \u00b7 ' + code + '</span>' +
+            '<span class="tk-px">' + tkFmt(v, code) + '</span>' +
+            '<span class="tk-per">per troy oz</span>' + (state === "live" ? tkMove(code, v) : "") +
+            (state === "manual" ? '<span class="tk-status">converted from your manual USD price</span>' : "") +
+            '</span>');
+        });
+      }
+      /* SILVER \u00b7 USD */
+      if(tkXag){
+        var xs = tkXagStale ? "last known \u00b7 Gold API"
+          : "Gold API" + (tkXag.stamp && !isNaN(tkXag.stamp) ? " \u00b7 price timestamp " + tkXag.stamp.toLocaleString() : "");
+        items.push('<span class="tk-item"><span class="tk-lbl">SILVER \u00b7 USD</span>' +
+          '<span class="tk-px">' + tkFmt(tkXag.price, "USD") + '</span>' +
+          '<span class="tk-per">per troy oz</span>' + tkMove("XAG", tkXag.price) +
+          '<span class="tk-status">' + xs + '</span></span>');
+      }
+      /* attribution: sources + the FX provider's own update stamp */
+      var attr = "Spot: Gold API";
+      if(tkFx) attr += " \u00b7 FX: exchangerate-api.com" + (tkFx.stamp ? " \u00b7 rates updated " + tkFx.stamp : "");
+      else attr += " \u00b7 currency conversion unavailable";
+      attr += " \u00b7 arrows vs previous observed quote";
+      items.push('<span class="tk-item"><span class="tk-status">' + attr + '</span></span>');
+      var half = items.join("") + items.join("");
+      if(half !== tkLastHtml){
+        tkLastHtml = half;
+        $s("tkHalfA").innerHTML = half;
+        $s("tkHalfB").innerHTML = half;
+      }
+    }
+    tkFetchFx();
+    tkFetchXag();
+    setInterval(tkFetchXag, 60000);
+    renderTicker();
+    setInterval(renderTicker, 1000);
+
+    syncStudio();
+  })();
 </script>
 </body>
 </html>
