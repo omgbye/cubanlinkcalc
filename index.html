@@ -229,18 +229,12 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   .tk-item .tk-lbl{color:#9b9784;letter-spacing:.14em;font-size:10.5px;font-weight:700}
   .tk-item .tk-px{font-weight:800;font-size:14.5px;color:#e3b341;font-variant-numeric:tabular-nums}
   .tk-item .tk-per{color:#9b9784;font-size:11.5px}
-  .tk-item .tk-mv{font-weight:700;font-size:11.5px}
+  /* movement block (v3): arrow + signed delta + signed percent, the whole
+     block colored by direction; the price itself stays the default color */
+  .tk-item .tk-mv{font-weight:800;font-size:13.5px;font-variant-numeric:tabular-nums}
   .tk-item .tk-mv.up{color:#22c55e}
   .tk-item .tk-mv.down{color:#ef4444}
-  .tk-item .tk-mv.flat{color:#9b9784;font-weight:400}
   .tk-item .tk-status{color:#9b9784;font-size:11.5px}
-  .tk-item .tk-chg{font-weight:800;font-size:12px;padding:2px 8px;border-radius:999px}
-  /* theatrical movement: big direction arrow + direction-colored price numbers */
-  .tk-item .tk-arrow{font-size:1.35em;font-weight:900;line-height:1;flex:none}
-  .tk-item .tk-arrow.up{color:#22c55e}
-  .tk-item .tk-arrow.down{color:#ef4444}
-  .tk-item .tk-px.up{color:#22c55e}
-  .tk-item .tk-px.down{color:#ef4444}
   /* update flash: one-shot background sweep when a refresh changes the price */
   @keyframes tkFlashUp{0%{background:rgba(34,197,94,.30)}100%{background:transparent}}
   @keyframes tkFlashDown{0%{background:rgba(239,68,68,.30)}100%{background:transparent}}
@@ -497,7 +491,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     <a class="calcjump" href="/compare.html">Compare quotes</a>
   </section>
 
-  <section id="learn" class="learn"><span class="eyebrow">A LITTLE GOLD KNOWLEDGE</span><h2>Three numbers. Three different meanings.</h2><div class="learn-grid"><article><span>01 / METAL</span><h3>Melt value</h3><p>The theoretical value of your gold content at the selected spot price. It excludes workmanship and seller premiums.</p></article><article><span>02 / BUYING</span><h3>Store price</h3><p>Gold value plus craftsmanship, overhead and margin. Compare the quoted price per gram and premium over melt.</p></article><article><span>03 / SELLING</span><h3>Buyer payout</h3><p>A buyer may deduct refining costs and margin. Condition, brand and resale demand can also affect an offer.</p></article></div><details><summary>How are purity and value calculated?</summary><p>We use nominal karat fractions: 14K is 14/24, or about 58.33%. A 585 hallmark means 58.5%; use tested fineness for an exact valuation. One troy ounce is 31.1034768 grams.</p></details><details><summary>Does the image show my exact chain?</summary><p>The chain detail and bust images are style references. Karat colors are illustrative. Images do not predict length, width, weight or construction.</p></details><details><summary>Can I use a store quote to judge a deal?</summary><p>The checker measures the premium above metal value. It does not authenticate jewelry or determine whether craftsmanship, condition and seller service justify a price. Use a pre-tax quote for a like-for-like comparison.</p></details></section><section class="learn" id="chain-questions"><span class="eyebrow">CUBAN LINK BUYING & SELLING GUIDE</span><h2>Gold chain questions, answered.</h2><details><summary>How much is a 14K Cuban link chain worth?</summary><p>Enter the measured weight and selected gold spot price. This calculator uses 14/24 (about 58.33%) for nominal 14K. The gold-content value is weight × purity × price per gram. A 585 hallmark represents 58.5%; exact valuation requires the actual fineness.</p></details><details><summary>How much should I pay for a Miami Cuban chain?</summary><p>Select “I’m buying a chain,” then open “Estimate store price + premium.” Adjust the percentage or enter a real seller quote. The result separates metal value from the added premium; it does not certify a fair market price.</p></details><details><summary>How much could I get for selling my gold chain?</summary><p>Select “I’m selling my gold” to model a buyer’s percentage of melt and any additional fees. The 90% starting value is an editable example, not a prediction. Private resale and collectible jewelry can follow different pricing.</p></details><details><summary>Why is the store price higher than melt value?</summary><p>A finished chain can include labor, clasp design, finishing, seller overhead, branding and profit. The premium over melt measures their combined price difference. It does not reveal the store’s rent, expenses or net profit.</p></details><details><summary>What is a gold chain premium over melt?</summary><p>Premium in dollars = seller quote − melt value. Premium percentage = (seller quote ÷ melt value − 1) × 100. This differs from gross margin, which uses selling price as its denominator. Compare pre-tax quotes on the same basis.</p></details><details><summary>How do I compare gold chain prices per gram?</summary><p>Divide the seller’s pre-tax price by total chain weight. Compare chains with the same karat, construction and relevant design features. The quote checker displays the quoted price per gram alongside the selected karat’s metal value per gram.</p></details><details><summary>How do 10K, 14K and 18K compare?</summary><p>Nominal purity is karat ÷ 24: 10K is about 41.67%, 14K about 58.33% and 18K 75%. At the same total weight and spot price, higher purity means more gold content. Alloy color and durability also depend on composition and construction.</p></details><details><summary>Does a hollow Cuban chain have the same gold value as a solid one?</summary><p>At identical measured weight and purity, the gold-content calculation is the same. Hollow and semi-hollow chains can weigh less at the same outside dimensions. The dimension-based builder currently models solid chains only; use a measured weight for hollow pieces.</p></details><details><summary>How do width and length affect Cuban link weight?</summary><p>Wider and longer chains generally contain more material, but thickness, link spacing, profile, alloy density and clasp change the result. Width and length alone cannot determine exact grams. The builder is calibrated against published handmade Miami specifications (for example, a 12mm 14K 24-inch solid chain at about 265 g); individual makers vary, which is why the estimate is shown as a range.</p></details><details><summary>How do I measure a Cuban chain?</summary><p>Measure overall length laid straight from clasp to end, and width across the widest link face. Weigh the chain on a suitable jewelry scale. Remove separate pendants and account for stones or non-gold components before using their weight as gold alloy weight.</p></details><details><summary>What is the difference between grams, dwt and troy ounces?</summary><p>A troy ounce is 31.1034768 grams; one pennyweight (dwt) is 1.55517384 grams. A regular household ounce is a different unit. Choose the unit printed on your scale; this calculator preserves weight when you switch between its supported units. One tola equals 11.6638 grams and is widely used in South Asian gold markets; this calculator supports it too.</p></details><details><summary>What is the difference between 14K and a 585 gold stamp?</summary><p>14K describes nominal karat purity. A 585 fineness mark specifies 585 parts of gold per thousand, or 58.5%. The difference matters for precise valuation. A stamp by itself does not verify authenticity or replace testing.</p></details><details><summary>Does this calculator include diamonds, tax or shipping?</summary><p>Melt value covers the entered gold-alloy weight and purity only. The buying scenario is pre-tax and excludes shipping. Do not value diamond weight as gold; gemstones and separate components require their own assessment.</p></details><details><summary>Is the displayed price a real jewelry listing?</summary><p>No. This website provides calculations and editable scenarios. The chain images are style references, not inventory for sale. Only a quote entered from an actual seller represents that seller’s asking price.</p></details><details><summary>What happens if the gold price feed is unavailable?</summary><p>The website labels the feed status and retains the displayed editable price. A fallback price is not current market data. Enter a current reference price and confirm its currency and troy-ounce unit before comparing offers.</p></details></section><footer><b>CUBAN LINK CALCULATOR</b><span>Know your gold. Know your price.</span><p>Estimates for education. Values depend on the entered weight, purity and gold price. No jeweler affiliations or sponsored listings in this version.</p><p style="font-size:12.5px;max-width:none"><a style="color:inherit" href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a> · <a style="color:inherit" href="/gold-karats-explained.html">Karats Explained</a> · <a style="color:inherit" href="/what-is-melt-value.html">Melt Value</a> · <a style="color:inherit" href="/compare.html">Compare Quotes</a> · <a style="color:inherit" href="/weight-chart.html">Weight Chart</a> · <a style="color:inherit" href="/melt-percentage.html">Payout %</a> · <a style="color:inherit" href="/methodology.html">Methodology</a> · <a style="color:inherit" href="/faq.html">FAQ</a> · <a style="color:inherit" href="/about.html">About</a> · <a style="color:inherit" href="/privacy.html">Privacy Policy</a> · <a style="color:inherit" href="/contact.html">Contact</a></p></footer>
+  <section id="learn" class="learn"><span class="eyebrow">A LITTLE GOLD KNOWLEDGE</span><h2>Three numbers. Three different meanings.</h2><div class="learn-grid"><article><span>01 / METAL</span><h3>Melt value</h3><p>The theoretical value of your gold content at the selected spot price. It excludes workmanship and seller premiums.</p></article><article><span>02 / BUYING</span><h3>Store price</h3><p>Gold value plus craftsmanship, overhead and margin. Compare the quoted price per gram and premium over melt.</p></article><article><span>03 / SELLING</span><h3>Buyer payout</h3><p>A buyer may deduct refining costs and margin. Condition, brand and resale demand can also affect an offer.</p></article></div><details><summary>How are purity and value calculated?</summary><p>We use nominal karat fractions: 14K is 14/24, or about 58.33%. A 585 hallmark means 58.5%; use tested fineness for an exact valuation. One troy ounce is 31.1034768 grams.</p></details><details><summary>Does the image show my exact chain?</summary><p>The chain detail and bust images are style references. Karat colors are illustrative. Images do not predict length, width, weight or construction.</p></details><details><summary>Can I use a store quote to judge a deal?</summary><p>The checker measures the premium above metal value. It does not authenticate jewelry or determine whether craftsmanship, condition and seller service justify a price. Use a pre-tax quote for a like-for-like comparison.</p></details></section><section class="learn" id="chain-questions"><span class="eyebrow">CUBAN LINK BUYING & SELLING GUIDE</span><h2>Gold chain questions, answered.</h2><details><summary>How much is a 14K Cuban link chain worth?</summary><p>Enter the measured weight and selected gold spot price. This calculator uses 14/24 (about 58.33%) for nominal 14K. The gold-content value is weight × purity × price per gram. A 585 hallmark represents 58.5%; exact valuation requires the actual fineness.</p></details><details><summary>How much should I pay for a Miami Cuban chain?</summary><p>Select “I’m buying a chain,” then open “Estimate store price + premium.” Adjust the percentage or enter a real seller quote. The result separates metal value from the added premium; it does not certify a fair market price.</p></details><details><summary>How much could I get for selling my gold chain?</summary><p>Select “I’m selling my gold” to model a buyer’s percentage of melt and any additional fees. The 90% starting value is an editable example, not a prediction. Private resale and collectible jewelry can follow different pricing.</p></details><details><summary>Why is the store price higher than melt value?</summary><p>A finished chain can include labor, clasp design, finishing, seller overhead, branding and profit. The premium over melt measures their combined price difference. It does not reveal the store’s rent, expenses or net profit.</p></details><details><summary>What is a gold chain premium over melt?</summary><p>Premium in dollars = seller quote − melt value. Premium percentage = (seller quote ÷ melt value − 1) × 100. This differs from gross margin, which uses selling price as its denominator. Compare pre-tax quotes on the same basis.</p></details><details><summary>How do I compare gold chain prices per gram?</summary><p>Divide the seller’s pre-tax price by total chain weight. Compare chains with the same karat, construction and relevant design features. The quote checker displays the quoted price per gram alongside the selected karat’s metal value per gram.</p></details><details><summary>How do 10K, 14K and 18K compare?</summary><p>Nominal purity is karat ÷ 24: 10K is about 41.67%, 14K about 58.33% and 18K 75%. At the same total weight and spot price, higher purity means more gold content. Alloy color and durability also depend on composition and construction.</p></details><details><summary>Does a hollow Cuban chain have the same gold value as a solid one?</summary><p>At identical measured weight and purity, the gold-content calculation is the same. Hollow and semi-hollow chains can weigh less at the same outside dimensions. The dimension-based builder currently models solid chains only; use a measured weight for hollow pieces.</p></details><details><summary>How do width and length affect Cuban link weight?</summary><p>Wider and longer chains generally contain more material, but thickness, link spacing, profile, alloy density and clasp change the result. Width and length alone cannot determine exact grams. The builder is calibrated against published handmade Miami specifications (for example, a 12mm 14K 24-inch solid chain at about 265 g); individual makers vary, which is why the estimate is shown as a range.</p></details><details><summary>How do I measure a Cuban chain?</summary><p>Measure overall length laid straight from clasp to end, and width across the widest link face. Weigh the chain on a suitable jewelry scale. Remove separate pendants and account for stones or non-gold components before using their weight as gold alloy weight.</p></details><details><summary>What is the difference between grams, dwt and troy ounces?</summary><p>A troy ounce is 31.1034768 grams; one pennyweight (dwt) is 1.55517384 grams. A regular household ounce is a different unit. Choose the unit printed on your scale; this calculator preserves weight when you switch between its supported units. One tola equals 11.6638 grams and is widely used in South Asian gold markets; this calculator supports it too.</p></details><details><summary>What is the difference between 14K and a 585 gold stamp?</summary><p>14K describes nominal karat purity. A 585 fineness mark specifies 585 parts of gold per thousand, or 58.5%. The difference matters for precise valuation. A stamp by itself does not verify authenticity or replace testing.</p></details><details><summary>Does this calculator include diamonds, tax or shipping?</summary><p>Melt value covers the entered gold-alloy weight and purity only. The buying scenario is pre-tax and excludes shipping. Do not value diamond weight as gold; gemstones and separate components require their own assessment.</p></details><details><summary>Is the displayed price a real jewelry listing?</summary><p>No. This website provides calculations and editable scenarios. The chain images are style references, not inventory for sale. Only a quote entered from an actual seller represents that seller’s asking price.</p></details><details><summary>What happens if the gold price feed is unavailable?</summary><p>The website labels the feed status and retains the displayed editable price. A fallback price is not current market data. Enter a current reference price and confirm its currency and troy-ounce unit before comparing offers.</p></details></section><footer><b>CUBAN LINK CALCULATOR</b><span>Know your gold. Know your price.</span><p>Estimates for education. Values depend on the entered weight, purity and gold price. No jeweler affiliations or sponsored listings in this version.</p><p style="font-size:12.5px;max-width:none"><a style="color:inherit" href="/how-to-buy-a-cuban-link-chain.html">Buyer's Guide</a> · <a style="color:inherit" href="/gold-karats-explained.html">Karats Explained</a> · <a style="color:inherit" href="/what-is-melt-value.html">Melt Value</a> · <a style="color:inherit" href="/compare.html">Compare Quotes</a> · <a style="color:inherit" href="/weight-chart.html">Weight Chart</a> · <a style="color:inherit" href="/melt-percentage.html">Payout %</a> · <a style="color:inherit" href="/methodology.html">Methodology</a> · <a style="color:inherit" href="/faq.html">FAQ</a> · <a style="color:inherit" href="/about.html">About</a> · <a style="color:inherit" href="/privacy.html">Privacy Policy</a> · <a style="color:inherit" href="/terms.html">Terms of Service</a> · <a style="color:inherit" href="/disclaimer.html">Disclaimer</a> · <a style="color:inherit" href="/contact.html">Contact</a></p></footer>
 </div>
 
 <script>
@@ -877,49 +871,52 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
        - SILVER · USD comes from gold-api's XAG endpoint on the feed cadence;
          a failed refresh keeps the last value, labeled "last known"; if it
          never loads, the item is omitted.
-       - EUR/GBP/silver arrows compare against the previous DISTINCT observed
-         value this session; the first observation shows "first quote".
+       - EUR/GBP/silver movement blocks compare against the previous
+         DISTINCT observed value this session; the first observation
+         shows no block.
          EUR/GBP observations are recorded only in the live state, so the
          pre-feed example price can never pose as a market move.
-       - Movement display (finance-channel style, presentation only): every
-         item gets a large direction arrow before its price and the price
-         number itself takes the direction color (green up / red down). The
-         USD arrow follows the goldprice.org day-change when present, else
-         the session delta; manual state suppresses arrows entirely; flat or
-         first-quote items show no arrow and keep the default number color.
-         When a refresh changes an item's displayed value, that item flashes
-         once (soft green up / red down, 600ms); the LIVE dot pulses only in
-         the live state. Reduced-motion disables flash and pulse. */
+       - Movement display (v3, Angel's reference format): the price stays
+         the default ticker color; beside it a movement BLOCK — arrow +
+         signed delta in the item's own units + signed percent — colored
+         as one block (green up / red down), e.g. "▼ -$143.82 -3.58%".
+         The USD block follows the goldprice.org day-change when present
+         (percent is their pc; the dollar delta uses the tile chip's own
+         prev-close math), else the session delta. EUR/GBP/silver blocks
+         use the session delta. First quote or exactly flat: NO block at
+         all. Manual state suppresses the USD/FX blocks entirely (the FX
+         items carry their conversion disclosure instead); a stale quote
+         keeps its last block. When a refresh changes an item's displayed
+         value, that item flashes once (soft green up / red down, 600ms);
+         the LIVE dot pulses only in the live state. Reduced-motion
+         disables flash and pulse. */
     function tkFmt(n, cur){ return new Intl.NumberFormat("en-US",{style:"currency",currency:cur}).format(n); }
     var tkFx = null, tkFxTried = 0;
     var tkXag = null, tkXagStale = false;
     var tkObs = {};
-    /* Movement parts for one item: direction ("up"/"down"/"flat"/"none") plus
-       the delta span. Direction is honest or nothing: it comes only from a
-       real observed change vs the previous distinct quote (or, for the USD
-       item, the goldprice.org day-change handled in renderTicker). The first
-       observation has no direction; an unchanged value keeps the last one. */
-    function tkMoveParts(code, value){
+    /* Movement block for one item: direction ("up"/"down"/"flat"/"none")
+       plus the block HTML — "▲ +$12.30 +1.27%" in the item's own units,
+       colored as a whole. Honest or nothing: it comes only from a real
+       observed change vs the previous distinct quote (the USD day-change
+       block is built in renderTicker from goldprice.org's pc). The first
+       observation and an exactly-flat move produce NO block; an unchanged
+       value keeps the last block (that is what carries a stale quote). */
+    function tkMoveParts(code, value, cur){
       var o = tkObs[code];
-      if(o && o.value === value) return { dir: o.dir, html: o.moveHtml };
-      var dir = "none", html;
-      if(!o || !(o.value > 0)){
-        html = '<span class="tk-mv flat">first quote</span>';
-      } else {
-        var pc = (value - o.value) / o.value * 100;
-        if(Math.abs(pc) < 0.00005){ dir = "flat"; html = '<span class="tk-mv flat">\u2014 unchanged</span>'; }
-        else if(pc > 0){ dir = "up"; html = '<span class="tk-mv up">\u25b2 +' + pc.toFixed(3) + '%</span>'; }
-        else { dir = "down"; html = '<span class="tk-mv down">\u25bc ' + pc.toFixed(3) + '%</span>'; }
+      if(o && o.value === value) return { dir: o.dir, html: o.html };
+      var dir = "none", html = "";
+      if(o && o.value > 0){
+        var d = value - o.value, pc = d / o.value * 100;
+        if(Math.abs(pc) < 0.00005){ dir = "flat"; }
+        else {
+          dir = pc > 0 ? "up" : "down";
+          html = '<span class="tk-mv ' + dir + '">' + (dir === "up" ? "\u25b2 +" : "\u25bc -") +
+            tkFmt(Math.abs(d), cur) + " " + (dir === "up" ? "+" : "-") + Math.abs(pc).toFixed(2) + '%</span>';
+        }
       }
-      tkObs[code] = { value: value, moveHtml: html, dir: dir };
+      tkObs[code] = { value: value, html: html, dir: dir };
       return { dir: dir, html: html };
     }
-    function tkMove(code, value){ return tkMoveParts(code, value).html; }
-    function tkArrow(dir){
-      return dir === "up" ? '<span class="tk-arrow up">\u25b2</span>'
-           : dir === "down" ? '<span class="tk-arrow down">\u25bc</span>' : "";
-    }
-    function tkPxCls(dir){ return dir === "up" ? " up" : dir === "down" ? " down" : ""; }
     /* Update flash: when an item's displayed value actually changes between
        renders, its next rendered HTML carries a one-shot flash class (green
        up / red down, 600ms CSS fade). Unchanged refreshes never flash. */
@@ -985,45 +982,41 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         status = failed ? "Feed unavailable \u00b7 showing example price"
                         : "Example price \u00b7 connecting to market feed\u2026";
       }
-      var chip = "";
+      /* USD movement block: the goldprice.org day-change when present —
+         percent is their pc; the dollar delta uses the tile chip's own
+         prev-close math (prevClose = spot/(1+pc/100), delta = spot -
+         prevClose). Otherwise the session delta vs the previous distinct
+         live quote. Manual suppresses the block entirely; an exactly-flat
+         day (|pc| < 0.005, the old flat-chip threshold) shows no block. */
       var pc = (typeof dayPc !== "undefined") ? dayPc : null;
-      if(state !== "manual" && pc !== null && !isNaN(pc) && p > 0){
-        var d = p - p/(1 + pc/100), up = pc > 0, flat = Math.abs(pc) < 0.005;
-        if(flat) chip = '<span class="tk-chg" style="background:rgba(255,255,255,.08);color:#ece7d8">\u2014 0.00% today</span>';
-        else if(up) chip = '<span class="tk-chg" style="background:rgba(34,197,94,.13);color:#22c55e">\u25b2 +' + tkFmt(Math.abs(d), "USD") + " (+" + Math.abs(pc).toFixed(2) + "%) today</span>";
-        else chip = '<span class="tk-chg" style="background:rgba(239,68,68,.13);color:#ef4444">\u25bc -' + tkFmt(Math.abs(d), "USD") + " (-" + Math.abs(pc).toFixed(2) + "%) today</span>";
-      }
-      /* USD direction: the goldprice.org day-change when that data is present
-         (same math as the tile chip); otherwise the session delta vs the
-         previous distinct live quote. Manual suppresses arrows entirely;
-         a stale quote keeps its last arrow (cached parts / chip). */
-      var usdDir = "none", usdMoveHtml = "";
-      if(state === "live" && p > 0){
-        var usdParts = tkMoveParts("USD", p);
-        if(chip){
-          usdDir = Math.abs(pc) < 0.005 ? "flat" : (pc > 0 ? "up" : "down");
-        } else {
-          usdDir = usdParts.dir;
-          if(usdDir === "up" || usdDir === "down") usdMoveHtml = usdParts.html;
+      var usdDir = "none", usdBlock = "";
+      if(state !== "manual" && p > 0){
+        var sParts = state === "live" ? tkMoveParts("USD", p, "USD") : null;
+        if(pc !== null && !isNaN(pc)){
+          if(Math.abs(pc) >= 0.005){
+            var dd = p - p/(1 + pc/100);
+            usdDir = pc > 0 ? "up" : "down";
+            usdBlock = '<span class="tk-mv ' + usdDir + '">' + (usdDir === "up" ? "\u25b2 +" : "\u25bc -") +
+              tkFmt(Math.abs(dd), "USD") + " " + (usdDir === "up" ? "+" : "-") + Math.abs(pc).toFixed(2) + '%</span>';
+          } else usdDir = "flat";
+        } else if(sParts){
+          usdDir = sParts.dir; usdBlock = sParts.html;
         }
-      } else if(state !== "manual" && chip && p > 0){
-        usdDir = Math.abs(pc) < 0.005 ? "flat" : (pc > 0 ? "up" : "down");
       }
       var usdFlash = p > 0 ? tkFlashFor("USD", p, usdDir) : "";
       items.push('<span class="tk-item' + usdFlash + '"><span class="tk-dot" style="background:' + dotBg + ";" + dotAnim + '"></span>' +
-        '<span class="tk-lbl">GOLD \u00b7 USD</span>' + tkArrow(usdDir) +
-        '<span class="tk-px' + tkPxCls(usdDir) + '">' + (p > 0 ? tkFmt(p, "USD") : "\u2014") + '</span>' +
-        '<span class="tk-per">per troy oz</span>' + chip + usdMoveHtml +
+        '<span class="tk-lbl">GOLD \u00b7 USD</span>' +
+        '<span class="tk-px">' + (p > 0 ? tkFmt(p, "USD") : "\u2014") + '</span>' +
+        '<span class="tk-per">per troy oz</span>' + usdBlock +
         '<span class="tk-status">' + status + '</span></span>');
       /* GOLD \u00b7 EUR / GBP — the same spot x daily FX */
       if(tkFx && p > 0){
         ["EUR","GBP"].forEach(function(code){
           var v = p * tkFx[code];
-          var parts = state === "live" ? tkMoveParts(code, v) : { dir: "none", html: "" };
+          var parts = state === "live" ? tkMoveParts(code, v, code) : { dir: "none", html: "" };
           var fxFlash = tkFlashFor(code, v, parts.dir);
           items.push('<span class="tk-item' + fxFlash + '"><span class="tk-lbl">GOLD \u00b7 ' + code + '</span>' +
-            tkArrow(parts.dir) +
-            '<span class="tk-px' + tkPxCls(parts.dir) + '">' + tkFmt(v, code) + '</span>' +
+            '<span class="tk-px">' + tkFmt(v, code) + '</span>' +
             '<span class="tk-per">per troy oz</span>' + parts.html +
             (state === "manual" ? '<span class="tk-status">converted from your manual USD price</span>' : "") +
             '</span>');
@@ -1033,11 +1026,10 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       if(tkXag){
         var xs = tkXagStale ? "last known \u00b7 Gold API"
           : "Gold API" + (tkXag.stamp && !isNaN(tkXag.stamp) ? " \u00b7 price timestamp " + tkXag.stamp.toLocaleString() : "");
-        var xParts = tkMoveParts("XAG", tkXag.price);
+        var xParts = tkMoveParts("XAG", tkXag.price, "USD");
         var xFlash = tkFlashFor("XAG", tkXag.price, xParts.dir);
         items.push('<span class="tk-item' + xFlash + '"><span class="tk-lbl">SILVER \u00b7 USD</span>' +
-          tkArrow(xParts.dir) +
-          '<span class="tk-px' + tkPxCls(xParts.dir) + '">' + tkFmt(tkXag.price, "USD") + '</span>' +
+          '<span class="tk-px">' + tkFmt(tkXag.price, "USD") + '</span>' +
           '<span class="tk-per">per troy oz</span>' + xParts.html +
           '<span class="tk-status">' + xs + '</span></span>');
       }
@@ -1045,7 +1037,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       var attr = "Spot: Gold API";
       if(tkFx) attr += " \u00b7 FX: exchangerate-api.com" + (tkFx.stamp ? " \u00b7 rates updated " + tkFx.stamp : "");
       else attr += " \u00b7 currency conversion unavailable";
-      attr += " \u00b7 arrows vs previous observed quote";
+      attr += " \u00b7 moves: USD today \u00b7 EUR/GBP/silver vs previous observed quote";
       items.push('<span class="tk-item"><span class="tk-status">' + attr + '</span></span>');
       var half = items.join("") + items.join("");
       if(half !== tkLastHtml){
