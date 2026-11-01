@@ -82,12 +82,12 @@
  precision highp float;
  layout(location=0) in vec3 aPos;layout(location=1) in vec3 aNormal;layout(location=2) in float aAO;
  layout(location=3) in vec3 aCenter;layout(location=4) in vec3 aRight;layout(location=5) in vec3 aAlong;layout(location=6) in vec3 aUp;
- uniform bool uChain;uniform float uWidth,uAngle,uAspect;out vec3 vPos,vNormal,vLocal,vLink;out float vAO;
+ uniform bool uChain;uniform float uWidth,uAngle,uAspect,uZoom,uCenterY;out vec3 vPos,vNormal,vLocal,vLink;out float vAO;
  vec3 turn(vec3 p){float c=cos(uAngle),s=sin(uAngle);return vec3(c*p.x+s*p.z,p.y,-s*p.x+c*p.z);}
  void main(){vec3 p=aPos,n=aNormal;if(uChain){p=aCenter+(aRight*aPos.x+aAlong*aPos.y+aUp*aPos.z)*uWidth;n=aRight*aNormal.x+aAlong*aNormal.y+aUp*aNormal.z;}
  vLink=aPos;vLocal=p;vPos=turn(p);vNormal=turn(n);vAO=aAO;
  vec3 camera=vec3(vPos.x,.866*(vPos.y+30.)-.5*vPos.z,.5*(vPos.y+30.)+.866*vPos.z-720.);
- float near=10.,far=1800.;gl_Position=vec4(camera.x*2.65/uAspect,camera.y*2.65,((far+near)/(near-far))*camera.z+(2.*far*near)/(near-far),-camera.z);}`;
+ float near=10.,far=1800.;gl_Position=vec4(camera.x*2.65*uZoom/uAspect,(camera.y-uCenterY)*2.65*uZoom,((far+near)/(near-far))*camera.z+(2.*far*near)/(near-far),-camera.z);}`;
  const fs=`#version 300 es
  precision highp float;in vec3 vPos,vNormal,vLocal,vLink;in float vAO;uniform float uMaterial,uLight,uDrop,uWidth;uniform vec3 uTint;out vec4 color;
  vec3 tonemap(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}
@@ -164,6 +164,10 @@
   return out;
  }
  const MASTER_OUTER=1.2752; // measured vertex extent along (end taper trims the tips)
+ /* framing:'macro' magnification: at 6.5x a 12mm link projects ~94px wide
+    in a 550x430 frame (measured with this file's own projection math);
+    uZoom/uCenterY default to 1/0, where the projection is the identity. */
+ const MACRO_ZOOM=6.5;
  function tierLevels(maxW){return maxW<=5?['lod2']:maxW<=9?['lod','lod2']:['master','lod','lod2'];}
  /* Link tiers, chosen per draw (and by chainGeometry for the pitch) by
     width: a 3mm strand is a few pixels wide and needs a coarse ring; a 20mm
@@ -202,7 +206,7 @@
   const clasp=mesh(gl,claspMesh()),claspInstances=gl.createBuffer();gl.bindVertexArray(clasp.vao);gl.bindBuffer(gl.ARRAY_BUFFER,claspInstances);
   for(let i=3;i<=6;i++){gl.enableVertexAttribArray(i);gl.vertexAttribPointer(i,3,gl.FLOAT,false,48,(i-3)*12);gl.vertexAttribDivisor(i,1);}
   gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.clearColor(0,0,0,0);
-  const uniforms={};for(const name of ['uChain','uWidth','uAngle','uAspect','uMaterial','uLight','uDrop','uTint'])uniforms[name]=gl.getUniformLocation(program,name);
+  const uniforms={};for(const name of ['uChain','uWidth','uAngle','uAspect','uZoom','uCenterY','uMaterial','uLight','uDrop','uTint'])uniforms[name]=gl.getUniformLocation(program,name);
   const state={canvas,gl,program,bust,stand,linkTiers:null,linkReady:false,clasp,claspInstances,instances,uniforms,lastKey:'',scheduled:false,options:{},width:0,height:0};
   loadLinkAsset(state,el);
   new ResizeObserver(entries=>{const r=entries[0].contentRect;state.width=r.width;state.height=r.height;schedule(state);}).observe(el);
@@ -232,6 +236,7 @@
  function draw(s){const {gl,canvas,uniforms:u,options:o}=s;if(!s.width||!s.height)return;const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(s.width*dpr),h=Math.round(s.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(s.program);
   const key=o.widthMm+':'+o.lengthIn;if(s.lastKey!==key){s.chain=chainGeometry(o.widthMm,o.lengthIn);gl.bindBuffer(gl.ARRAY_BUFFER,s.instances);gl.bufferData(gl.ARRAY_BUFFER,s.chain.data,gl.DYNAMIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,s.claspInstances);gl.bufferData(gl.ARRAY_BUFFER,s.chain.clasp,gl.DYNAMIC_DRAW);s.lastKey=key;}
   gl.uniform1f(u.uWidth,o.widthMm);gl.uniform1f(u.uAngle,o.angleDeg*Math.PI/180);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uLight,o.light);gl.uniform1f(u.uDrop,s.chain.drop);
+  const macro=o.framing==='macro';gl.uniform1f(u.uZoom,macro?MACRO_ZOOM:1);let macroCY=0;if(macro){const bp=center(0,s.chain.drop,o.widthMm);macroCY=.866*(bp[1]+30)-.5*Math.cos(o.angleDeg*Math.PI/180)*bp[2];}gl.uniform1f(u.uCenterY,macroCY);
   const tint=tintForKarat(o.karat);gl.uniform3f(u.uTint,tint[0],tint[1],tint[2]);
   gl.uniform1i(u.uChain,0);gl.uniform1f(u.uMaterial,2);gl.bindVertexArray(s.stand.vao);gl.drawArrays(gl.TRIANGLES,0,s.stand.count);gl.uniform1f(u.uMaterial,0);gl.bindVertexArray(s.bust.vao);gl.drawArrays(gl.TRIANGLES,0,s.bust.count);
   if(s.linkReady){gl.uniform1i(u.uChain,1);gl.uniform1f(u.uMaterial,1);const tier=s.linkTiers.find(t=>o.widthMm<=t.maxW)||s.linkTiers[s.linkTiers.length-1];const drop=s.chain.count>300?2:s.chain.count>220?1:0;const m=tier.levels[Math.min(tier.levels.length-1,drop)];gl.bindVertexArray(m.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,m.count,s.chain.count);
@@ -239,6 +244,6 @@
   canvas.dataset.renderError=String(gl.getError());canvas.dataset.links=String(s.chain.count);canvas.dataset.valid=String(s.chain.data.every(Number.isFinite));
  }
  global.renderChain=function(el,options){if(!(el instanceof Element))throw TypeError('renderChain needs a container element.');let s=cache.get(el);if(!s){s=initialize(el);cache.set(el,s);}if(s.failed)return;
-  s.options={widthMm:clamp(Number(options.widthMm)||12,3,20),lengthIn:clamp(Number(options.lengthIn)||24,16,32),light:clamp(Number(options.light)||0,-1,1),angleDeg:Number(options.angleDeg)||0,karat:clamp(Number(options.karat)||14,9,24)};schedule(s);
+  s.options={widthMm:clamp(Number(options.widthMm)||12,3,20),lengthIn:clamp(Number(options.lengthIn)||24,16,32),light:clamp(Number(options.light)||0,-1,1),angleDeg:Number(options.angleDeg)||0,karat:clamp(Number(options.karat)||14,9,24),framing:options.framing==='macro'?'macro':'full'};schedule(s);
  };
 })(window);
