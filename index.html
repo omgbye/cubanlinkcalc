@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout in grams, dwt, troy ounces or tola."><meta name="theme-color" content="#0b0c0c"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta property="og:title" content="Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate"><meta property="og:description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout."><meta property="og:type" content="website"><meta property="og:url" content="https://cubanlinkcalc.com/"><meta property="og:image" content="https://cubanlinkcalc.com/assets/chain.webp"><meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://cubanlinkcalc.com/"><title>Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate</title>
+<meta name="description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout in grams, dwt, troy ounces or tola."><meta name="theme-color" content="#0b0c0c"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta property="og:title" content="Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate"><meta property="og:description" content="Calculate Miami Cuban link gold value by karat and weight. Compare a store quote, adjust retail premiums, or estimate a scrap gold payout."><meta property="og:type" content="website"><meta property="og:url" content="https://cubanlinkcalc.com/"><meta property="og:image" content="https://cubanlinkcalc.com/assets/og-card.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:image" content="https://cubanlinkcalc.com/assets/og-card.png"><meta name="twitter:card" content="summary_large_image"><link rel="canonical" href="https://cubanlinkcalc.com/"><title>Cuban Link Calculator | Gold Value, Buying Price & Selling Estimate</title>
 <style>
   :root{
     --gold:#e3b341; --gold-deep:#b8860b; --ink:#0a0a0b; --panel:#141416; --panel2:#1b1b1e;
@@ -263,7 +263,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
 
 <div class="wrap">
   <header>
-    <div class="logo logolock"><img src="assets/logo-lockup-transparent.png" alt="Cuban Link Calculator"></div>
+    <div class="logo logolock"><a href="/" aria-label="Cuban Link Calculator — home"><img src="assets/logo-lockup-transparent.png" alt="Cuban Link Calculator" width="1443" height="471"></a></div>
     <nav><a class="on" href="#calculator">Calculator</a><a href="#build">Build &amp; Estimate</a><a href="#regular">Regular Calculator</a><a href="#learn">Learn</a><a href="/compare.html">Compare Quotes</a><a href="/weight-chart.html">Weight Chart</a><a href="/melt-percentage.html">Payout %</a></nav><button class="menubtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu">&#9776; Menu</button>
   </header>
   <div class="tickerstrip" id="liveTicker" aria-label="Live precious metal prices">
@@ -316,8 +316,9 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
           <span class="pval" id="panelLenVal">22 in</span>
         </div>
         <div class="lightrow">
-          <span>Move the studio light</span>
-          <input type="range" id="lightSlider" min="0" max="100" value="28" style="flex:1">
+          <span>Karat</span>
+          <input type="range" id="panelKaratSlider" min="9" max="24" step="0.05" value="14" style="flex:1" aria-label="Karat">
+          <span class="pval" id="panelKaratVal">14K</span>
         </div>
         <div class="caption">
           <div class="big" id="capSize">12 mm · 22 inches</div>
@@ -325,7 +326,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         </div>
       </div>
       <div class="stage-divide">PHOTO · PURITY METER</div>
-      <div class="view-switch" aria-label="Chain view"><button type="button" data-view="chain" aria-pressed="true">Chain detail</button><button type="button" data-view="bust" aria-pressed="false">On neck</button></div><div class="float-wrap" id="floatWrap"><span class="stage-label">MIAMI CUBAN / YELLOW GOLD</span><img id="chainImg" src="assets/miami-cuban.webp" alt="Polished gold Miami Cuban chain with tightly packed broad rounded links"></div>
+      <div class="view-switch" aria-label="Chain view"><button type="button" data-view="chain" aria-pressed="true">Chain detail</button><button type="button" data-view="bust" aria-pressed="false">On neck</button></div><div class="float-wrap" id="floatWrap"><span class="stage-label">MIAMI CUBAN / YELLOW GOLD</span><img id="chainImg" src="assets/miami-cuban.webp" alt="Polished gold Miami Cuban chain with tightly packed broad rounded links" width="1920" height="1920"></div>
       <div class="meterbox">
         <div class="meterhead">
           <span class="t">THEORETICAL PURITY</span>
@@ -680,7 +681,13 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
   /* ===== STUDIO LAYER (additive only — the calculator script above is untouched) =====
      - mode tabs: Cuban chain studio <-> Simple gold calculator (show/hide, live sections)
      - interactive WebGL2 chain (assets/render-chain.js), driven by the LIVE
-       Build & Estimate inputs (bWid / bLen) + the calculator's karat/fineness state */
+       Build & Estimate inputs (bWid / bLen) + the calculator's karat/fineness state
+     - panel Karat slider: ONE unified karat state across the slider, the
+       calculator's karat buttons, the fineness input and bKarat (10/14/18)
+     - the studio light is FIXED at the old light slider's default
+       (28 -> -0.44); that slider is gone — the Karat slider took its row
+     - auto-rotation: a slow drift drives angleDeg until the visitor grabs
+       the chain (see the auto-rotation block below) */
   (function(){
     "use strict";
     var $s = function(id){ return document.getElementById(id); };
@@ -714,25 +721,29 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     /* ---------- interactive chain (WebGL2 component, assets/render-chain.js) ----------
        Codex's renderer draws its own bust + stand + chain into #chainStage and
        keeps its canvas between calls. This script only supplies live values:
-       width/length from the Build & Estimate inputs, light mapped from the
-       slider's 0..100 to the renderer's -1..1, and the rotation state below. */
+       width/length from the Build & Estimate inputs, a FIXED light, and the
+       rotation state below. */
     var studio = { width: 12, length: 22 };
     var chainStage = $s("chainStage");
-    var lightSlider = $s("lightSlider");
+    /* The studio light is FIXED at the old light slider's default: 28 on its
+       0..100 scale, mapped exactly as the slider mapped it (28/50 - 1 =
+       -0.44), so the gold's reflections and the bust contact shadow keep
+       their tuned values. The slider itself is gone — the panel Karat
+       slider (below) took its row. */
+    var FIXED_LIGHT = 28/50 - 1;
     var angleDeg = 0;
     function drawChain(){
       if(!chainStage || typeof window.renderChain !== "function") return;
-      var lv = parseFloat(lightSlider.value);
-      /* karat tint follows the MAIN calculator's karat state (buttons + custom
-         fineness) — the same state the bust caption reads; the Build & Estimate
-         dropdown is a separate estimate-only input and does not drive it. */
+      /* karat tint follows the ONE unified karat state (panel slider / karat
+         buttons / fineness input / Build dropdown — see the karat block
+         below), the same state the bust caption reads. */
       var effKarat = (typeof fine !== "undefined" && fine !== null)
         ? fine * 24
         : ((typeof karat !== "undefined") ? karat : 14);
       window.renderChain(chainStage, {
         widthMm: studio.width,
         lengthIn: studio.length,
-        light: isNaN(lv) ? 0 : lv/50 - 1,
+        light: FIXED_LIGHT,
         angleDeg: angleDeg,
         karat: effKarat
       });
@@ -752,16 +763,128 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         : "Miami Cuban · " + ((typeof karat !== "undefined") ? karat : 14) + "K";
       $s("panelKarat").textContent = label;
       $s("capSize").textContent = studio.width + " mm · " + studio.length + " inches";
+      /* unified karat, state -> Build dropdown: a standard-button state
+         also lands in bKarat when the dropdown offers that karat (10/14/18)
+         and the build numbers are recomputed so the estimate matches the
+         state. A fineness state never touches the dropdown — it keeps its
+         own value for its estimate. */
+      var bkStr = (typeof fine !== "undefined" && fine !== null) ? null
+        : String((typeof karat !== "undefined") ? karat : 14);
+      if(bkStr !== null && bKaratStrs.indexOf(bkStr) !== -1 && $s("bKarat").value !== bkStr){
+        $s("bKarat").value = bkStr;
+        if(typeof calc === "function") calc();
+      }
       syncPanelSliders();
+      syncKaratUI();
       drawChain();
     }
-    ["bWid","bLen","bKarat"].forEach(function(id){
+    ["bWid","bLen"].forEach(function(id){
       $s(id).addEventListener("input", syncStudio);
       $s(id).addEventListener("change", syncStudio);
     });
+    /* bKarat gets its own wiring (karat block below): changing the Build
+       dropdown sets the ONE karat state rather than only redrawing. */
+    $s("bKarat").addEventListener("input", onBKaratEvent);
+    $s("bKarat").addEventListener("change", onBKaratEvent);
     $s("karats").addEventListener("click", syncStudio);
     $s("fineBtn").addEventListener("click", syncStudio);
     $s("applyBuild").addEventListener("click", syncStudio);
+
+    /* ---------- ONE karat state: panel slider <-> buttons <-> fineness <-> bKarat ----------
+       Angel replaced the studio-light slider with a Karat slider. There is
+       exactly ONE karat state on this page — the calculator script's
+       karat/fine globals — and every control reflects it:
+       - the panel slider is continuous (9..24) with snap detents at the
+         standard karats 10/14/18/22/24 (snap when within 0.35);
+       - a slider value landing exactly on a button karat (9/10/12/14/18/21/
+         22/24) takes the button path — the same state writes the karat
+         button handler performs — so its outputs match the button exactly;
+       - any other slider value takes the fineness path, the same writes
+         the fineness button performs, with fineness = round(K x 1000 / 24)
+         (17K -> 708): the melt math runs on the displayed fineness, so a
+         slider-set 17K is output-identical to typing 708 as a fineness;
+       - the Build & Estimate dropdown syncs two-way for the karats it
+         offers (10/14/18): changing it sets the unified state here, and a
+         unified standard state lands in it inside syncStudio above; any
+         other state leaves the dropdown at its own value. */
+    var KARAT_DETENTS = [10, 14, 18, 22, 24];
+    var KARAT_SNAP = 0.35;
+    var KARAT_BUTTONS = [9, 10, 12, 14, 18, 21, 22, 24];
+    var bKaratStrs = selectPairs($s("bKarat")).map(function(p){ return p.str; });
+    var karatSlider = $s("panelKaratSlider"), karatVal = $s("panelKaratVal");
+    function readKaratState(){
+      if(typeof fine !== "undefined" && fine !== null) return { fine: fine };
+      return { k: (typeof karat !== "undefined") ? karat : 14 };
+    }
+    function markKaratButtons(onK){
+      document.querySelectorAll("#karats button").forEach(function(x){
+        var on = onK !== null && +x.dataset.k === onK;
+        x.classList.toggle("on", on);
+        x.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+    function setUnifiedKarat(raw){
+      var k = parseFloat(raw);
+      if(isNaN(k)) return;
+      if(k < 9) k = 9; if(k > 24) k = 24;
+      for(var i = 0; i < KARAT_DETENTS.length; i++){
+        if(Math.abs(k - KARAT_DETENTS[i]) <= KARAT_SNAP){ k = KARAT_DETENTS[i]; break; }
+      }
+      if(k === Math.round(k) && KARAT_BUTTONS.indexOf(k) !== -1){
+        /* button path — the same writes the karat-button handler performs */
+        markKaratButtons(k);
+        karat = k; fine = null; $s("fineIn").value = "";
+      } else {
+        /* fineness path — the same writes the fineness button performs */
+        var fineInt = Math.round(k * 1000 / 24);
+        if(fineInt < 1) fineInt = 1; if(fineInt > 1000) fineInt = 1000;
+        markKaratButtons(null);
+        $s("fineIn").value = String(fineInt);
+        fine = fineInt / 1000;
+      }
+      if(typeof calc === "function") calc();
+      syncStudio();
+    }
+    if(karatSlider) karatSlider.addEventListener("input", function(){ setUnifiedKarat(karatSlider.value); });
+    /* reflection: state -> slider position + readout. For in-between
+       values the fineness is the honest number: "17K · 708 fine". */
+    function syncKaratUI(){
+      if(!karatSlider) return;
+      var st = readKaratState(), kv, label;
+      if(typeof st.fine === "number"){
+        var fi = Math.round(st.fine * 1000);
+        kv = st.fine * 24;
+        label = Math.round(kv) + "K · " + fi + " fine";
+      } else {
+        kv = st.k; label = st.k + "K";
+      }
+      karatSlider.value = kv;
+      paintRange(karatSlider);
+      if(karatVal) karatVal.textContent = label;
+    }
+    /* the Build dropdown drives the unified state for its own karats;
+       a value that is not one of its options only redraws, as before */
+    function onBKaratEvent(){
+      var v = $s("bKarat").value;
+      if(bKaratStrs.indexOf(v) !== -1) setUnifiedKarat(parseFloat(v));
+      else syncStudio();
+    }
+    /* fineness applied with the Enter key gets the same studio reflection
+       the fineness button already had (this script's listener runs after
+       the calculator script's own Enter handler) */
+    $s("fineIn").addEventListener("keydown", function(e){ if(e.key === "Enter") syncStudio(); });
+    /* "Use this estimate in the calculator" takes its karat from the Build
+       dropdown (the calculator script's handler) but leaves any custom
+       fineness in place — the shown karat and the priced purity could
+       disagree. Unify: the applied build wins and the fineness clears.
+       (Registered after the syncStudio listener above, so it runs last.) */
+    $s("applyBuild").addEventListener("click", function(){
+      if(typeof fine !== "undefined" && fine !== null){
+        fine = null; $s("fineIn").value = "";
+        if(typeof calc === "function") calc();
+        syncStudio();
+      }
+    });
 
     /* ---------- panel measurement sliders ----------
        The studio panel carries its own Width/Length sliders so the controls
@@ -821,8 +944,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       if($s("panelLenVal") && l > 0) $s("panelLenVal").textContent = l + " in";
     }
 
-    /* ---------- studio light + rotation ---------- */
-    lightSlider.addEventListener("input", function(){ drawChain(); });
+    /* ---------- rotation: buttons, drag, auto-drift ---------- */
     function syncAngleBtns(){
       $s("btnBust").classList.toggle("on", angleDeg === 0);
       $s("btnAngle").classList.toggle("on", angleDeg !== 0);
@@ -845,17 +967,50 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
       angleDeg = dragState.angle + (e.clientX - dragState.x) * 0.5;
       syncAngleBtns(); drawChain();
     });
-    chainStage.addEventListener("pointerup", function(){ dragState = null; });
-    chainStage.addEventListener("pointercancel", function(){ dragState = null; });
+    chainStage.addEventListener("pointerup", function(){ dragState = null; lastInteract = Date.now(); });
+    chainStage.addEventListener("pointercancel", function(){ dragState = null; lastInteract = Date.now(); });
     chainStage.addEventListener("keydown", function(e){
       if(e.key === "ArrowLeft" || e.key === "ArrowRight"){
         e.preventDefault();
         angleDeg += (e.key === "ArrowLeft" ? -5 : 5);
+        lastInteract = Date.now();
         syncAngleBtns(); drawChain();
       } else if(e.key === "Home"){
         e.preventDefault(); setAngle(0);
       }
     });
+
+    /* ---------- auto-rotation ----------
+       On arrival the chain drifts slowly to the right on its own — 0.4 deg
+       per 100 ms tick, 4 deg/s — until the visitor takes over. The page
+       drives angleDeg; the renderer stays dumb and coalesces the calls.
+       The drift runs only while the studio tab is active (the calculator
+       section is not hidden) and the document is visible. It pauses while
+       the pointer is down and for ~2 s after the visitor lets go (or
+       nudges with the arrow keys), then resumes from wherever the chain
+       sits. The On bust / Studio angle buttons stay orientation resets:
+       they set the base angle and the drift continues from there.
+       prefers-reduced-motion: no drift at all. */
+    var lastInteract = 0;
+    var driftAllowed = true;
+    try {
+      driftAllowed = !(typeof matchMedia === "function" &&
+        matchMedia("(prefers-reduced-motion: reduce)").matches);
+    } catch(err){ /* if the query itself fails, keep the drift on */ }
+    function driftActive(){
+      if(!driftAllowed) return false;
+      if(typeof document !== "undefined" && document.hidden) return false;
+      if(dragState) return false;
+      if(Date.now() - lastInteract < 2000) return false;
+      var calcSec = $s("calculator");
+      if(calcSec && calcSec.hidden) return false;
+      return true;
+    }
+    setInterval(function(){
+      if(!driftActive()) return;
+      angleDeg += 0.4;
+      drawChain();
+    }, 100);
 
     /* ---------- floating live ticker ----------
        A scrolling strip under the header. Data rules (nothing fabricated):
