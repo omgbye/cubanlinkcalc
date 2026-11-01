@@ -5,6 +5,14 @@
    karat tint (uTint), and procedural studio-environment
    reflections (v2). The v3 solid band is gone: its links stacked like
    shingles and read as diagonal plates however they were tuned.
+   MODELED-LINK STAGED VARIANT (not deployed): the per-link geometry is no
+   longer swept in code. One master Cuban link was modeled in Blender
+   (modeled-link/model_link.py: filed flat facets front/back, squared-oval
+   centreline, analytic normals, baked AO) and exported to link-mesh.bin
+   (master 2,208 tris + decimated lod 922 + lod2 348). This file loads that
+   asset async, derives each tier's mesh from it (along-axis scale for the
+   tier aspect, as the old per-tier sweeps did), and keeps everything else
+   -- drape, bust, clasp, shaders, tint, contract -- from the v4 renderer.
    Integration: renderChain(container, {widthMm, lengthIn, light, angleDeg, karat}).
    Canvas, buffers, and geometry are retained. Input calls coalesce into one RAF. */
 (function(global){
@@ -117,114 +125,46 @@
   for(let j=0;j<sectors;j++){const a=surface(178,j/sectors*Math.PI*2),b=surface(178,(j+1)/sectors*Math.PI*2);triangle(data,[0,182,0,0,1,0,1],[...a,0,1,0,1],[...b,0,1,0,1]);}
   return new Float32Array(data);
  }
- /* ONE TRUE CURB LINK (renderer v4.1). All units are fractions of the
-    nominal strand width; the vertex shader scales local geometry by uWidth.
-      B     centreline along semi-axis -- PER TIER (LINK_TIERS): the width
-            chart (refs 11/16) shows the link aspect shifting with size --
-            near-square and chunky at 8-9mm (outer length ~1.2x width),
-            relatively longer at 4-5mm (~1.5x). Each tier's B reproduces the
-            ratio at its nominal width. Cross-check: at 12mm the shorter,
-            more numerous links reproduce the GOLDZENN 266 g weight anchor's
-            implied wire volume better than a uniform 1.42 ratio did.
-      W     wire width in the ring plane -- PER TIER (.29 up to 12mm, .27 at
-            14-16mm, .26 at 18-20mm): real chains' wire grows slower than
-            strand width, and the threading solve below requires the slimmer
-            relative wire at the round tiers. A (centreline across
-            semi-axis) is derived per tier as A = .5 - W/2, so the outer
-            across size 2(A+W/2) is exactly 1.00 -- the strand IS the
-            nominal width -- at every tier.
-      H     wire height out of the ring plane (.20).
-      C     saddle-warp amplitude (.135): the centreline is
-            P(t) = (A sin t, B cos t, C sin 2t) -- opposite quadrants rise and
-            fall by C while the ends (t=0,pi) and sides (t=+-pi/2) stay in the
-            mid plane, the classic twisted curb-link curve; the chain lies flat.
-      pitch advance per link = B + W/2 + .012 (tierPitch): the SEATING
-            pitch. It is the smallest advance at which the chain is fully
-            threaded AND clean, solved numerically (below). A progressive
-            section twist phi(t) = TW*cos(t) -- the literal curb wring --
-            was also implemented and measured during the solve; it did not
-            reduce joint penetration at any tier and is not used: the
-            saddle warp plus the 180-degree flip already alternates the
-            over/under and the facet presentation.
-    Derived facts (verified numerically in the v4.1 harness, per tier):
-      outer size  2(A+W/2) across = 1.00 exactly at every size (width gate
-                  4.000x); outer length 2(B+W/2) runs 1.50 (4mm tier) down
-                  to 1.145 (18mm+ tier).
-      aperture    2(A-W/2) across (.42 up to 12mm, .46 at 14-16mm, .48 at
-                  18-20mm) x 2(B-W/2) along, genuinely OPEN: there is no
-                  centre fan; you see through the link to the bust.
-      threading   the next link's end tip lands at (0, pitch-B) in this
-                  link's frame, inside the aperture at every tier. The two
-                  end arcs cross in plan at cos t* = pitch/(2B) (t* = 47-48
-                  deg by tier), where the warp holds the centrelines
-                  2*C*sin(2t*) ~= .269 apart vertically against a wire
-                  height of .20 -- a ~= .069 over/under clearance. Odd links
-                  are instanced rotated 180 deg about the chain axis
-                  (chainGeometry negates their right/up basis), flipping the
-                  over/under side to side.
-      seating     at the seating pitch, the signed surface penetration
-                  between neighbouring links (vertex-to-triangle, signed by
-                  the analytic normals, sampled at the front-arc joints) is
-                  ZERO at every tier at 16-24in lengths; at 32in -- the
-                  deepest drape, where each link spans the most frame
-                  rotation -- it stays bounded at <= .010 of the strand
-                  width (<= 0.2mm at 20mm), inside the crossing zone only.
-                  Second neighbours' tips clear by 2*pitch - outer length
-                  = .024 with zero penetration at every length; side-run x
-                  side-run triangle intersections are zero -- the links
-                  interleave only inside the crossing zones and even there
-                  they clear, instead of intersecting mid-link or stacking
-                  like shingles.
-      sweep       tightest centreline curvature (the ends) has radius
-                  A^2/B >= .21 > W/2 (<= .145) at every tier, so the swept
-                  wire never folds through itself.
-    The wire section is a superellipse (exponent 3.2) -- a flattened rounded
-    rectangle: broad flat filed faces front and back, rounded edges. It is
-    symmetric front/back on purpose: odd links sit flipped, and a real
-    chain's outward face is filed after assembly, so both parities must
-    present the same flat face. AO: back face .80, inner edge x.92. */
- const LINK={H:.20,C:.135};
- function linkMesh(M,K,B,W){
-  const out=[],A=.5-W/2,C=LINK.C,HW=W/2,HH=LINK.H/2,EXP=3.2;
-  // Section profile: K points around the superellipse in (u = radial in the
-  // ring plane, v = ring normal) space, with analytic normals and AO.
-  const prof=[];
-  for(let j=0;j<K;j++){
-   const ph=j/K*Math.PI*2,cp=Math.cos(ph),sp=Math.sin(ph);
-   const u=HW*Math.sign(cp)*Math.abs(cp)**(2/EXP),v=HH*Math.sign(sp)*Math.abs(sp)**(2/EXP);
-   let gu=Math.sign(u)*Math.abs(u)**(EXP-1)/(HW**EXP),gv=Math.sign(v)*Math.abs(v)**(EXP-1)/(HH**EXP);
-   const gl=Math.hypot(gu,gv)||1;
-   prof.push([u,v,gu/gl,gv/gl,(v<0?.8:1)*(u<0?.92:1)]);
+ /* MODELED LINK ASSET. link-mesh.bin (served next to this script):
+   'CLNK' v1: u32 variantCount; per variant: u32 nameLen, name, u32
+   vertexCount, then vertexCount x 7 f32 interleaved exactly as the old
+   procedural mesh produced (pos xyz, normal xyz, AO) -- so the shader
+   inputs, the endSeam band (vLink.y) and the AO seam shading behave as
+   before. AO was baked in Blender with the v4 rule (back face .80, inner
+   edge x.92). The master's outer size is 1.00 across x 1.2752 along; each
+   tier's variant is the master (or a decimation) scaled along y by
+   tierOuter/1.30 to reproduce the tier aspect from the width chart, with
+   normals corrected for the scale. Base variant per tier: <=5mm lod2,
+   <=9mm lod, >=12mm master; long chains step down a level (see draw()). */
+ const LINK_ASSET_URL=(()=>{try{return new URL('link-mesh.bin',document.currentScript.src).href;}catch(e){return 'link-mesh.bin';}})();
+ function parseLinkAsset(buf){
+  const dv=new DataView(buf);let o=0;
+  const magic=String.fromCharCode(dv.getUint8(0),dv.getUint8(1),dv.getUint8(2),dv.getUint8(3));
+  if(magic!=='CLNK')throw Error('bad link asset magic');
+  const version=dv.getUint32(4,true),count=dv.getUint32(8,true);o=12;
+  if(version!==1)throw Error('bad link asset version');
+  const variants={};
+  for(let i=0;i<count;i++){
+   const nl=dv.getUint32(o,true);o+=4;
+   let name='';for(let j=0;j<nl;j++)name+=String.fromCharCode(dv.getUint8(o+j));o+=nl;
+   const vc=dv.getUint32(o,true);o+=4;
+   const bytes=new Uint8Array(vc*28);bytes.set(new Uint8Array(buf,o,vc*28)); // copy: name lengths break f32 alignment
+   variants[name]=new Float32Array(bytes.buffer);o+=vc*28;
   }
-  // Centreline samples with sweep frames: s1 = ring-plane radial (outward,
-  // orthogonalised against the tangent), s2 = T x s1 (the ring normal).
-  const rings=[];
-  for(let i=0;i<M;i++){
-   const t=i/M*Math.PI*2,st=Math.sin(t),ct=Math.cos(t);
-   const P=[A*st,B*ct,C*Math.sin(2*t)];
-   let T=[A*ct,-B*st,2*C*Math.cos(2*t)];const tl=Math.hypot(...T)||1;T=T.map(x=>x/tl);
-   let r=[st/A,ct/B,0];const rl=Math.hypot(...r)||1;r=r.map(x=>x/rl);
-   const d=r[0]*T[0]+r[1]*T[1]+r[2]*T[2];
-   let s1=r.map((x,j)=>x-T[j]*d);const s1l=Math.hypot(...s1)||1;s1=s1.map(x=>x/s1l);
-   const s2=[T[1]*s1[2]-T[2]*s1[1],T[2]*s1[0]-T[0]*s1[2],T[0]*s1[1]-T[1]*s1[0]];
-   const ring=[];
-   for(let j=0;j<K;j++){
-    const [u,v,gu,gv,ao]=prof[j];
-    let nx=s1[0]*gu+s2[0]*gv,ny=s1[1]*gu+s2[1]*gv,nz=s1[2]*gu+s2[2]*gv;
-    const nl=Math.hypot(nx,ny,nz)||1;
-    ring.push([P[0]+s1[0]*u+s2[0]*v,P[1]+s1[1]*u+s2[1]*v,P[2]+s1[2]*u+s2[2]*v,nx/nl,ny/nl,nz/nl,ao]);
-   }
-   rings.push(ring);
-  }
-  for(let i=0;i<M;i++){
-   const r0=rings[i],r1=rings[(i+1)%M];
-   for(let j=0;j<K;j++){
-    const j1=(j+1)%K;
-    triangle(out,r0[j],r1[j],r1[j1]);triangle(out,r0[j],r1[j1],r0[j1]);
-   }
-  }
-  return new Float32Array(out);
+  return variants;
  }
+ function scaledVariant(data,f){
+  if(f===1)return data;
+  const out=new Float32Array(data.length);
+  for(let i=0;i<data.length;i+=7){
+   const nx=data[i+3],ny=data[i+4]/f,nz=data[i+5],nl=Math.hypot(nx,ny,nz)||1;
+   out[i]=data[i];out[i+1]=data[i+1]*f;out[i+2]=data[i+2];
+   out[i+3]=nx/nl;out[i+4]=ny/nl;out[i+5]=nz/nl;out[i+6]=data[i+6];
+  }
+  return out;
+ }
+ const MASTER_OUTER=1.2752; // measured vertex extent along (end taper trims the tips)
+ function tierLevels(maxW){return maxW<=5?['lod2']:maxW<=9?['lod','lod2']:['master','lod','lod2'];}
  /* Link tiers, chosen per draw (and by chainGeometry for the pitch) by
     width: a 3mm strand is a few pixels wide and needs a coarse ring; a 20mm
     strand is the hero and gets the fine one. The B column carries the
@@ -233,7 +173,8 @@
     [maxWidthMm, ringSteps, sectionSteps, centrelineAlongSemiAxis, wireWidth]. */
  const LINK_TIERS=[[5,20,8,.60,.29],[7,24,9,.56,.29],[9,28,10,.51,.29],[12,36,12,.4675,.29],[16,40,13,.44,.27],[Infinity,44,14,.4225,.26]];
  function tierFor(width){return LINK_TIERS.find(t=>width<=t[0])||LINK_TIERS[LINK_TIERS.length-1];}
- function tierPitch(tier){return tier[3]+tier[4]/2+.012;}
+ const PITCH_DELTAS=[0,0,0,0,0,0];
+ function tierPitch(tier){const i=LINK_TIERS.indexOf(tier);return tier[3]+tier[4]/2+.012+(PITCH_DELTAS[i]||0);}
  function standMesh(){
   const out=[],segments=64;
   function cylinder(rx,rz,bottom,top){
@@ -258,19 +199,34 @@
  function initialize(el){const canvas=document.createElement('canvas');canvas.setAttribute('aria-hidden','true');el.appendChild(canvas);const gl=canvas.getContext('webgl2',{antialias:true,alpha:true,preserveDrawingBuffer:true,powerPreference:'low-power'});if(!gl){canvas.remove();const p=document.createElement('p');p.className='renderer-error';p.textContent='The interactive studio needs WebGL 2. Your calculator controls remain available.';el.appendChild(p);return {failed:true};}
   const program=gl.createProgram();gl.attachShader(program,shader(gl,gl.VERTEX_SHADER,vs));gl.attachShader(program,shader(gl,gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));
   const bust=mesh(gl,bustMesh()),stand=mesh(gl,standMesh()),instances=gl.createBuffer();
-  const linkTiers=LINK_TIERS.map(([maxW,M,K,B,W])=>{
-   const m=mesh(gl,linkMesh(M,K,B,W));gl.bindVertexArray(m.vao);gl.bindBuffer(gl.ARRAY_BUFFER,instances);
-   for(let i=3;i<=6;i++){gl.enableVertexAttribArray(i);gl.vertexAttribPointer(i,3,gl.FLOAT,false,48,(i-3)*12);gl.vertexAttribDivisor(i,1);}
-   return {maxW,mesh:m};
-  });
   const clasp=mesh(gl,claspMesh()),claspInstances=gl.createBuffer();gl.bindVertexArray(clasp.vao);gl.bindBuffer(gl.ARRAY_BUFFER,claspInstances);
   for(let i=3;i<=6;i++){gl.enableVertexAttribArray(i);gl.vertexAttribPointer(i,3,gl.FLOAT,false,48,(i-3)*12);gl.vertexAttribDivisor(i,1);}
   gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.clearColor(0,0,0,0);
   const uniforms={};for(const name of ['uChain','uWidth','uAngle','uAspect','uMaterial','uLight','uDrop','uTint'])uniforms[name]=gl.getUniformLocation(program,name);
-  const state={canvas,gl,program,bust,stand,linkTiers,clasp,claspInstances,instances,uniforms,lastKey:'',scheduled:false,options:{},width:0,height:0};
+  const state={canvas,gl,program,bust,stand,linkTiers:null,linkReady:false,clasp,claspInstances,instances,uniforms,lastKey:'',scheduled:false,options:{},width:0,height:0};
+  loadLinkAsset(state,el);
   new ResizeObserver(entries=>{const r=entries[0].contentRect;state.width=r.width;state.height=r.height;schedule(state);}).observe(el);
   canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();el.setAttribute('aria-label','Studio paused because the graphics context was lost. Reload to restore it.');});
   return state;
+ }
+ function loadLinkAsset(state,el){
+  fetch(LINK_ASSET_URL).then(r=>{if(!r.ok)throw Error('link asset HTTP '+r.status);return r.arrayBuffer();}).then(buf=>{
+   const variants=parseLinkAsset(buf),gl=state.gl;
+   state.linkTiers=LINK_TIERS.map(tier=>{
+    const f=2*(tier[3]+tier[4]/2)/MASTER_OUTER;
+    const levels=tierLevels(tier[0]).map(name=>{
+     const m=mesh(gl,scaledVariant(variants[name],f));
+     gl.bindVertexArray(m.vao);gl.bindBuffer(gl.ARRAY_BUFFER,state.instances);
+     for(let i=3;i<=6;i++){gl.enableVertexAttribArray(i);gl.vertexAttribPointer(i,3,gl.FLOAT,false,48,(i-3)*12);gl.vertexAttribDivisor(i,1);}
+     return m;
+    });
+    return {maxW:tier[0],levels};
+   });
+   state.linkReady=true;schedule(state);
+  }).catch(()=>{ // degrade to the fallback message, never a blank panel
+   state.failed=true;state.canvas.remove();
+   const p=document.createElement('p');p.className='renderer-error';p.textContent='The interactive studio could not load its 3D model. Your calculator controls remain available.';el.appendChild(p);
+  });
  }
  function schedule(s){if(s.scheduled||s.failed)return;s.scheduled=true;requestAnimationFrame(()=>{s.scheduled=false;draw(s);});}
  function draw(s){const {gl,canvas,uniforms:u,options:o}=s;if(!s.width||!s.height)return;const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(s.width*dpr),h=Math.round(s.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(s.program);
@@ -278,9 +234,8 @@
   gl.uniform1f(u.uWidth,o.widthMm);gl.uniform1f(u.uAngle,o.angleDeg*Math.PI/180);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uLight,o.light);gl.uniform1f(u.uDrop,s.chain.drop);
   const tint=tintForKarat(o.karat);gl.uniform3f(u.uTint,tint[0],tint[1],tint[2]);
   gl.uniform1i(u.uChain,0);gl.uniform1f(u.uMaterial,2);gl.bindVertexArray(s.stand.vao);gl.drawArrays(gl.TRIANGLES,0,s.stand.count);gl.uniform1f(u.uMaterial,0);gl.bindVertexArray(s.bust.vao);gl.drawArrays(gl.TRIANGLES,0,s.bust.count);
-  gl.uniform1i(u.uChain,1);gl.uniform1f(u.uMaterial,1);const tier=s.linkTiers.find(t=>o.widthMm<=t.maxW)||s.linkTiers[s.linkTiers.length-1];gl.bindVertexArray(tier.mesh.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,tier.mesh.count,s.chain.count);
-
-  gl.bindVertexArray(s.clasp.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,s.clasp.count,1);
+  if(s.linkReady){gl.uniform1i(u.uChain,1);gl.uniform1f(u.uMaterial,1);const tier=s.linkTiers.find(t=>o.widthMm<=t.maxW)||s.linkTiers[s.linkTiers.length-1];const drop=s.chain.count>300?2:s.chain.count>220?1:0;const m=tier.levels[Math.min(tier.levels.length-1,drop)];gl.bindVertexArray(m.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,m.count,s.chain.count);
+  gl.bindVertexArray(s.clasp.vao);gl.drawArraysInstanced(gl.TRIANGLES,0,s.clasp.count,1);}
   canvas.dataset.renderError=String(gl.getError());canvas.dataset.links=String(s.chain.count);canvas.dataset.valid=String(s.chain.data.every(Number.isFinite));
  }
  global.renderChain=function(el,options){if(!(el instanceof Element))throw TypeError('renderChain needs a container element.');let s=cache.get(el);if(!s){s=initialize(el);cache.set(el,s);}if(s.failed)return;
