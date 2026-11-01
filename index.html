@@ -785,8 +785,14 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
        same unified karat, a fixed front angle, and framing:'macro' (the
        renderer centres the bottom arc of the drape and magnifies it).
        No drag, no drift — syncStudio() is its only driver, so the one
-       settings set above drives both renders. */
+       settings set above drives both renders. The zoom is adaptive:
+       compact (the default) the panel is a wide, short strip, so
+       drawMacro() passes MACRO_ZOOM_COMPACT to crop the strip to
+       roughly ten links across the bottom arc; expanded it passes 1,
+       the framing the renderer's MACRO_ZOOM was tuned at. */
     var chainMacro = $s("chainMacro");
+    var macroExpanded = false;
+    var MACRO_ZOOM_COMPACT = 2.2;
     function drawMacro(){
       if(!chainMacro || typeof window.renderChain !== "function") return;
       var effKarat = (typeof fine !== "undefined" && fine !== null)
@@ -798,7 +804,8 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
         light: FIXED_LIGHT,
         angleDeg: 0,
         karat: effKarat,
-        framing: "macro"
+        framing: "macro",
+        zoom: macroExpanded ? 1 : MACRO_ZOOM_COMPACT
       });
     }
 
@@ -1082,6 +1089,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}body{background:#0b0c0c}.wra
     });
     if(btnExpandPhoto && floatWrap) btnExpandPhoto.addEventListener('click', function(){
       var ex = floatWrap.classList.toggle('expanded');
+      macroExpanded = ex;
       btnExpandPhoto.setAttribute('aria-expanded', ex ? 'true' : 'false');
       btnExpandPhoto.textContent = ex ? 'Collapse' : 'Expand';
       drawMacro();
