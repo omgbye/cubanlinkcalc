@@ -178,6 +178,26 @@
   gtag('config', 'G-MGXCDLBHK6');
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9902709215635813" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Compare Cuban Link Chain Quotes",
+  "url": "https://cubanlinkcalc.com/compare.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cuban Link Calculator"
+  },
+  "browserRequirements": "Requires JavaScript"
+}
+</script>
 </head>
 <body>
 
@@ -474,6 +494,7 @@
   }
 
   function compute(q, spot){
+    try{gtag('event','quotes_compared',{tool:'quote_compare'})}catch(e){}
     const perGramPure = spot / TROY, pur = PURITY[q.k];
     const melt = q.grams * pur * perGramPure;
     const prem = q.price - melt;

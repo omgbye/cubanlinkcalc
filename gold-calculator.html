@@ -213,6 +213,26 @@
   gtag('config', 'G-MGXCDLBHK6');
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9902709215635813" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Gold Calculator",
+  "url": "https://cubanlinkcalc.com/gold-calculator.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cuban Link Calculator"
+  },
+  "browserRequirements": "Requires JavaScript"
+}
+</script>
 </head>
 <body>
 
@@ -334,7 +354,7 @@
           <div class="qout" id="qOut">Type in what a store quoted you and see exactly how much premium is in it.</div>
         </div>
         <p class="expl" style="font-size:11.5px">Pre-tax scenario, not a seller quote. The premium can include labor, overhead, brand and profit; their individual amounts cannot be inferred from a price. Enter your own percentage or a real pre-tax quote.</p>
-      </details><section class="storebox" id="sellSection" hidden><div class="l">SELLING · SCRAP PAYOUT SCENARIO</div><p class="expl">What might a gold buyer pay you? Choose an example percentage of melt, then subtract only fees not already included in that percentage. This models a scrap offer; a resale offer for an intact chain can differ.</p><label for="payoutPct">Buyer pays (% of melt)</label><div class="premium-entry"><input type="number" id="payoutPct" min="0" max="100" step="0.1" value="90"><span>% · example, not a market rate</span></div><label for="sellFee">Additional fee (USD)</label><div class="premium-entry"><input type="number" id="sellFee" min="0" step="0.01" value="0"></div><div class="sprice" id="sellTotal" aria-live="polite"></div><p class="expl" id="sellBreakdown"></p><div class="quote"><label for="buyerOffer">Already have a buyer offer? (USD)</label><div class="inputs"><input type="number" id="buyerOffer" min="0" step="0.01" placeholder="Amount they would pay you"></div><p class="qout" id="offerOut"></p></div><p class="expl">This calculator does not buy or sell gold. Obtain actual offers and confirm weight, fineness and fees with each buyer.</p></section>
+      </details><section class="storebox" id="sellSection" hidden><div class="l">SELLING · SCRAP PAYOUT SCENARIO</div><p class="expl">What might a gold buyer pay you? Choose an example percentage of melt, then subtract only fees not already included in that percentage. This models a scrap offer; a resale offer for an intact chain can differ.</p><label for="payoutPct">Buyer pays (% of melt)</label><div class="premium-entry"><input type="number" id="payoutPct" min="0" max="100" step="0.1" value="80"><span>% · example, not a market rate</span></div><label for="sellFee">Additional fee (USD)</label><div class="premium-entry"><input type="number" id="sellFee" min="0" step="0.01" value="0"></div><div class="sprice" id="sellTotal" aria-live="polite"></div><p class="expl" id="sellBreakdown"></p><div class="quote"><label for="buyerOffer">Already have a buyer offer? (USD)</label><div class="inputs"><input type="number" id="buyerOffer" min="0" step="0.01" placeholder="Amount they would pay you"></div><p class="qout" id="offerOut"></p></div><p class="expl">This calculator does not buy or sell gold. Obtain actual offers and confirm weight, fineness and fees with each buyer.</p></section>
     </div>
 <div class="panel" id="gramPanel" style="margin-top:26px">
     <h2>LIVE GOLD VALUE PER GRAM</h2>
@@ -423,6 +443,7 @@
     $("gramCap").innerHTML = "At spot <b>"+new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(perGramPure*31.1034768)+"</b> · melt value per gram before premiums or deductions.";
   }
   function calc(){
+    try{gtag('event','calculator_used',{tool:'gold_calculator'})}catch(e){}
     const spot = Math.max(0,parseFloat($("spot").value)||0);
     $("spotTop").textContent = new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(spot);
     $("wOut").textContent = grams().toFixed(1);

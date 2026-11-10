@@ -142,6 +142,26 @@
   gtag('config', 'G-MGXCDLBHK6');
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9902709215635813" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "What Percentage of Melt Are You Being Offered?",
+  "url": "https://cubanlinkcalc.com/melt-percentage.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cuban Link Calculator"
+  },
+  "browserRequirements": "Requires JavaScript"
+}
+</script>
 </head>
 <body>
 
@@ -282,6 +302,7 @@
 
   /* Pure payout computation (no DOM): the offer measured against melt. */
   function computePayout(grams, k, offer, fees, spot){
+    try{gtag('event','melt_pct_checked',{tool:'melt_percentage'})}catch(e){}
     const perGramPure = spot / TROY, pur = PURITY[k];
     const melt = grams * pur * perGramPure;
     const net = offer - fees;
